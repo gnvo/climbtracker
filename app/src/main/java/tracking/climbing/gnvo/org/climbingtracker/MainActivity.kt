@@ -67,8 +67,8 @@ class MainActivity : AppCompatActivity() {
                 val intent = Intent(this@MainActivity, AddEditEntryActivity::class.java)
                 intent.putExtra(AddEditEntryActivity.EXTRA_ID, climbEntry.id)
                 intent.putExtra(AddEditEntryActivity.EXTRA_TITLE, climbEntry.name)
-                intent.putExtra(AddEditEntryActivity.EXTRA_DESCRIPTION, climbEntry.comments)
-                intent.putExtra(AddEditEntryActivity.EXTRA_PRIORITY, climbEntry.priority )
+                intent.putExtra(AddEditEntryActivity.EXTRA_COMMENT, climbEntry.comment)
+//                intent.putExtra(AddEditEntryActivity.EXTRA_PRIORITY, climbEntry.priority )
 
                 startActivityForResult(intent, EDIT_CLIMBING_ENTRY_REQUEST)
             }
@@ -84,14 +84,14 @@ class MainActivity : AppCompatActivity() {
         }
 
         val title = data?.getStringExtra(AddEditEntryActivity.EXTRA_TITLE)
-        val description = data?.getStringExtra(AddEditEntryActivity.EXTRA_DESCRIPTION)
+        val description = data?.getStringExtra(AddEditEntryActivity.EXTRA_COMMENT)
         val priority = data?.getIntExtra(AddEditEntryActivity.EXTRA_PRIORITY, -1)
         val id = data?.getIntExtra(AddEditEntryActivity.EXTRA_ID, AddEditEntryActivity.INVALID_ID)
 
         when (requestCode) {
             ADD_CLIMBING_ENTRY_REQUEST -> {
-                val climbEntry = ClimbEntry(name = title!!, comments = description!!, priority = priority)
-                viewModel.insert(climbEntry)
+//                val climbEntry = ClimbEntry(name = title!!, comments = description!!, priority = priority)
+//                viewModel.insert(climbEntry)
 
                 Toast.makeText(this, "ClimbEntry created", Toast.LENGTH_LONG).show()
             }
@@ -101,9 +101,9 @@ class MainActivity : AppCompatActivity() {
                     return
                 }
 
-                val climbEntry = ClimbEntry(name = title!!, comments = description!!, priority = priority)
-                climbEntry.id = id
-                viewModel.update(climbEntry)
+//                val climbEntry = ClimbEntry(name = title!!, comments = description!!, priority = priority)
+//                climbEntry.id = id
+//                viewModel.update(climbEntry)
 
                 Toast.makeText(this, "ClimbEntry updated", Toast.LENGTH_LONG).show()
             }

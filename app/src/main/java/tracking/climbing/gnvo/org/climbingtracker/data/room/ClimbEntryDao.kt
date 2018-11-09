@@ -9,7 +9,7 @@ interface ClimbEntryDao {
     fun insert(climbEntry: ClimbEntry)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(climbEntry: List<ClimbEntry>)
+    fun init(climbEntry: List<ClimbEntry>)
 
     @Update
     fun update(climbEntry: ClimbEntry)
@@ -17,9 +17,10 @@ interface ClimbEntryDao {
     @Delete
     fun delete(climbEntry: ClimbEntry)
 
-    @Query("DELETE FROM climbing_entry_table")
+    @Query("DELETE FROM climbing_entry")
     fun deleteAllClimbingEntries()
 
-    @Query("SELECT * FROM climbing_entry_table ORDER BY priority DESC")
+//    @Query("SELECT * FROM climbing_entry ORDER BY datetime DESC")
+    @Query("SELECT * FROM climbing_entry")
     fun getAllClimbingEntries(): LiveData<List<ClimbEntry>>
 }

@@ -15,7 +15,7 @@ class AddEditEntryActivity : AppCompatActivity() {
     companion object {
         const val EXTRA_ID: String = "tracking.climbing.gnvo.org.climbingtracker.ui.main.EXTRA_ID"
         const val EXTRA_TITLE: String = "tracking.climbing.gnvo.org.climbingtracker.ui.main.EXTRA_TITLE"
-        const val EXTRA_DESCRIPTION: String = "tracking.climbing.gnvo.org.climbingtracker.ui.main.EXTRA_DESCRIPTION"
+        const val EXTRA_COMMENT: String = "tracking.climbing.gnvo.org.climbingtracker.ui.main.EXTRA_COMMENT"
         const val EXTRA_PRIORITY: String = "tracking.climbing.gnvo.org.climbingtracker.ui.main.EXTRA_PRIORITY"
         const val INVALID_ID: Int = -1
     }
@@ -31,7 +31,7 @@ class AddEditEntryActivity : AppCompatActivity() {
         if (intent.hasExtra(EXTRA_ID)) {
             setTitle("Edit note")
             edit_text_title.setText(intent.getStringExtra(EXTRA_TITLE))
-            edit_text_description.setText(intent.getStringExtra(EXTRA_DESCRIPTION))
+            edit_text_description.setText(intent.getStringExtra(EXTRA_COMMENT))
             number_picker_priority.value = intent.getIntExtra(EXTRA_PRIORITY, 1)
         } else {
             setTitle("Add note")
@@ -48,7 +48,7 @@ class AddEditEntryActivity : AppCompatActivity() {
 
         val data = Intent()
         data.putExtra(EXTRA_TITLE, title)
-        data.putExtra(EXTRA_DESCRIPTION, description)
+        data.putExtra(EXTRA_COMMENT, description)
         data.putExtra(EXTRA_PRIORITY, number_picker_priority.value)
 
         val id = intent.getIntExtra(EXTRA_ID, INVALID_ID)

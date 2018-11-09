@@ -9,10 +9,15 @@ import android.content.Context
 import android.support.annotation.NonNull
 import java.util.concurrent.Executors
 
-@Database(entities = [ClimbEntry::class], version = 1)
-//@TypeConverters(DateTypeConverter::class)
+@Database(entities = [AttemptOutcome::class,ClimbEntry::class,ClimbingStyle::class,Pitch::class,RouteGrade::class,RouteStyle::class,RouteType::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
+    abstract fun attemptOutcomeDao(): AttemptOutcomeDao
     abstract fun climbEntryDao(): ClimbEntryDao
+    abstract fun climbingStyleDao(): ClimbingStyleDao
+    abstract fun pitchDao(): PitchDao
+    abstract fun routeGradeDao(): RouteGradeDao
+    abstract fun routeStyleDao(): RouteStyleDao
+    abstract fun routeTypeDao(): RouteTypeDao
 
     companion object {
         var INSTANCE: AppDatabase? = null
@@ -41,7 +46,11 @@ abstract class AppDatabase : RoomDatabase() {
                         super.onCreate(db)
                         Executors.newSingleThreadScheduledExecutor()
                             .execute {
-                                INSTANCE?.climbEntryDao()?.insert(ClimbEntry.initialData())
+                                INSTANCE?.routeTypeDao()?.init(RouteType.initialData())
+                                INSTANCE?.attemptOutcomeDao()?.init(AttemptOutcome.initialData())
+                                INSTANCE?.routeGradeDao()?.init(RouteGrade.initialData())
+                                INSTANCE?.climbingStyleDao()?.init(ClimbingStyle.initialData())
+                                INSTANCE?.routeStyleDao()?.init(RouteStyle.initialData())
                             }
                     }
                 })

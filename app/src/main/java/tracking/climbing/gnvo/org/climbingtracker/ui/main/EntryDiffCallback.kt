@@ -10,7 +10,7 @@ class EntryDiffCallback : DiffUtil.ItemCallback<ClimbEntry>() {
 
     override fun areContentsTheSame(oldItem: ClimbEntry, newItem: ClimbEntry): Boolean {
         return oldItem.name == newItem.name &&
-             oldItem.comments == newItem.comments &&
-             oldItem.priority == newItem.priority
+             oldItem.comment == newItem.comment// &&
+//             oldItem.priority == newItem.priority
     }
 }

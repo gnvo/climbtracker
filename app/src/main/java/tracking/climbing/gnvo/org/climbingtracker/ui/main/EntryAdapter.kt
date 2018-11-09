@@ -29,8 +29,8 @@ class EntryAdapter : ListAdapter<ClimbEntry, EntryAdapter.ViewHolder>(EntryDiffC
     open inner class ViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(climbEntry: ClimbEntry) {
             itemView.text_view_title.text = climbEntry.name
-            itemView.text_view_description.text = climbEntry.comments
-            itemView.text_view_priority.text = climbEntry.priority?.toString()
+            itemView.text_view_description.text = climbEntry.comment
+//            itemView.text_view_priority.text = climbEntry.priority?.toString()
 
             itemView.setOnClickListener {
                 val position = adapterPosition
