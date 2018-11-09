@@ -6,7 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.note_item.view.*
+import kotlinx.android.synthetic.main.climb_entry_item.view.*
 import tracking.climbing.gnvo.org.climbingtracker.R
 import tracking.climbing.gnvo.org.climbingtracker.data.room.ClimbEntry
 
@@ -15,7 +15,7 @@ class EntryAdapter : ListAdapter<ClimbEntry, EntryAdapter.ViewHolder>(EntryDiffC
     private var listener: OnItemClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.note_item, parent, false))
+        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.climb_entry_item, parent, false))
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

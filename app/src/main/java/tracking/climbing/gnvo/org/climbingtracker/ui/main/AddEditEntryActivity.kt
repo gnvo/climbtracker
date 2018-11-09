@@ -7,7 +7,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
-import kotlinx.android.synthetic.main.activity_add_note.*
+import kotlinx.android.synthetic.main.activity_add_update_climb_entry.*
 import tracking.climbing.gnvo.org.climbingtracker.R
 
 class AddEditEntryActivity : AppCompatActivity() {
@@ -22,7 +22,7 @@ class AddEditEntryActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_note)
+        setContentView(R.layout.activity_add_update_climb_entry)
 
         number_picker_priority.minValue = 1
         number_picker_priority.maxValue = 10
@@ -60,7 +60,7 @@ class AddEditEntryActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.add_note_menu, menu)
+        menuInflater.inflate(R.menu.add_climb_entry_menu, menu)
         return true
     }
 
