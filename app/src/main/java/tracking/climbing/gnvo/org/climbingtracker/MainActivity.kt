@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
 
-        button_add_note.setOnClickListener {
+        button_add_climb_entry.setOnClickListener {
             val intent = Intent(this@MainActivity, AddEditEntryActivity::class.java)
             startActivityForResult(intent, ADD_CLIMBING_ENTRY_REQUEST)
         }
@@ -117,9 +117,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         return when (item?.itemId) {
-            R.id.delete_all_notes -> {
+            R.id.delete_all_climb_entries -> {
                 viewModel.deleteAllClimbingEntries()
-                Toast.makeText(this, "All notes deleted", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "All climb entries deleted", Toast.LENGTH_LONG).show()
                 true
             }
             else -> super.onOptionsItemSelected(item)

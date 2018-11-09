@@ -2,8 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-            android:title="Delete all nodes"
+            android:title="Delete all climb entries"
             app:showAsAction="never"
-            android:id="@+id/delete_all_notes"
+            android:id="@+id/delete_all_climb_entries"
     />
 </menu>

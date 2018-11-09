@@ -29,12 +29,12 @@ class AddEditEntryActivity : AppCompatActivity() {
 
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_close)
         if (intent.hasExtra(EXTRA_ID)) {
-            setTitle("Edit note")
+            setTitle("Edit climb entry")
             edit_text_title.setText(intent.getStringExtra(EXTRA_TITLE))
             edit_text_description.setText(intent.getStringExtra(EXTRA_COMMENT))
             number_picker_priority.value = intent.getIntExtra(EXTRA_PRIORITY, 1)
         } else {
-            setTitle("Add note")
+            setTitle("Add climb entry")
         }
     }
 
@@ -66,7 +66,7 @@ class AddEditEntryActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         return when (item?.itemId) {
-            R.id.save_note -> {
+            R.id.save_climb_entry -> {
                 saveClimbingEntry()
                 true
             }
