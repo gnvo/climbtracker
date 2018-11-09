@@ -3,6 +3,7 @@ package tracking.climbing.gnvo.org.climbingtracker.data.room
 import android.arch.persistence.room.Embedded
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
+import java.util.Date
 
 @Entity(tableName = "climbing_entry")
 data class ClimbEntry(
@@ -11,7 +12,7 @@ data class ClimbEntry(
     val coordinates: String,
     val site: String,
     val sector: String,
-//    val datetime: java.sql.Date,
+    val datetime: Date?,
 //    @Embedded val pitches: List<Pitch>,
     @Embedded val routeType: RouteType,
     var rating: Int? = null,

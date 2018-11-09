@@ -5,11 +5,13 @@ import android.arch.persistence.db.SupportSQLiteDatabase
 import android.arch.persistence.room.Database
 import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
+import android.arch.persistence.room.TypeConverters
 import android.content.Context
 import android.support.annotation.NonNull
 import java.util.concurrent.Executors
 
 @Database(entities = [AttemptOutcome::class,ClimbEntry::class,ClimbingStyle::class,Pitch::class,RouteGrade::class,RouteStyle::class,RouteType::class], version = 1)
+@TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun attemptOutcomeDao(): AttemptOutcomeDao
     abstract fun climbEntryDao(): ClimbEntryDao
