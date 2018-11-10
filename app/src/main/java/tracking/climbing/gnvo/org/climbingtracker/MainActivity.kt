@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity() {
             override fun onItemClick(climbEntry: ClimbEntry) {
                 val intent = Intent(this@MainActivity, AddEditEntryActivity::class.java)
                 intent.putExtra(AddEditEntryActivity.EXTRA_ID, climbEntry.id)
-                intent.putExtra(AddEditEntryActivity.EXTRA_TITLE, climbEntry.name)
+                intent.putExtra(AddEditEntryActivity.EXTRA_ROUTE_NAME, climbEntry.name)
                 intent.putExtra(AddEditEntryActivity.EXTRA_COMMENT, climbEntry.comment)
 //                intent.putExtra(AddEditEntryActivity.EXTRA_PRIORITY, climbEntry.priority )
 
@@ -83,7 +83,7 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
-        val title = data?.getStringExtra(AddEditEntryActivity.EXTRA_TITLE)
+        val routeName = data?.getStringExtra(AddEditEntryActivity.EXTRA_ROUTE_NAME)
         val description = data?.getStringExtra(AddEditEntryActivity.EXTRA_COMMENT)
         val priority = data?.getIntExtra(AddEditEntryActivity.EXTRA_PRIORITY, -1)
         val id = data?.getIntExtra(AddEditEntryActivity.EXTRA_ID, AddEditEntryActivity.INVALID_ID)

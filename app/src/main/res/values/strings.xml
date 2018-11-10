@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Climbingtracker</string>
+    <string name="route_type">Route type</string>
+    <string name="route_name">Route name</string>
+    <string name="coordinates">Coordinates</string>
+    <string name="area">Area</string>
+    <string name="sector">Sector</string>
+    <string name="comment">Comment</string>
+    <string name="edit_climb_entry">Edit climb entry</string>
+    <string name="add_climb_entry">Add climb entry</string>
 </resources>
