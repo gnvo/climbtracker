@@ -8,23 +8,23 @@ import tracking.climbing.gnvo.org.climbingtracker.data.room.ClimbEntry
 import java.util.concurrent.Executors
 
 class MainViewModel(application: Application): AndroidViewModel(application) {
-    private val repository: ClimbEntryRepository = ClimbEntryRepository(application, Executors.newSingleThreadScheduledExecutor())
-    private val climbingEntries: LiveData<List<ClimbEntry>> = repository.getAllClimbingEntries()
+    private val repositoryClimbEntry: ClimbEntryRepository = ClimbEntryRepository(application, Executors.newSingleThreadScheduledExecutor())
+    private val climbingEntries: LiveData<List<ClimbEntry>> = repositoryClimbEntry.getAllClimbingEntries()
 
-    fun insert(climbEntry: ClimbEntry){
-        repository.insert(climbEntry)
+    fun insertClimbEntry(climbEntry: ClimbEntry){
+        repositoryClimbEntry.insert(climbEntry)
     }
 
-    fun update(climbEntry: ClimbEntry){
-        repository.update(climbEntry)
+    fun updateClimbEntry(climbEntry: ClimbEntry){
+        repositoryClimbEntry.update(climbEntry)
     }
 
-    fun delete(climbEntry: ClimbEntry){
-        repository.delete(climbEntry)
+    fun deleteClimbEntry(climbEntry: ClimbEntry){
+        repositoryClimbEntry.delete(climbEntry)
     }
 
     fun deleteAllClimbingEntries(){
-        repository.deleteAllClimbingEntries()
+        repositoryClimbEntry.deleteAllClimbingEntries()
     }
 
     fun getAllClimbingEntries(): LiveData<List<ClimbEntry>>{
