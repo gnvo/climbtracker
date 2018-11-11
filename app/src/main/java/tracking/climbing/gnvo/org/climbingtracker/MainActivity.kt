@@ -18,8 +18,6 @@ import tracking.climbing.gnvo.org.climbingtracker.ui.main.AddEditEntryActivity
 import tracking.climbing.gnvo.org.climbingtracker.ui.main.MainViewModel
 import tracking.climbing.gnvo.org.climbingtracker.ui.main.EntryAdapter
 
-
-
 class MainActivity : AppCompatActivity() {
 
     val ADD_CLIMBING_ENTRY_REQUEST: Int = 1
@@ -56,7 +54,7 @@ class MainActivity : AppCompatActivity() {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
-                viewModel.delete(adapter.getClimbingEntryAt(position))
+                viewModel.deleteClimbEntry(adapter.getClimbingEntryAt(position))
             }
         }
         val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallback)
@@ -91,7 +89,7 @@ class MainActivity : AppCompatActivity() {
         when (requestCode) {
             ADD_CLIMBING_ENTRY_REQUEST -> {
 //                val climbEntry = ClimbEntry(name = title!!, comments = description!!, priority = priority)
-//                viewModel.insert(climbEntry)
+//                viewModel.insertClimbEntry(climbEntry)
 
                 Toast.makeText(this, "ClimbEntry created", Toast.LENGTH_LONG).show()
             }
@@ -103,7 +101,7 @@ class MainActivity : AppCompatActivity() {
 
 //                val climbEntry = ClimbEntry(name = title!!, comments = description!!, priority = priority)
 //                climbEntry.id = id
-//                viewModel.update(climbEntry)
+//                viewModel.updateClimbEntry(climbEntry)
 
                 Toast.makeText(this, "ClimbEntry updated", Toast.LENGTH_LONG).show()
             }
