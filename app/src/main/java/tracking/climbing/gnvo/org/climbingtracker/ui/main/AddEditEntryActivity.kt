@@ -1,14 +1,22 @@
 package tracking.climbing.gnvo.org.climbingtracker.ui.main
 
-import android.app.Activity
-import android.content.Intent
+import android.app.DatePickerDialog
+import android.app.Dialog
+import android.app.TimePickerDialog
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v4.app.DialogFragment
+import android.text.format.DateFormat
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
+import android.widget.DatePicker
+import android.widget.TimePicker
 import kotlinx.android.synthetic.main.activity_add_update_climb_entry.*
 import tracking.climbing.gnvo.org.climbingtracker.R
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
+import java.util.*
 
 class AddEditEntryActivity : AppCompatActivity() {
 
@@ -21,6 +29,8 @@ class AddEditEntryActivity : AppCompatActivity() {
         const val EXTRA_PRIORITY: String = "tracking.climbing.gnvo.org.climbingtracker.ui.main.EXTRA_PRIORITY"
         const val INVALID_ID: Int = -1
     }
+
+    private val formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +47,10 @@ class AddEditEntryActivity : AppCompatActivity() {
 //            number_picker_priority.value = intent.getIntExtra(EXTRA_PRIORITY, 1)
         } else {
             title = getString(R.string.add_climb_entry)
+            button_datetime.text = LocalDateTime.now().format(formatter)
+        }
+        button_datetime.setOnClickListener {
+            TimePickerFragment().show(supportFragmentManager, "timePicker")
         }
     }
 
@@ -73,6 +87,42 @@ class AddEditEntryActivity : AppCompatActivity() {
                 true
             }
             else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    class TimePickerFragment : DialogFragment(), TimePickerDialog.OnTimeSetListener {
+        override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
+
+            val newFragment = DatePickerFragment()
+            newFragment.show(fragmentManager, "datePicker")
+        }
+
+        override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+            // Use the current time as the default values for the picker
+            val c = Calendar.getInstance()
+            val hour = c.get(Calendar.HOUR_OF_DAY)
+            val minute = c.get(Calendar.MINUTE)
+
+            // Create a new instance of TimePickerDialog and return it
+            return TimePickerDialog(activity, this, hour, minute, DateFormat.is24HourFormat(activity))
+        }
+    }
+
+    class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener {
+
+        override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+            // Use the current date as the default date in the picker
+            val c = Calendar.getInstance()
+            val year = c.get(Calendar.YEAR)
+            val month = c.get(Calendar.MONTH)
+            val day = c.get(Calendar.DAY_OF_MONTH)
+
+            // Create a new instance of DatePickerDialog and return it
+            return DatePickerDialog(activity, this, year, month, day)
+        }
+
+        override fun onDateSet(view: DatePicker, year: Int, month: Int, day: Int) {
+            // Do something with the date chosen by the user
         }
     }
 }
