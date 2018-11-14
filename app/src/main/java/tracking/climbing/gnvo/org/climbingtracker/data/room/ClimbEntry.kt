@@ -12,7 +12,7 @@ data class ClimbEntry(
     val coordinates: String,
     val site: String,
     val sector: String,
-    val datetime: Date?,
+    val datetime: Date,
 //    @Embedded val pitches: List<Pitch>,
     @Embedded(prefix = "route_type_") val routeType: RouteType,
     var rating: Int? = null,
