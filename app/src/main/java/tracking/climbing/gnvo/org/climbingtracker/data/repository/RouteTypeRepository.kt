@@ -9,9 +9,15 @@ import java.util.concurrent.Executor
 class RouteTypeRepository(application: Application, private val executor: Executor) {
     private val db: AppDatabase? = AppDatabase.getInstance(application = application)
     private val routeTypeDao: RouteTypeDao? = db?.routeTypeDao()
-    private val allRouteTypes: List<String> = routeTypeDao?.getAllString()!!
+    private val allRouteTypes: LiveData<List<String>> = routeTypeDao?.getAllString()!!
 
-    fun getAllRouteTypeNames(): List<String> {
+    fun getAllRouteTypeNames(): LiveData<List<String>> {
         return allRouteTypes
+    }
+
+    fun insert(routeType: RouteType) {
+        executor.execute {
+            routeTypeDao?.insert(routeType)
+        }
     }
 }

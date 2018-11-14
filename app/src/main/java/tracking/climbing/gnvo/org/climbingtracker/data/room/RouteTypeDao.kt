@@ -9,8 +9,11 @@ interface RouteTypeDao {
     fun getAll(): LiveData<List<RouteType>>
 
     @Query("SELECT name FROM route_type ORDER BY name ASC")
-    fun getAllString(): List<String>
+    fun getAllString(): LiveData<List<String>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun init(routeTypes: List<RouteType>)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insert(routeType: RouteType)
 }
