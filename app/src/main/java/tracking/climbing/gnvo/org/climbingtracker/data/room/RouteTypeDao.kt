@@ -1,13 +1,14 @@
 package tracking.climbing.gnvo.org.climbingtracker.data.room
 
+import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.*
 
 @Dao
 interface RouteTypeDao {
-    @Query("SELECT * FROM route_type ORDER BY route_type_name ASC")
-    fun getAll(): List<RouteType>
+    @Query("SELECT * FROM route_type ORDER BY name ASC")
+    fun getAll(): LiveData<List<RouteType>>
 
-    @Query("SELECT route_type_name FROM route_type ORDER BY route_type_name ASC")
+    @Query("SELECT name FROM route_type ORDER BY name ASC")
     fun getAllString(): List<String>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

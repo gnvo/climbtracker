@@ -7,15 +7,15 @@ import android.arch.persistence.room.PrimaryKey
 @Entity(tableName = "route_type")
 data class RouteType(
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "route_type_id") val routeTypeId: Int? = null,
-    @ColumnInfo(name = "route_type_name") val routeTypeName: String
+    @ColumnInfo(name = "id") val id: Int? = null,
+    @ColumnInfo(name = "name") val name: String
 ){
     companion object {
         fun initialData(): List<RouteType> {
             return listOf(
-                RouteType(routeTypeName="Sport"),
-                RouteType(routeTypeName="Trad"),
-                RouteType(routeTypeName="Boulder")
+                RouteType(name="Sport"),
+                RouteType(name="Trad"),
+                RouteType(name="Boulder")
             )
         }
     }
