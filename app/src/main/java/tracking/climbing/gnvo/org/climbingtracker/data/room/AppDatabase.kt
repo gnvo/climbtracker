@@ -53,6 +53,7 @@ abstract class AppDatabase : RoomDatabase() {
                                 INSTANCE?.routeGradeDao()?.init(RouteGrade.initialData())
                                 INSTANCE?.climbingStyleDao()?.init(ClimbingStyle.initialData())
                                 INSTANCE?.routeStyleDao()?.init(RouteStyle.initialData())
+                                INSTANCE?.climbEntryDao()?.init(ClimbEntry.initialData())
                             }
                     }
                 })

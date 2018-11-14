@@ -18,20 +18,21 @@ data class ClimbEntry(
     var rating: Int? = null,
     val comment: String
 )
-//{
-//    companion object {
-//        fun initialData(): List<ClimbEntry> {
-//            return listOf(
-//                ClimbEntry(name = "name1",
-//                    coordinates = "coordinates1",
-//                    site = "site1",
-//                    sector = "sector1",
-//                    datetime = "datetime1",
+{
+    companion object {
+        fun initialData(): List<ClimbEntry> {
+            return listOf(
+                ClimbEntry(
+                    name = "route name1",
+                    coordinates = "1.0,1.0",
+                    site = "site1",
+                    sector = "sector1",
+                    datetime = Date(0),
 //                    pitches = List(0),
-//                    routeType = RouteType(),
-//                    rating = 5,
-//                    comments = "comments1")
-//            )
-//        }
-//    }
-//}
+                    routeType = RouteType(name="Sport"),
+                    rating = 5,
+                    comment = "comments1")
+            )
+        }
+    }
+}
