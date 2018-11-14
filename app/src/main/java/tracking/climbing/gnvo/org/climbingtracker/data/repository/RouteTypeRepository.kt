@@ -9,7 +9,7 @@ import java.util.concurrent.Executor
 class RouteTypeRepository(application: Application, private val executor: Executor) {
     private val db: AppDatabase? = AppDatabase.getInstance(application = application)
     private val routeTypeDao: RouteTypeDao? = db?.routeTypeDao()
-    private val allRouteTypes: List<String> = routeTypeDao?.getAllRouteTypeNames()!!
+    private val allRouteTypes: List<String> = routeTypeDao?.getAllString()!!
 
     fun getAllRouteTypeNames(): List<String> {
         return allRouteTypes
