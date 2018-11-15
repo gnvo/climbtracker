@@ -1,4 +1,4 @@
-package tracking.climbing.gnvo.org.climbingtracker.data.room
+package tracking.climbing.gnvo.org.climbingtracker.data.room.pojo
 
 import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
@@ -13,9 +13,9 @@ data class RouteType(
     companion object {
         fun initialData(): List<RouteType> {
             return listOf(
-                RouteType(name="Sport"),
-                RouteType(name="Trad"),
-                RouteType(name="Boulder")
+                RouteType(name = "Sport"),
+                RouteType(name = "Trad"),
+                RouteType(name = "Boulder")
             )
         }
     }

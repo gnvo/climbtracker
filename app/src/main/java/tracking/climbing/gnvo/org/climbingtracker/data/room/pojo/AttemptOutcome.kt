@@ -1,4 +1,4 @@
-package tracking.climbing.gnvo.org.climbingtracker.data.room
+package tracking.climbing.gnvo.org.climbingtracker.data.room.pojo
 
 import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity

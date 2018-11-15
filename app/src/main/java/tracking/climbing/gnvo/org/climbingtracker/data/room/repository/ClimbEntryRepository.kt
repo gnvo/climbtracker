@@ -1,9 +1,10 @@
-package tracking.climbing.gnvo.org.climbingtracker.data.repository
+package tracking.climbing.gnvo.org.climbingtracker.data.room.repository
 
 import android.app.Application
 import android.arch.lifecycle.LiveData
-import tracking.climbing.gnvo.org.climbingtracker.data.room.AttemptOutcomeDao
-import tracking.climbing.gnvo.org.climbingtracker.data.room.*
+import tracking.climbing.gnvo.org.climbingtracker.data.room.AppDatabase
+import tracking.climbing.gnvo.org.climbingtracker.data.room.dao.ClimbEntryDao
+import tracking.climbing.gnvo.org.climbingtracker.data.room.pojo.ClimbEntry
 import java.util.concurrent.Executor
 
 

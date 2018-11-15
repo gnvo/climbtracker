@@ -1,7 +1,8 @@
-package tracking.climbing.gnvo.org.climbingtracker.data.room
+package tracking.climbing.gnvo.org.climbingtracker.data.room.dao
 
 import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.*
+import tracking.climbing.gnvo.org.climbingtracker.data.room.pojo.RouteType
 
 @Dao
 interface RouteTypeDao {

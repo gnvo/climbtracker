@@ -1,4 +1,4 @@
-package tracking.climbing.gnvo.org.climbingtracker.data.room
+package tracking.climbing.gnvo.org.climbingtracker.data.room.pojo
 
 import android.arch.persistence.room.Embedded
 import android.arch.persistence.room.Entity
@@ -29,9 +29,10 @@ data class ClimbEntry(
                     sector = "sector1",
                     datetime = Date(0),
 //                    pitches = List(0),
-                    routeType = RouteType(name="Sport"),
+                    routeType = RouteType(name = "Sport"),
                     rating = 5,
-                    comment = "comments1")
+                    comment = "comments1"
+                )
             )
         }
     }

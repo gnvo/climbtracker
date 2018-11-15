@@ -1,4 +1,4 @@
-package tracking.climbing.gnvo.org.climbingtracker.data.room
+package tracking.climbing.gnvo.org.climbingtracker.data.room.pojo
 
 import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
@@ -13,10 +13,10 @@ data class ClimbingStyle(
     companion object {
         fun initialData(): List<ClimbingStyle> {
             return listOf(
-                ClimbingStyle(climbingStyleName="Lead"),
-                ClimbingStyle(climbingStyleName="Follow"),
-                ClimbingStyle(climbingStyleName="Top rope"),
-                ClimbingStyle(climbingStyleName="Solo")
+                ClimbingStyle(climbingStyleName = "Lead"),
+                ClimbingStyle(climbingStyleName = "Follow"),
+                ClimbingStyle(climbingStyleName = "Top rope"),
+                ClimbingStyle(climbingStyleName = "Solo")
             )
         }
     }

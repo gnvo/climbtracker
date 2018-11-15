@@ -8,9 +8,11 @@ import android.arch.persistence.room.RoomDatabase
 import android.arch.persistence.room.TypeConverters
 import android.content.Context
 import android.support.annotation.NonNull
+import tracking.climbing.gnvo.org.climbingtracker.data.room.dao.*
+import tracking.climbing.gnvo.org.climbingtracker.data.room.pojo.*
 import java.util.concurrent.Executors
 
-@Database(entities = [AttemptOutcome::class,ClimbEntry::class,ClimbingStyle::class,Pitch::class,RouteGrade::class,RouteStyle::class,RouteType::class], version = 1)
+@Database(entities = [AttemptOutcome::class, ClimbEntry::class, ClimbingStyle::class, Pitch::class, RouteGrade::class, RouteStyle::class, RouteType::class], version = 1)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun attemptOutcomeDao(): AttemptOutcomeDao

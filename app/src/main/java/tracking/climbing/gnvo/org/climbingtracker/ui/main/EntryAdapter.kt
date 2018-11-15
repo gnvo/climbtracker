@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.climb_entry_item.view.*
 import tracking.climbing.gnvo.org.climbingtracker.R
-import tracking.climbing.gnvo.org.climbingtracker.data.room.ClimbEntry
+import tracking.climbing.gnvo.org.climbingtracker.data.room.pojo.ClimbEntry
 
 class EntryAdapter : ListAdapter<ClimbEntry, EntryAdapter.ViewHolder>(EntryDiffCallback()) {
 
@@ -22,7 +22,7 @@ class EntryAdapter : ListAdapter<ClimbEntry, EntryAdapter.ViewHolder>(EntryDiffC
         holder.bind(getItem(position))
     }
 
-    fun getClimbingEntryAt(position: Int): ClimbEntry{
+    fun getClimbingEntryAt(position: Int): ClimbEntry {
         return getItem(position)
     }
 

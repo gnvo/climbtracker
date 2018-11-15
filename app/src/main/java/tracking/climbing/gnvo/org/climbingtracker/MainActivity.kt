@@ -13,7 +13,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
-import tracking.climbing.gnvo.org.climbingtracker.data.room.ClimbEntry
+import tracking.climbing.gnvo.org.climbingtracker.data.room.pojo.ClimbEntry
+import tracking.climbing.gnvo.org.climbingtracker.data.room.pojo.RouteType
 import tracking.climbing.gnvo.org.climbingtracker.ui.main.AddEditEntryActivity
 import tracking.climbing.gnvo.org.climbingtracker.ui.main.MainViewModel
 import tracking.climbing.gnvo.org.climbingtracker.ui.main.EntryAdapter

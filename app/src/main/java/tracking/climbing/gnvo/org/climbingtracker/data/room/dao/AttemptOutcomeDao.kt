@@ -1,7 +1,7 @@
-package tracking.climbing.gnvo.org.climbingtracker.data.room
+package tracking.climbing.gnvo.org.climbingtracker.data.room.dao
 
 import android.arch.persistence.room.*
-import tracking.climbing.gnvo.org.climbingtracker.data.room.AttemptOutcome
+import tracking.climbing.gnvo.org.climbingtracker.data.room.pojo.AttemptOutcome
 
 @Dao
 interface AttemptOutcomeDao {
