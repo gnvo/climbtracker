@@ -7,31 +7,24 @@ import java.util.Date
 
 @Entity(tableName = "climbing_entry")
 data class ClimbEntry(
-    @PrimaryKey(autoGenerate = true) var id: Int? = null,
-    val name: String,
-    val coordinates: String,
-    val site: String,
-    val sector: String,
+    @PrimaryKey(autoGenerate = true) val id: Int? = null,
+    val name: String? = null,
+    val coordinates: String? = null,
+    val site: String? = null,
+    val sector: String? = null,
     val datetime: Date,
-//    @Embedded val pitches: List<Pitch>,
-    @Embedded(prefix = "route_type_") val routeType: RouteType,
+    var pitches: List<Pitch>,
+    @Embedded(prefix = "route_type_") val routeType: RouteType? = null,
     var rating: Int? = null,
-    val comment: String
+    val comment: String? = null
 )
 {
     companion object {
         fun initialData(): List<ClimbEntry> {
             return listOf(
                 ClimbEntry(
-                    name = "route name1",
-                    coordinates = "1.0,1.0",
-                    site = "site1",
-                    sector = "sector1",
                     datetime = Date(0),
-//                    pitches = List(0),
-                    routeType = RouteType(name = "Sport"),
-                    rating = 5,
-                    comment = "comments1"
+                    pitches = listOf(Pitch(routeGradeId = 2))
                 )
             )
         }
