@@ -9,15 +9,18 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 import tracking.climbing.gnvo.org.climbingtracker.data.room.pojo.ClimbEntry
+import tracking.climbing.gnvo.org.climbingtracker.data.room.pojo.Pitch
 import tracking.climbing.gnvo.org.climbingtracker.data.room.pojo.RouteType
 import tracking.climbing.gnvo.org.climbingtracker.ui.main.AddEditEntryActivity
 import tracking.climbing.gnvo.org.climbingtracker.ui.main.MainViewModel
 import tracking.climbing.gnvo.org.climbingtracker.ui.main.EntryAdapter
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -32,8 +35,33 @@ class MainActivity : AppCompatActivity() {
 
 
         button_add_climb_entry.setOnClickListener {
-            val intent = Intent(this@MainActivity, AddEditEntryActivity::class.java)
-            startActivityForResult(intent, ADD_CLIMBING_ENTRY_REQUEST)
+            Log.d("gnvo", "CLICK")
+            viewModel.insertClimbEntry(
+                ClimbEntry(
+//                    name = "route name2",
+//                    coordinates = "2.0,2.0",
+//                    site = "site2",
+//                    sector = "sector2",
+                    datetime = Date(System.currentTimeMillis()),
+                    pitches = listOf(
+                        Pitch(routeGradeId = 4),
+                        Pitch(routeGradeId = 1)
+                    )//,
+//                    routeType = RouteType(name = "Sportsdf"),
+//                    rating = 2,
+//                    comment = "comments21"
+                )
+            )
+
+//            viewModel.getAllRouteTypeNames().observe(this@MainActivity, Observer { routeTypeNames: List<String>? ->
+//                routeTypeNames?.forEach {
+//                    Log.d("gnvo", it)
+//
+//                }
+//            })
+
+//            val intent = Intent(this@MainActivity, AddEditEntryActivity::class.java)
+//            startActivityForResult(intent, ADD_CLIMBING_ENTRY_REQUEST)
         }
 
         recycler_view.layoutManager = LinearLayoutManager(this)
@@ -71,6 +99,13 @@ class MainActivity : AppCompatActivity() {
 
                 startActivityForResult(intent, EDIT_CLIMBING_ENTRY_REQUEST)
             }
+        })
+
+        viewModel.getAllRouteTypeNames().observe(this, Observer { routeTypeNames: List<String>? ->
+            Log.d("gnvo", routeTypeNames.toString())
+        })
+        viewModel.getAllClimbingEntries().observe(this, Observer { climbEntries: List<ClimbEntry>? ->
+            Log.d("gnvo", climbEntries.toString())
         })
     }
 

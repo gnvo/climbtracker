@@ -8,6 +8,7 @@ import android.arch.persistence.room.PrimaryKey
 data class RouteStyle(
     @PrimaryKey(autoGenerate = true)
     val id: Int? = null,
+    @ColumnInfo(name = "user_created") val userCreated: Boolean? = false,
     val name: String
 ){
     companion object {
