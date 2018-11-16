@@ -9,10 +9,14 @@ import android.view.ViewGroup
 import kotlinx.android.synthetic.main.climb_entry_item.view.*
 import tracking.climbing.gnvo.org.climbingtracker.R
 import tracking.climbing.gnvo.org.climbingtracker.data.room.pojo.ClimbEntry
+import java.text.SimpleDateFormat
+import java.util.*
 
 class EntryAdapter : ListAdapter<ClimbEntry, EntryAdapter.ViewHolder>(EntryDiffCallback()) {
 
     private var listener: OnItemClickListener? = null
+
+    private val dateFormater = SimpleDateFormat("yyyy/MM/dd", Locale.getDefault())
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.climb_entry_item, parent, false))
@@ -28,9 +32,16 @@ class EntryAdapter : ListAdapter<ClimbEntry, EntryAdapter.ViewHolder>(EntryDiffC
 
     open inner class ViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(climbEntry: ClimbEntry) {
-            itemView.text_view_title.text = climbEntry.name
-            itemView.text_view_description.text = climbEntry.comment
-//            itemView.text_view_priority.text = climbEntry.priority?.toString()
+            val orderedPitches = climbEntry.pitches.sortedWith(compareBy{it.pitchNumber})
+            val gradesText = when (orderedPitches.size) {
+                1 -> orderedPitches[0].routeGradeId.toString()
+                else -> {
+                    val grades= orderedPitches.map{it.routeGradeId!!}
+                    "${grades.joinToString(",")} (max: ${grades.max()})"
+                }
+            }
+            itemView.text_view_grade.text = gradesText
+            itemView.text_view_date.text = dateFormater.format(climbEntry.datetime)
 
             itemView.setOnClickListener {
                 val position = adapterPosition

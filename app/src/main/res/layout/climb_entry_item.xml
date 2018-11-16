@@ -15,30 +15,19 @@
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/text_view_priority"
-                android:text="1"
-                android:layout_alignParentEnd="true"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-        />
-
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/text_view_title"
-                android:text="Title"
+                android:id="@+id/text_view_grade"
+                android:text="Grade"
                 android:maxLines="1"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-                android:layout_toStartOf="@id/text_view_priority"
                 android:layout_alignParentStart="true"
-                android:ellipsize="end"
         />
 
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/text_view_description"
-                android:text="Description"
-                android:layout_below="@id/text_view_title"
+                android:id="@+id/text_view_date"
+                android:text="Date"
+                android:layout_below="@id/text_view_grade"
         />
     </RelativeLayout>
 </android.support.v7.widget.CardView>
