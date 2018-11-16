@@ -21,7 +21,6 @@ interface ClimbEntryDao {
     @Query("DELETE FROM climbing_entry")
     fun deleteAllClimbingEntries()
 
-//    @Query("SELECT * FROM climbing_entry ORDER BY datetime DESC")
-    @Query("SELECT * FROM climbing_entry")
+    @Query("SELECT * FROM climbing_entry ORDER BY datetime ASC")
     fun getAllClimbingEntries(): LiveData<List<ClimbEntry>>
 }

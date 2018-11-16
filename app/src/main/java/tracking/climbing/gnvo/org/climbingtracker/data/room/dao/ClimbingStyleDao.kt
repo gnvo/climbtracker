@@ -5,7 +5,7 @@ import tracking.climbing.gnvo.org.climbingtracker.data.room.pojo.ClimbingStyle
 
 @Dao
 interface ClimbingStyleDao {
-    @Query("SELECT * FROM climbing_style ORDER BY climbing_style_name ASC")
+    @Query("SELECT * FROM climbing_style ORDER BY name ASC")
     fun getAll(): List<ClimbingStyle>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

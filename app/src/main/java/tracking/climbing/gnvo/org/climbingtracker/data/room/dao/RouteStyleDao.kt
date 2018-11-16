@@ -5,7 +5,7 @@ import tracking.climbing.gnvo.org.climbingtracker.data.room.pojo.RouteStyle
 
 @Dao
 interface RouteStyleDao {
-    @Query("SELECT * FROM route_style ORDER BY route_style_name ASC")
+    @Query("SELECT * FROM route_style ORDER BY name ASC")
     fun getAll(): List<RouteStyle>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

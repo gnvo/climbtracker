@@ -1,14 +1,11 @@
 package tracking.climbing.gnvo.org.climbingtracker.data.room.pojo
 
-import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
 
 @Entity(tableName = "route_grade")
 data class RouteGrade(
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "grade_id") val gradeId: Int? = null,
-    @ColumnInfo(name = "user_created_grade") val userCreatedGrade: Boolean = false,
+    @PrimaryKey(autoGenerate = true) val id: Int? = null,
     val french: String,
     val yds: String,
     val uiaa: String

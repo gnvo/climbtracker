@@ -5,10 +5,10 @@ import tracking.climbing.gnvo.org.climbingtracker.data.room.pojo.AttemptOutcome
 
 @Dao
 interface AttemptOutcomeDao {
-    @Query("SELECT * FROM attempt_outcome ORDER BY attempt_outcome_name ASC")
+    @Query("SELECT * FROM attempt_outcome ORDER BY name ASC")
     fun getAll(): List<AttemptOutcome>
 
-    @Query("SELECT attempt_outcome_name FROM attempt_outcome ORDER BY attempt_outcome_name ASC")
+    @Query("SELECT name FROM attempt_outcome ORDER BY name ASC")
     fun getAllString(): List<String>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
