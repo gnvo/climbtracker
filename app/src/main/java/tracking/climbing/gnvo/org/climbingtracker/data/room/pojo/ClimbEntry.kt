@@ -13,7 +13,7 @@ data class ClimbEntry(
     val site: String? = null,
     val sector: String? = null,
     val datetime: Date,
-    var pitches: List<Pitch>,
+    var pitches: List<Pitch>,//Todo: Don't use JSON to store pitches
     @Embedded(prefix = "route_type_") val routeType: RouteType? = null,
     var rating: Int? = null,
     val comment: String? = null
