@@ -1,6 +1,6 @@
 package tracking.climbing.gnvo.org.climbingtracker.data.room.pojo
 
-import android.arch.persistence.room.Embedded
+import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
 import java.util.Date
@@ -14,7 +14,7 @@ data class ClimbEntry(
     val sector: String? = null,
     val datetime: Date,
     var pitches: List<Pitch>,//Todo: Don't use JSON to store pitches
-    @Embedded(prefix = "route_type_") val routeType: RouteType? = null,
+    @ColumnInfo(name = "route_type") val routeType: String,
     var rating: Int? = null,
     val comment: String? = null
 )
@@ -23,8 +23,9 @@ data class ClimbEntry(
         fun initialData(): List<ClimbEntry> {
             return listOf(
                 ClimbEntry(
+                    routeType = "Sport",
                     datetime = Date(0),
-                    pitches = listOf(Pitch(routeGradeId = 2))
+                    pitches = listOf(Pitch(routeGradeId = 2, pitchNumber = 1))
                 )
             )
         }

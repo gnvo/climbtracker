@@ -12,16 +12,11 @@ import tracking.climbing.gnvo.org.climbingtracker.data.room.dao.*
 import tracking.climbing.gnvo.org.climbingtracker.data.room.pojo.*
 import java.util.concurrent.Executors
 
-@Database(entities = [AttemptOutcome::class, ClimbEntry::class, ClimbingStyle::class, Pitch::class, RouteGrade::class, RouteStyle::class, RouteType::class], version = 1)
+@Database(entities = [ClimbEntry::class, Pitch::class, RouteGrade::class], version = 1)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
-    abstract fun attemptOutcomeDao(): AttemptOutcomeDao
     abstract fun climbEntryDao(): ClimbEntryDao
-    abstract fun climbingStyleDao(): ClimbingStyleDao
-    abstract fun pitchDao(): PitchDao
     abstract fun routeGradeDao(): RouteGradeDao
-    abstract fun routeStyleDao(): RouteStyleDao
-    abstract fun routeTypeDao(): RouteTypeDao
 
     companion object {
         var INSTANCE: AppDatabase? = null
@@ -50,11 +45,7 @@ abstract class AppDatabase : RoomDatabase() {
                         super.onCreate(db)
                         Executors.newSingleThreadScheduledExecutor()
                             .execute {
-                                INSTANCE?.routeTypeDao()?.init(RouteType.initialData())
-                                INSTANCE?.attemptOutcomeDao()?.init(AttemptOutcome.initialData())
                                 INSTANCE?.routeGradeDao()?.init(RouteGrade.initialData())
-                                INSTANCE?.climbingStyleDao()?.init(ClimbingStyle.initialData())
-                                INSTANCE?.routeStyleDao()?.init(RouteStyle.initialData())
                                 INSTANCE?.climbEntryDao()?.init(ClimbEntry.initialData())
                             }
                     }

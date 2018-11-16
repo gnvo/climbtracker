@@ -37,4 +37,24 @@ class Converters {
         val type = object : TypeToken<List<Pitch>>() {}.type
         return gson.fromJson(pitchString, type)
     }
+
+    @TypeConverter
+    fun fromRouteStyleList(routeStyle: List<String>?): String? {
+        if (routeStyle == null) {
+            return null
+        }
+        val gson = Gson()
+        val type = object : TypeToken<List<String>>() {}.type
+        return gson.toJson(routeStyle, type)
+    }
+
+    @TypeConverter
+    fun toRouteStyleList(routeStyleString: String?): List<String>? {
+        if (routeStyleString == null) {
+            return null
+        }
+        val gson = Gson()
+        val type = object : TypeToken<List<String>>() {}.type
+        return gson.fromJson(routeStyleString, type)
+    }
 }

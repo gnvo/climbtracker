@@ -8,4 +8,33 @@
     <string name="comment">Comment</string>
     <string name="edit_climb_entry">Edit climb entry</string>
     <string name="add_climb_entry">Add climb entry</string>
+
+    <string-array name="route_type">
+        <item>Sport</item>
+        <item>Trad</item>
+        <item>Boulder</item>
+    </string-array>
+
+    <string-array name="climbing_styles">
+        <item>Lead</item>
+        <item>Follow</item>
+        <item>Top rope</item>
+        <item>Solo</item>
+    </string-array>
+
+    <string-array name="route_styles">
+        <item>Slab</item>
+        <item>Face</item>
+        <item>Overhang</item>
+        <item>Tufas</item>
+        <item>Pockets</item>
+    </string-array>
+
+    <string-array name="attempt_outcome">
+        <item>Onsight</item>
+        <item>Flash</item>
+        <item>Redpoint</item>
+        <item>Fell/Hung</item>
+    </string-array>
+
 </resources>
