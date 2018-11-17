@@ -8,8 +8,7 @@ import android.arch.persistence.room.*
 //    foreignKeys = [ForeignKey(entity = RouteGrade::class, parentColumns = ["id"], childColumns = ["route_grade_id"])
 //])
 data class Pitch(
-    @PrimaryKey(autoGenerate = true)
-    var id: Int? = null,
+    @PrimaryKey(autoGenerate = true) var id: Long? = null,
     @ColumnInfo(name = "pitch_number") var pitchNumber: Int,
     @ColumnInfo(name = "attempt_outcome") val attemptOutcome: String? = null,
     @ColumnInfo(name = "climbing_style") val climbingStyle: String? = null,

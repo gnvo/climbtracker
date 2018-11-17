@@ -5,7 +5,7 @@ import android.arch.persistence.room.PrimaryKey
 
 @Entity(tableName = "route_grade")
 data class RouteGrade(
-    @PrimaryKey(autoGenerate = true) var id: Int? = null,
+    @PrimaryKey(autoGenerate = true) var id: Long? = null,
     var french: String? = null,
     var yds: String? = null,
     var uiaa: String? = null

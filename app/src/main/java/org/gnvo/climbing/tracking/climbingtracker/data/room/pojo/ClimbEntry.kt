@@ -7,7 +7,7 @@ import java.util.Date
 
 @Entity(tableName = "climbing_entry")
 data class ClimbEntry(
-    @PrimaryKey(autoGenerate = true) val id: Int? = null,
+    @PrimaryKey(autoGenerate = true) val id: Long? = null,
     val name: String? = null,
     val coordinates: String? = null,
     val site: String? = null,
