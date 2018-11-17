@@ -4,5 +4,5 @@ import android.arch.persistence.room.*
 
 data class ClimbEntryWithPitches(
     @Embedded var climbEntry: ClimbEntry? = null,
-    @Relation(parentColumn = "id", entityColumn = "climb_entry_id") var pitches: List<Pitch> = ArrayList()
+    @Relation(parentColumn = "id", entityColumn = "climb_entry_id", entity = Pitch::class) var pitches: List<Pitch> = listOf()
 )
