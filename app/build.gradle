@@ -9,7 +9,7 @@ apply plugin: 'kotlin-kapt'
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "tracking.climbing.gnvo.org.climbingtracker"
+        applicationId "org.gnvo.climbing.tracking.climbingtracker"
         minSdkVersion 26
         targetSdkVersion 28
         versionCode 1

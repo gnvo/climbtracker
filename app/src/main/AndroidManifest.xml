@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="tracking.climbing.gnvo.org.climbingtracker">
+          package="org.gnvo.climbing.tracking.climbingtracker">
 
     <application
             android:allowBackup="true"
