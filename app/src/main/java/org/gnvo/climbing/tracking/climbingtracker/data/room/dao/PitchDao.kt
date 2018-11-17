@@ -5,7 +5,6 @@ import android.arch.persistence.room.Insert
 import android.arch.persistence.room.Update
 import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.Pitch
 
-
 @Dao
 interface PitchDao {
     @Insert
