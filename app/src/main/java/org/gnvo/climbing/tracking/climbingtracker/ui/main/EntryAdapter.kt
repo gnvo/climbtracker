@@ -8,11 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.climb_entry_item.view.*
 import org.gnvo.climbing.tracking.climbingtracker.R
-import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.ClimbEntry
+import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.ClimbEntryWithPitches
 import java.text.SimpleDateFormat
 import java.util.*
 
-class EntryAdapter : ListAdapter<ClimbEntry, EntryAdapter.ViewHolder>(
+class EntryAdapter : ListAdapter<ClimbEntryWithPitches, EntryAdapter.ViewHolder>(
     EntryDiffCallback()
 ) {
 
@@ -30,24 +30,24 @@ class EntryAdapter : ListAdapter<ClimbEntry, EntryAdapter.ViewHolder>(
         holder.bind(getItem(position))
     }
 
-    fun getClimbingEntryAt(position: Int): ClimbEntry {
+    fun getClimbingEntryAt(position: Int): ClimbEntryWithPitches {
         return getItem(position)
     }
 
     open inner class ViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(climbEntry: ClimbEntry) {
-            val orderedPitches = climbEntry.pitches.sortedWith(compareBy{it.pitchNumber})
-            val gradesText= orderedPitches.
-                    map{ it.routeGrade.french + "/" + it.routeGrade.yds }.
-                    joinToString(",")
-            val maxText = if (orderedPitches.size > 1) {
-                val pitchesOrderedByGrade = orderedPitches.sortedWith(compareBy{it.routeGrade.french})
-                "(max: ${pitchesOrderedByGrade[0].routeGrade.french}/${pitchesOrderedByGrade[0].routeGrade.yds}) "
-            } else {
-                ""
-            }
-            itemView.text_view_grade.text = maxText + gradesText
-            itemView.text_view_date.text = dateFormater.format(climbEntry.datetime)
+        fun bind(climbEntryWithPitches: ClimbEntryWithPitches) {
+//            val orderedPitches = climbEntry.pitches.sortedWith(compareBy{it.pitchNumber})
+//            val gradesText= orderedPitches.
+//                    map{ it.routeGrade.french + "/" + it.routeGrade.yds }.
+//                    joinToString(",")
+//            val maxText = if (orderedPitches.size > 1) {
+//                val pitchesOrderedByGrade = orderedPitches.sortedWith(compareBy{it.routeGrade.french})
+//                "(max: ${pitchesOrderedByGrade[0].routeGrade.french}/${pitchesOrderedByGrade[0].routeGrade.yds}) "
+//            } else {
+//                ""
+//            }
+//            itemView.text_view_grade.text = maxText + gradesText
+            itemView.text_view_date.text = dateFormater.format(climbEntryWithPitches.climbEntry!!.datetime)
 
             itemView.setOnClickListener {
                 val position = adapterPosition
@@ -59,7 +59,7 @@ class EntryAdapter : ListAdapter<ClimbEntry, EntryAdapter.ViewHolder>(
     }
 
     interface OnItemClickListener {
-        fun onItemClick(climbEntry: ClimbEntry)
+        fun onItemClick(climbEntry: ClimbEntryWithPitches)
     }
 
     fun setOnItemClickListener(listener: OnItemClickListener){

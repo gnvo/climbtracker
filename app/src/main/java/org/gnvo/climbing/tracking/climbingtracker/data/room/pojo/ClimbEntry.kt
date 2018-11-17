@@ -13,7 +13,6 @@ data class ClimbEntry(
     val site: String? = null,
     val sector: String? = null,
     val datetime: Date,
-    var pitches: List<Pitch>,//Todo: Don't use JSON to store pitches
     @ColumnInfo(name = "route_type") val routeType: String,
     var rating: Int? = null,
     val comment: String? = null

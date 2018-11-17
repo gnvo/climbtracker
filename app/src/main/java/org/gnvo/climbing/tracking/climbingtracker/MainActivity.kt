@@ -15,6 +15,7 @@ import android.view.MenuItem
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.ClimbEntry
+import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.ClimbEntryWithPitches
 import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.Pitch
 import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.RouteGrade
 import org.gnvo.climbing.tracking.climbingtracker.ui.main.AddEditEntryActivity
@@ -77,7 +78,7 @@ class MainActivity : AppCompatActivity() {
         recycler_view.adapter = adapter
 
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
-        viewModel.getAllClimbingEntries().observe(this, Observer {
+        viewModel.getAllClimbingEntriesWithPitches().observe(this, Observer {
             adapter.submitList(it!!)
         })
 
@@ -89,18 +90,18 @@ class MainActivity : AppCompatActivity() {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
-                viewModel.deleteClimbEntry(adapter.getClimbingEntryAt(position))
+                viewModel.deleteClimbEntry(adapter.getClimbingEntryAt(position).climbEntry!!)
             }
         }
         val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallback)
         itemTouchHelper.attachToRecyclerView(recycler_view)
 
         adapter.setOnItemClickListener(object : EntryAdapter.OnItemClickListener {
-            override fun onItemClick(climbEntry: ClimbEntry) {
+            override fun onItemClick(climbEntry: ClimbEntryWithPitches) {
                 val intent = Intent(this@MainActivity, AddEditEntryActivity::class.java)
-                intent.putExtra(AddEditEntryActivity.EXTRA_ID, climbEntry.id)
-                intent.putExtra(AddEditEntryActivity.EXTRA_ROUTE_NAME, climbEntry.name)
-                intent.putExtra(AddEditEntryActivity.EXTRA_COMMENT, climbEntry.comment)
+                intent.putExtra(AddEditEntryActivity.EXTRA_ID, climbEntry.climbEntry!!.id)
+                intent.putExtra(AddEditEntryActivity.EXTRA_ROUTE_NAME, climbEntry.climbEntry!!.name)
+                intent.putExtra(AddEditEntryActivity.EXTRA_COMMENT, climbEntry.climbEntry!!.comment)
 //                intent.putExtra(AddEditEntryActivity.EXTRA_PRIORITY, climbEntry.priority )
 
                 startActivityForResult(intent, EDIT_CLIMBING_ENTRY_REQUEST)
