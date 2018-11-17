@@ -5,10 +5,10 @@ import android.arch.lifecycle.LiveData
 import org.gnvo.climbing.tracking.climbingtracker.data.room.AppDatabase
 import org.gnvo.climbing.tracking.climbingtracker.data.room.dao.ClimbEntryDao
 import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.ClimbEntry
-import java.util.concurrent.Executor
+import org.jetbrains.anko.doAsync
 
 
-class ClimbEntryRepository(application: Application, private val executor: Executor) {
+class ClimbEntryRepository(application: Application) {
     private val db: AppDatabase? = AppDatabase.getInstance(application = application)
 //    private val attemptOutcomeDao: AttemptOutcomeDao? = db?.attemptOutcomeDao()
     private val climbEntryDao: ClimbEntryDao? = db?.climbEntryDao()
@@ -20,25 +20,25 @@ class ClimbEntryRepository(application: Application, private val executor: Execu
     private val allClimbingEntries: LiveData<List<ClimbEntry>> = climbEntryDao?.getAllClimbingEntries()!!
 
     fun insert(climbEntry: ClimbEntry) {
-        executor.execute {
+        doAsync {
             climbEntryDao?.insert(climbEntry)
         }
     }
 
     fun update(climbEntry: ClimbEntry) {
-        executor.execute {
+        doAsync {
             climbEntryDao?.update(climbEntry)
         }
     }
 
     fun delete(climbEntry: ClimbEntry) {
-        executor.execute {
+        doAsync {
             climbEntryDao?.delete(climbEntry)
         }
     }
 
     fun deleteAllClimbingEntries() {
-        executor.execute {
+        doAsync {
             climbEntryDao?.deleteAllClimbingEntries()
         }
     }

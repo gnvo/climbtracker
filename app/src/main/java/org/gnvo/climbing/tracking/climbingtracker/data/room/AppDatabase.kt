@@ -13,6 +13,7 @@ import org.gnvo.climbing.tracking.climbingtracker.data.room.dao.RouteGradeDao
 import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.ClimbEntry
 import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.Pitch
 import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.RouteGrade
+import org.jetbrains.anko.doAsync
 import java.util.concurrent.Executors
 
 @Database(entities = [ClimbEntry::class, Pitch::class, RouteGrade::class], version = 1)
@@ -46,10 +47,9 @@ abstract class AppDatabase : RoomDatabase() {
                 .addCallback(object : RoomDatabase.Callback() {
                     override fun onCreate(@NonNull db: SupportSQLiteDatabase) {
                         super.onCreate(db)
-                        Executors.newSingleThreadScheduledExecutor()
-                            .execute {
-                                INSTANCE?.routeGradeDao()?.init(RouteGrade.initialData())
-                            }
+                        doAsync {
+                            INSTANCE?.routeGradeDao()?.init(RouteGrade.initialData())
+                        }
                     }
                 })
                 .build()

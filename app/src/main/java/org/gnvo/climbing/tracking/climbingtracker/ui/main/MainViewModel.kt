@@ -7,31 +7,27 @@ import org.gnvo.climbing.tracking.climbingtracker.data.room.repository.ClimbEntr
 import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.ClimbEntry
 import java.util.concurrent.Executors
 
-class MainViewModel(application: Application): AndroidViewModel(application) {
-    private val repositoryClimbEntry: ClimbEntryRepository =
-        ClimbEntryRepository(
-            application,
-            Executors.newSingleThreadScheduledExecutor()
-        )
+class MainViewModel(application: Application) : AndroidViewModel(application) {
+    private val repositoryClimbEntry: ClimbEntryRepository = ClimbEntryRepository(application)
     private val climbingEntries: LiveData<List<ClimbEntry>> = repositoryClimbEntry.getAllClimbingEntries()
 
-    fun insertClimbEntry(climbEntry: ClimbEntry){
+    fun insertClimbEntry(climbEntry: ClimbEntry) {
         repositoryClimbEntry.insert(climbEntry)
     }
 
-    fun updateClimbEntry(climbEntry: ClimbEntry){
+    fun updateClimbEntry(climbEntry: ClimbEntry) {
         repositoryClimbEntry.update(climbEntry)
     }
 
-    fun deleteClimbEntry(climbEntry: ClimbEntry){
+    fun deleteClimbEntry(climbEntry: ClimbEntry) {
         repositoryClimbEntry.delete(climbEntry)
     }
 
-    fun deleteAllClimbingEntries(){
+    fun deleteAllClimbingEntries() {
         repositoryClimbEntry.deleteAllClimbingEntries()
     }
 
-    fun getAllClimbingEntries(): LiveData<List<ClimbEntry>>{
+    fun getAllClimbingEntries(): LiveData<List<ClimbEntry>> {
         return climbingEntries
     }
 }
