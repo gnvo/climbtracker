@@ -108,7 +108,7 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        viewModel.getAllClimbingEntries().observe(this, Observer { climbEntries: List<ClimbEntry>? ->
+        viewModel.getAllClimbingEntriesWithPitches().observe(this, Observer { climbEntries: List<ClimbEntryWithPitches>? ->
             Log.d("gnvo", climbEntries.toString())
         })
         viewModel.getAllRouteGrades().observe(this, Observer { routeGrades: List<RouteGrade>? ->
