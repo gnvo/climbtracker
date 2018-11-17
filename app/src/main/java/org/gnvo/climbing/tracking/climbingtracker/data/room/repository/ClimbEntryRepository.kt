@@ -23,7 +23,7 @@ class ClimbEntryRepository(application: Application) {
     private val allClimbingEntries: LiveData<List<ClimbEntry>> = climbEntryDao?.getAllClimbingEntries()!!
     private val allClimbingEntriesWithPitches: LiveData<List<ClimbEntryWithPitches>> = climbEntryWithPitchesDao?.getAll()!!
 
-    fun insert(climbEntry: ClimbEntry) {
+    fun insert(climbEntry: ClimbEntry?) {
         doAsync {
             climbEntryDao?.insert(climbEntry)
         }

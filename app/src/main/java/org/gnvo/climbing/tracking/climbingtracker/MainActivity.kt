@@ -38,25 +38,13 @@ class MainActivity : AppCompatActivity() {
         button_add_climb_entry.setOnClickListener {
             Log.d("gnvo", "CLICK")
             viewModel.insertClimbEntry(
-                ClimbEntry(
-//                    name = "route name2",
-//                    coordinates = "2.0,2.0",
-//                    site = "site2",
-//                    sector = "sector2",
-                    datetime = Date(System.currentTimeMillis()),
-                    pitches = listOf(
-                        Pitch(
-                            pitchNumber = 2,
-                            routeGrade = RouteGrade(id = 1)
-                        ),
-                        Pitch(
-                            pitchNumber = 1,
-                            routeGrade = RouteGrade(id = 2)
-                        )
-                    ),
-                    routeType = "Sport"
-//                    rating = 2,
-//                    comment = "comments21"
+                ClimbEntryWithPitches(
+                    ClimbEntry(datetime = Date(System.currentTimeMillis()),
+                        routeType = "Sport"),
+                    listOf(
+                        Pitch(pitchNumber = 1, routeGradeId = 1, climbEntryId = 2)
+                    )
+
                 )
             )
 

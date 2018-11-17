@@ -36,9 +36,9 @@ class EntryAdapter : ListAdapter<ClimbEntryWithPitches, EntryAdapter.ViewHolder>
 
     open inner class ViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(climbEntryWithPitches: ClimbEntryWithPitches) {
-//            val orderedPitches = climbEntry.pitches.sortedWith(compareBy{it.pitchNumber})
-//            val gradesText= orderedPitches.
-//                    map{ it.routeGrade.french + "/" + it.routeGrade.yds }.
+            val orderedPitches = climbEntryWithPitches.pitches.sortedWith(compareBy{it.pitchNumber})
+//            val gradesText = orderedPitches.
+//                    map{ it. ..routeGrade.french + "/" + it.routeGrade.yds }.
 //                    joinToString(",")
 //            val maxText = if (orderedPitches.size > 1) {
 //                val pitchesOrderedByGrade = orderedPitches.sortedWith(compareBy{it.routeGrade.french})
@@ -46,7 +46,7 @@ class EntryAdapter : ListAdapter<ClimbEntryWithPitches, EntryAdapter.ViewHolder>
 //            } else {
 //                ""
 //            }
-//            itemView.text_view_grade.text = maxText + gradesText
+            itemView.text_view_grade.text = orderedPitches.map{it.routeGradeId}.toString()
             itemView.text_view_date.text = dateFormater.format(climbEntryWithPitches.climbEntry!!.datetime)
 
             itemView.setOnClickListener {
