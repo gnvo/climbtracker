@@ -2,7 +2,7 @@ package org.gnvo.climbing.tracking.climbingtracker.data.room.pojo
 
 import android.arch.persistence.room.*
 
-//TODO: currently not a table but a JSON in the ClimbEntry POJO, migrate away from JSON
+
 @Entity(tableName = "pitch",
     indices = [Index(value = ["pitch_number"], unique = true)],
     foreignKeys = [
@@ -16,5 +16,5 @@ data class Pitch(
     @ColumnInfo(name = "climbing_style") var climbingStyle: String? = null,
     @ColumnInfo(name = "route_grade_id") var routeGradeId: Int,
     @ColumnInfo(name = "climb_entry_id") var climbEntryId: Int,
-    @ColumnInfo(name = "route_style") var routeStyle: List<String>? = null
+    @ColumnInfo(name = "route_style") var routeStyle: List<String>? = null//TODO: currently storing as JSON, migrate away from JSON
 )
