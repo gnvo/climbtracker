@@ -110,6 +110,9 @@ class MainActivity : AppCompatActivity() {
         viewModel.getAllClimbingEntries().observe(this, Observer { climbEntries: List<ClimbEntry>? ->
             Log.d("gnvo", climbEntries.toString())
         })
+        viewModel.getAllRouteGrades().observe(this, Observer { routeGrades: List<RouteGrade>? ->
+            Log.d("gnvo", routeGrades.toString())
+        })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

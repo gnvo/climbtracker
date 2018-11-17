@@ -1,13 +1,14 @@
 package org.gnvo.climbing.tracking.climbingtracker.data.room.dao
 
+import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.*
 import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.RouteGrade
 
 @Dao
 interface RouteGradeDao {
     @Query("SELECT * FROM route_grade ORDER BY french ASC")
-    fun getAll(): List<RouteGrade>
+    fun getAll(): LiveData<List<RouteGrade>>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert
     fun init(routeGrades: List<RouteGrade>)
 }
