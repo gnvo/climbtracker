@@ -1,6 +1,7 @@
 package org.gnvo.climbing.tracking.climbingtracker.data.room.pojo
 
 import android.arch.persistence.room.ColumnInfo
+import android.arch.persistence.room.Embedded
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
 import java.util.Date
@@ -9,7 +10,7 @@ import java.util.Date
 data class ClimbEntry(
     @PrimaryKey(autoGenerate = true) val id: Long? = null,
     val name: String? = null,
-    val coordinates: String? = null,
+    @Embedded val coordinates: Coordinates? = null,
     val site: String? = null,
     val sector: String? = null,
     val datetime: Date,
