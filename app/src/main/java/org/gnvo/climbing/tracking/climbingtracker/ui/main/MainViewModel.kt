@@ -43,4 +43,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun getAllClimbingEntriesSummary(): LiveData<List<ClimbEntrySummary>> {
         return climbingEntriesSummary
     }
+
+    fun deleteClimbEntryById(climbEntryId: Long?) {
+        repositoryPitch.deleteClimbEntryById(climbEntryId)
+        repositoryClimbEntry.deleteClimbEntryById(climbEntryId)
+    }
 }

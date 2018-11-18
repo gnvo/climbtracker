@@ -16,4 +16,10 @@ class PitchRepository(application: Application) {
             pitchDao?.insert(pitches)
         }
     }
+
+    fun deleteClimbEntryById(climbEntryId: Long?) {
+        doAsync {
+            pitchDao?.deleteByClimbEntryId(climbEntryId)
+        }
+    }
 }

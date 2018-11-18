@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity() {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
-                viewModel.deleteClimbEntry(adapter.getClimbingEntryAt(position).climbEntry!!)
+                viewModel.deleteClimbEntryById(adapter.getClimbingEntryAt(position).climbEntryId)
             }
         }
         val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallback)

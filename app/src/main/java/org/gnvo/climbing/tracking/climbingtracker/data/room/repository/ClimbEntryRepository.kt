@@ -46,4 +46,10 @@ class ClimbEntryRepository(application: Application) {
     fun getAllSummary(): LiveData<List<ClimbEntrySummary>> {
         return allSummary
     }
+
+    fun deleteClimbEntryById(climbEntryId: Long?) {
+        doAsync {
+            climbEntryDao?.deleteByClimbEntryId(climbEntryId)
+        }
+    }
 }

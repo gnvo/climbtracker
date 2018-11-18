@@ -19,6 +19,9 @@ interface ClimbEntryDao {
     @Delete
     fun delete(climbEntry: ClimbEntry)
 
+    @Query("DELETE FROM climbing_entry WHERE id = :climbEntryId")
+    fun deleteByClimbEntryId(climbEntryId: Long?)
+
     @Query("DELETE FROM climbing_entry")
     fun deleteAllClimbingEntries()
 
@@ -34,4 +37,5 @@ interface ClimbEntryDao {
             "GROUP BY climb_entry_id " +
             "ORDER BY datetime")
     fun getAllSummary(): LiveData<List<ClimbEntrySummary>>
+
 }

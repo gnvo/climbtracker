@@ -1,8 +1,6 @@
 package org.gnvo.climbing.tracking.climbingtracker.data.room.dao
 
-import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Insert
-import android.arch.persistence.room.Update
+import android.arch.persistence.room.*
 import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.Pitch
 
 @Dao
@@ -12,4 +10,7 @@ interface PitchDao {
 
     @Update
     fun update(pitch: Pitch)
+
+    @Query("DELETE FROM pitch WHERE climb_entry_id = :climbEntryId")
+    fun deleteByClimbEntryId(climbEntryId: Long?)
 }
