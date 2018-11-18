@@ -18,9 +18,7 @@ class EntryAdapter : ListAdapter<ClimbEntrySummary, EntryAdapter.ViewHolder>(
 
     private var listener: OnItemClickListener? = null
 
-    //HARDCODED PREFERENCES: //TODO: Unhardcode and let the user set them
     private val dateFormater = SimpleDateFormat("yyyy/MM/dd", Locale.getDefault())
-    private val gradesToShow = arrayOf("french", "yds", "uiaa")
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.climb_entry_item, parent, false))
@@ -37,16 +35,15 @@ class EntryAdapter : ListAdapter<ClimbEntrySummary, EntryAdapter.ViewHolder>(
     open inner class ViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(climbEntryWithPitches: ClimbEntrySummary) {
             val orderedPitches = climbEntryWithPitches.pitches?.sortedWith(compareBy{it.pitchNumber})
-//            val gradesText = orderedPitches.
-//                    map{ it. ..routeGrade.french + "/" + it.routeGrade.yds }.
-//                    joinToString(",")
-//            val maxText = if (orderedPitches.size > 1) {
-//                val pitchesOrderedByGrade = orderedPitches.sortedWith(compareBy{it.routeGrade.french})
-//                "(max: ${pitchesOrderedByGrade[0].routeGrade.french}/${pitchesOrderedByGrade[0].routeGrade.yds}) "
-//            } else {
-//                ""
-//            }
-            itemView.text_view_grade.text = orderedPitches?.map{it.french}?.joinToString(",")
+            val maxText = climbEntryWithPitches.pitches?.sortedWith(compareBy{it.french})?.last()?.french
+            val gradeText = orderedPitches?.map{it.french}?.joinToString(", ")
+            itemView.text_view_grade.text = gradeText
+            if (climbEntryWithPitches.pitches?.size!! > 1){
+                itemView.text_view_max.text = "($maxText)"
+                itemView.text_view_max.visibility = View.VISIBLE
+            } else {
+                itemView.text_view_max.visibility = View.GONE
+            }
             itemView.text_view_date.text = dateFormater.format(climbEntryWithPitches.datetime)
 
             itemView.setOnClickListener {
