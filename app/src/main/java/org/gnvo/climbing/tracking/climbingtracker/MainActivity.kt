@@ -71,12 +71,9 @@ class MainActivity : AppCompatActivity() {
         itemTouchHelper.attachToRecyclerView(recycler_view)
 
         adapter.setOnItemClickListener(object : EntryAdapter.OnItemClickListener {
-            override fun onItemClick(climbEntry: ClimbEntryWithPitches) {
+            override fun onItemClick(climbEntry: ClimbEntrySummary) {
                 val intent = Intent(this@MainActivity, AddEditEntryActivity::class.java)
-                intent.putExtra(AddEditEntryActivity.EXTRA_ID, climbEntry.climbEntry!!.id)
-                intent.putExtra(AddEditEntryActivity.EXTRA_ROUTE_NAME, climbEntry.climbEntry!!.name)
-                intent.putExtra(AddEditEntryActivity.EXTRA_COMMENT, climbEntry.climbEntry!!.comment)
-//                intent.putExtra(AddEditEntryActivity.EXTRA_PRIORITY, climbEntry.priority )
+                intent.putExtra(AddEditEntryActivity.EXTRA_ID, climbEntry.climbEntryId)
 
                 startActivityForResult(intent, EDIT_CLIMBING_ENTRY_REQUEST)
             }
