@@ -4,6 +4,7 @@ import android.arch.persistence.room.TypeConverter
 import java.util.Date
 import com.google.gson.reflect.TypeToken
 import com.google.gson.Gson
+import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.PitchSummaryWithGrades
 
 
 class Converters {
@@ -15,6 +16,21 @@ class Converters {
     @TypeConverter
     fun dateToTimestamp(date: Date?): Long? {
         return date?.time//.toLong()
+    }
+
+    @TypeConverter
+    fun fromPitches(pitches: String): List<PitchSummaryWithGrades> {
+        val pitchesStringList = pitches.split(",")
+
+        return pitchesStringList.map{
+            val detailsList = it.split("/")
+            PitchSummaryWithGrades(
+                pitchNumber = detailsList[0].toInt(),
+                french = detailsList[1],
+                uiaa = detailsList[2],
+                yds = detailsList[3]
+            )
+        }
     }
 
     @TypeConverter
