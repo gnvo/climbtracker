@@ -5,6 +5,7 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.AndroidViewModel
 import org.gnvo.climbing.tracking.climbingtracker.data.room.repository.ClimbEntryRepository
 import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.ClimbEntry
+import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.ClimbEntrySummary
 import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.ClimbEntryWithPitches
 import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.RouteGrade
 import org.gnvo.climbing.tracking.climbingtracker.data.room.repository.PitchRepository
@@ -16,7 +17,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val repositoryRouteGrade: RouteGradeRepository = RouteGradeRepository(application)
     private val repositoryPitch: PitchRepository = PitchRepository(application)
 
-    private val climbingEntries: LiveData<List<ClimbEntry>> = repositoryClimbEntry.getAllClimbingEntries()
+    private val climbingEntriesSummary: LiveData<List<ClimbEntrySummary>> = repositoryClimbEntry.getAllSummary()
     private val climbingEntriesWithPitches: LiveData<List<ClimbEntryWithPitches>> = repositoryClimbEntry.getAllClimbingEntriesWithPitches()
     private val routeGrades: LiveData<List<RouteGrade>> = repositoryRouteGrade.getAll()
 
@@ -37,15 +38,15 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         repositoryClimbEntry.deleteAllClimbingEntries()
     }
 
-    fun getAllClimbingEntries(): LiveData<List<ClimbEntry>> {
-        return climbingEntries
-    }
-
     fun getAllClimbingEntriesWithPitches(): LiveData<List<ClimbEntryWithPitches>> {
         return climbingEntriesWithPitches
     }
 
     fun getAllRouteGrades(): LiveData<List<RouteGrade>> {
         return routeGrades
+    }
+
+    fun getAllClimbingEntriesSummary(): LiveData<List<ClimbEntrySummary>> {
+        return climbingEntriesSummary
     }
 }

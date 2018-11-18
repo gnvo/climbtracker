@@ -14,10 +14,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
-import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.ClimbEntry
-import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.ClimbEntryWithPitches
-import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.Pitch
-import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.RouteGrade
+import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.*
 import org.gnvo.climbing.tracking.climbingtracker.ui.main.AddEditEntryActivity
 import org.gnvo.climbing.tracking.climbingtracker.ui.main.MainViewModel
 import org.gnvo.climbing.tracking.climbingtracker.ui.main.EntryAdapter
@@ -96,7 +93,7 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        viewModel.getAllClimbingEntriesWithPitches().observe(this, Observer { climbEntries: List<ClimbEntryWithPitches>? ->
+        viewModel.getAllClimbingEntriesSummary().observe(this, Observer { climbEntries: List<ClimbEntrySummary>? ->
             Log.d("gnvo", climbEntries.toString())
         })
         viewModel.getAllRouteGrades().observe(this, Observer { routeGrades: List<RouteGrade>? ->

@@ -6,6 +6,7 @@ import org.gnvo.climbing.tracking.climbingtracker.data.room.AppDatabase
 import org.gnvo.climbing.tracking.climbingtracker.data.room.dao.ClimbEntryDao
 import org.gnvo.climbing.tracking.climbingtracker.data.room.dao.ClimbEntryWithPitchesDao
 import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.ClimbEntry
+import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.ClimbEntrySummary
 import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.ClimbEntryWithPitches
 import org.jetbrains.anko.doAsync
 
@@ -20,7 +21,7 @@ class ClimbEntryRepository(application: Application) {
 //    private val routeGradeDao: RouteGradeDao? = db?.routeGradeDao()
 //    private val routeStyleDao: RouteStyleDao? = db?.routeStyleDao()
 //    private val routeTypeDao: RouteTypeDao? = db?.routeTypeDao()
-    private val allClimbingEntries: LiveData<List<ClimbEntry>> = climbEntryDao?.getAllClimbingEntries()!!
+    private val allSummary: LiveData<List<ClimbEntrySummary>> = climbEntryDao?.getAllSummary()!!
     private val allClimbingEntriesWithPitches: LiveData<List<ClimbEntryWithPitches>> = climbEntryWithPitchesDao?.getAll()!!
 
     fun insert(climbEntry: ClimbEntry?) {
@@ -47,11 +48,11 @@ class ClimbEntryRepository(application: Application) {
         }
     }
 
-    fun getAllClimbingEntries(): LiveData<List<ClimbEntry>> {
-        return allClimbingEntries
-    }
-
     fun getAllClimbingEntriesWithPitches(): LiveData<List<ClimbEntryWithPitches>> {
         return allClimbingEntriesWithPitches
+    }
+
+    fun getAllSummary(): LiveData<List<ClimbEntrySummary>> {
+        return allSummary
     }
 }
