@@ -4,7 +4,7 @@ import android.arch.persistence.room.*
 
 
 @Entity(tableName = "pitch",
-    indices = [Index(value = ["pitch_number"], unique = true)],
+    indices = [Index(value = ["pitch_number", "climb_entry_id"], unique = true)],
     foreignKeys = [
         ForeignKey(entity = RouteGrade::class, parentColumns = ["id"], childColumns = ["route_grade_id"]),
         ForeignKey(entity = ClimbEntry::class, parentColumns = ["id"], childColumns = ["climb_entry_id"])]
