@@ -15,7 +15,6 @@ import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.ClimbEntry
 import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.Pitch
 import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.RouteGrade
 import org.jetbrains.anko.doAsync
-import java.util.concurrent.Executors
 
 @Database(entities = [ClimbEntry::class, Pitch::class, RouteGrade::class], version = 1)
 @TypeConverters(Converters::class)

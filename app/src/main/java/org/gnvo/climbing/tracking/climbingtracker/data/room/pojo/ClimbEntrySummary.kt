@@ -1,7 +1,6 @@
 package org.gnvo.climbing.tracking.climbingtracker.data.room.pojo
 
 import android.arch.persistence.room.ColumnInfo
-import android.arch.persistence.room.TypeConverter
 import android.arch.persistence.room.TypeConverters
 import org.gnvo.climbing.tracking.climbingtracker.data.room.Converters
 import java.util.*

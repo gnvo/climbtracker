@@ -10,7 +10,6 @@ import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.ClimbEntryWithP
 import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.RouteGrade
 import org.gnvo.climbing.tracking.climbingtracker.data.room.repository.PitchRepository
 import org.gnvo.climbing.tracking.climbingtracker.data.room.repository.RouteGradeRepository
-import java.util.concurrent.Executors
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val repositoryClimbEntry: ClimbEntryRepository = ClimbEntryRepository(application)
