@@ -10,6 +10,6 @@ class EntryDiffCallback : DiffUtil.ItemCallback<ClimbEntrySummary>() {
 
     override fun areContentsTheSame(oldItem: ClimbEntrySummary, newItem: ClimbEntrySummary): Boolean {
         return oldItem.datetime == newItem.datetime &&
-                oldItem.pitches!!.sortedBy { it.french } == newItem.pitches.sortedBy { it.french }
+                oldItem.pitches?.sortedBy { it.french } == newItem.pitches?.sortedBy { it.french }
     }
 }
