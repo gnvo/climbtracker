@@ -18,7 +18,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val repositoryPitch: PitchRepository = PitchRepository(application)
 
     private val climbingEntriesSummary: LiveData<List<ClimbEntrySummary>> = repositoryClimbEntry.getAllSummary()
-    private val climbingEntriesWithPitches: LiveData<List<ClimbEntryWithPitches>> = repositoryClimbEntry.getAllClimbingEntriesWithPitches()
     private val routeGrades: LiveData<List<RouteGrade>> = repositoryRouteGrade.getAll()
 
     fun insertClimbEntry(climbEntryWithPitches: ClimbEntryWithPitches) {
@@ -36,10 +35,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun deleteAllClimbingEntries() {
         repositoryClimbEntry.deleteAllClimbingEntries()
-    }
-
-    fun getAllClimbingEntriesWithPitches(): LiveData<List<ClimbEntryWithPitches>> {
-        return climbingEntriesWithPitches
     }
 
     fun getAllRouteGrades(): LiveData<List<RouteGrade>> {

@@ -8,11 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.climb_entry_item.view.*
 import org.gnvo.climbing.tracking.climbingtracker.R
-import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.ClimbEntryWithPitches
+import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.ClimbEntrySummary
 import java.text.SimpleDateFormat
 import java.util.*
 
-class EntryAdapter : ListAdapter<ClimbEntryWithPitches, EntryAdapter.ViewHolder>(
+class EntryAdapter : ListAdapter<ClimbEntrySummary, EntryAdapter.ViewHolder>(
     EntryDiffCallback()
 ) {
 
@@ -30,13 +30,13 @@ class EntryAdapter : ListAdapter<ClimbEntryWithPitches, EntryAdapter.ViewHolder>
         holder.bind(getItem(position))
     }
 
-    fun getClimbingEntryAt(position: Int): ClimbEntryWithPitches {
+    fun getClimbingEntryAt(position: Int): ClimbEntrySummary {
         return getItem(position)
     }
 
     open inner class ViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(climbEntryWithPitches: ClimbEntryWithPitches) {
-            val orderedPitches = climbEntryWithPitches.pitches.sortedWith(compareBy{it.pitchNumber})
+        fun bind(climbEntryWithPitches: ClimbEntrySummary) {
+            val orderedPitches = climbEntryWithPitches.pitches?.sortedWith(compareBy{it.pitchNumber})
 //            val gradesText = orderedPitches.
 //                    map{ it. ..routeGrade.french + "/" + it.routeGrade.yds }.
 //                    joinToString(",")
@@ -46,8 +46,8 @@ class EntryAdapter : ListAdapter<ClimbEntryWithPitches, EntryAdapter.ViewHolder>
 //            } else {
 //                ""
 //            }
-            itemView.text_view_grade.text = orderedPitches.map{it.routeGradeId}.toString()
-            itemView.text_view_date.text = dateFormater.format(climbEntryWithPitches.climbEntry!!.datetime)
+            itemView.text_view_grade.text = orderedPitches?.map{it.french}?.joinToString(",")
+            itemView.text_view_date.text = dateFormater.format(climbEntryWithPitches.datetime)
 
             itemView.setOnClickListener {
                 val position = adapterPosition
@@ -59,7 +59,7 @@ class EntryAdapter : ListAdapter<ClimbEntryWithPitches, EntryAdapter.ViewHolder>
     }
 
     interface OnItemClickListener {
-        fun onItemClick(climbEntry: ClimbEntryWithPitches)
+        fun onItemClick(climbEntry: ClimbEntrySummary)
     }
 
     fun setOnItemClickListener(listener: OnItemClickListener){

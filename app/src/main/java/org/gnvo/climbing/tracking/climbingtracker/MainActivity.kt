@@ -63,7 +63,7 @@ class MainActivity : AppCompatActivity() {
         recycler_view.adapter = adapter
 
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
-        viewModel.getAllClimbingEntriesWithPitches().observe(this, Observer {
+        viewModel.getAllClimbingEntriesSummary().observe(this, Observer {
             adapter.submitList(it!!)
         })
 
