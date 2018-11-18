@@ -34,17 +34,6 @@ class MainActivity : AppCompatActivity() {
 
         button_add_climb_entry.setOnClickListener {
             Log.d("gnvo", "CLICK")
-            viewModel.insertClimbEntry(
-                ClimbEntryWithPitches(
-                    ClimbEntry(datetime = Date(System.currentTimeMillis()),
-                        routeType = "Sport"),
-                    listOf(
-                        Pitch(pitchNumber = 1, routeGradeId = 1, climbEntryId = 2)
-                    )
-
-                )
-            )
-
 //            viewModel.getAllRouteTypeNames().observe(this@MainActivity, Observer { routeTypeNames: List<String>? ->
 //                routeTypeNames?.forEach {
 //                    Log.d("gnvo", it)

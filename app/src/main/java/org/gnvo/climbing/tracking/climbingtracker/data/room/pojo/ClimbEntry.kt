@@ -17,4 +17,23 @@ data class ClimbEntry(
     @ColumnInfo(name = "route_type") val routeType: String,
     var rating: Int? = null,
     val comment: String? = null
-)
+) {
+    companion object {
+        fun initialData(): List<ClimbEntry> {
+            return listOf(
+                ClimbEntry(
+                    datetime = Date(System.currentTimeMillis()),
+                    routeType = "Sport"
+                ),
+                ClimbEntry(
+                    datetime = Date(System.currentTimeMillis()),
+                    routeType = "Trad"
+                ),
+                ClimbEntry(
+                    datetime = Date(System.currentTimeMillis()),
+                    routeType = "Sport"
+                )
+            )
+        }
+    }
+}

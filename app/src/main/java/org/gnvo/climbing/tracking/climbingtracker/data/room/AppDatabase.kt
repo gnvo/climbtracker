@@ -12,6 +12,7 @@ import org.gnvo.climbing.tracking.climbingtracker.data.room.dao.ClimbEntryDao
 import org.gnvo.climbing.tracking.climbingtracker.data.room.dao.PitchDao
 import org.gnvo.climbing.tracking.climbingtracker.data.room.dao.RouteGradeDao
 import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.ClimbEntry
+import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.ClimbEntryWithPitches
 import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.Pitch
 import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.RouteGrade
 import org.jetbrains.anko.doAsync
@@ -50,6 +51,8 @@ abstract class AppDatabase : RoomDatabase() {
                         super.onCreate(db)
                         doAsync {
                             INSTANCE?.routeGradeDao()?.init(RouteGrade.initialData())
+                            INSTANCE?.climbEntryDao()?.init(ClimbEntry.initialData())
+                            INSTANCE?.pitchDao()?.insert(Pitch.initialData())
                         }
                     }
                 })
