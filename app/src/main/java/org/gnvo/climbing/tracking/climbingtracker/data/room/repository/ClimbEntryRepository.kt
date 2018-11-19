@@ -4,8 +4,10 @@ import android.app.Application
 import android.arch.lifecycle.LiveData
 import org.gnvo.climbing.tracking.climbingtracker.data.room.AppDatabase
 import org.gnvo.climbing.tracking.climbingtracker.data.room.dao.ClimbEntryDao
+import org.gnvo.climbing.tracking.climbingtracker.data.room.dao.PitchDao
 import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.ClimbEntry
 import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.ClimbEntrySummary
+import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.ClimbEntryWithPitches
 import org.jetbrains.anko.doAsync
 
 class ClimbEntryRepository(application: Application) {
@@ -17,11 +19,18 @@ class ClimbEntryRepository(application: Application) {
 //    private val routeGradeDao: RouteGradeDao? = db?.routeGradeDao()
 //    private val routeStyleDao: RouteStyleDao? = db?.routeStyleDao()
 //    private val routeTypeDao: RouteTypeDao? = db?.routeTypeDao()
+    private val pitchDao: PitchDao? = db?.pitchDao()
     private val allSummary: LiveData<List<ClimbEntrySummary>> = climbEntryDao?.getAllSummary()!!
 
-    fun insert(climbEntry: ClimbEntry?) {
+    fun insert(climbEntryWithPitches: ClimbEntryWithPitches) {
         doAsync {
-            climbEntryDao?.insert(climbEntry)
+            val climbEntryId = climbEntryDao?.insert(climbEntryWithPitches.climbEntry)
+            if (climbEntryId != -1L) {
+                for (pitch in climbEntryWithPitches.pitches) {
+                    pitch.climbEntryId = climbEntryId!!
+                }
+                pitchDao?.insert(climbEntryWithPitches.pitches)
+            }
         }
     }
 

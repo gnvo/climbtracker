@@ -51,8 +51,6 @@ abstract class AppDatabase : RoomDatabase() {
                         super.onCreate(db)
                         doAsync {
                             INSTANCE?.routeGradeDao()?.init(RouteGrade.initialData())
-                            INSTANCE?.climbEntryDao()?.init(ClimbEntry.initialData())
-                            INSTANCE?.pitchDao()?.insert(Pitch.initialData())
                         }
                     }
                 })

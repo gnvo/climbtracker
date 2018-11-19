@@ -19,19 +19,36 @@ data class ClimbEntry(
     val comment: String? = null
 ) {
     companion object {
-        fun initialData(): List<ClimbEntry> {
+        fun initialData(): List<ClimbEntryWithPitches> {
             return listOf(
-                ClimbEntry(
-                    datetime = Date(System.currentTimeMillis()),
-                    routeType = "Sport"
+                ClimbEntryWithPitches(
+                    ClimbEntry(
+                        datetime = Date(System.currentTimeMillis()),
+                        routeType = "Sport"
+                    ),
+                    pitches = listOf(
+                        Pitch(pitchNumber = 1, routeGradeId = 12),
+                        Pitch(pitchNumber = 2, routeGradeId = 13)
+                    )
                 ),
-                ClimbEntry(
-                    datetime = Date(System.currentTimeMillis()),
-                    routeType = "Trad"
-                ),
-                ClimbEntry(
-                    datetime = Date(System.currentTimeMillis()),
-                    routeType = "Sport"
+                ClimbEntryWithPitches(
+                    ClimbEntry(
+                        datetime = Date(System.currentTimeMillis()),
+                        routeType = "Trad"
+                    ),
+                    pitches = listOf(
+                        Pitch(pitchNumber = 1, routeGradeId = 14)
+                    )
+                ),ClimbEntryWithPitches(
+                    ClimbEntry(
+                        datetime = Date(System.currentTimeMillis()),
+                        routeType = "Sport"
+                    ),
+                    pitches = listOf(
+                        Pitch(pitchNumber = 3, routeGradeId = 4),
+                        Pitch(pitchNumber = 2, routeGradeId = 5),
+                        Pitch(pitchNumber = 1, routeGradeId = 16)
+                    )
                 )
             )
         }

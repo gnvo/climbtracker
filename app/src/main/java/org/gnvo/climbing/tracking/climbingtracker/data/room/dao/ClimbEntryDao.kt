@@ -8,7 +8,7 @@ import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.ClimbEntrySumma
 @Dao
 interface ClimbEntryDao {
     @Insert
-    fun insert(climbEntry: ClimbEntry?)
+    fun insert(climbEntry: ClimbEntry?): Long
 
     @Insert
     fun init(climbEntry: List<ClimbEntry>)

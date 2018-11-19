@@ -20,8 +20,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val routeGrades: LiveData<List<RouteGrade>> = repositoryRouteGrade.getAll()
 
     fun insertClimbEntry(climbEntryWithPitches: ClimbEntryWithPitches) {
-        repositoryClimbEntry.insert(climbEntryWithPitches.climbEntry)
-        repositoryPitch.insert(climbEntryWithPitches.pitches)
+        repositoryClimbEntry.insert(climbEntryWithPitches)
     }
 
     fun updateClimbEntry(climbEntry: ClimbEntry) {
