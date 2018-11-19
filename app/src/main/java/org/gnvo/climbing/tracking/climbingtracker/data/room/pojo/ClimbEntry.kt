@@ -10,12 +10,12 @@ import java.util.Date
 @Entity(tableName = "climbing_entry")
 data class ClimbEntry(
     @PrimaryKey(autoGenerate = true) var id: Long? = null,
+    var datetime: LocalDateTime,
     var name: String? = null,
-    @Embedded val coordinates: Coordinates? = null,
-    val site: String? = null,
-    val sector: String? = null,
-    val datetime: LocalDateTime,
-    @ColumnInfo(name = "route_type") val routeType: String,
+    var area: String? = null,
+    var sector: String? = null,
+    var comment: String? = null,
+    @ColumnInfo(name = "route_type") var routeType: String,
     var rating: Int? = null,
-    val comment: String? = null
+    @Embedded var coordinates: Coordinates? = null
 )
