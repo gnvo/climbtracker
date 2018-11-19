@@ -12,13 +12,7 @@ import org.jetbrains.anko.doAsync
 
 class ClimbEntryRepository(application: Application) {
     private val db: AppDatabase? = AppDatabase.getInstance(application = application)
-//    private val attemptOutcomeDao: AttemptOutcomeDao? = db?.attemptOutcomeDao()
     private val climbEntryDao: ClimbEntryDao? = db?.climbEntryDao()
-//    private val climbingStyleDao: ClimbingStyleDao? = db?.climbingStyleDao()
-//    private val pitchDao: PitchDao? = db?.pitchDao()
-//    private val routeGradeDao: RouteGradeDao? = db?.routeGradeDao()
-//    private val routeStyleDao: RouteStyleDao? = db?.routeStyleDao()
-//    private val routeTypeDao: RouteTypeDao? = db?.routeTypeDao()
     private val pitchDao: PitchDao? = db?.pitchDao()
     private val allSummary: LiveData<List<ClimbEntrySummary>> = climbEntryDao?.getAllSummary()!!
 
