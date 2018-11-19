@@ -3,6 +3,7 @@ package org.gnvo.climbing.tracking.climbingtracker.ui.main
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.app.TimePickerDialog
+import android.arch.lifecycle.ViewModelProviders
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
@@ -13,38 +14,34 @@ import android.widget.DatePicker
 import android.widget.TimePicker
 import kotlinx.android.synthetic.main.activity_add_update_climb_entry.*
 import org.gnvo.climbing.tracking.climbingtracker.R
+import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.ClimbEntry
+import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.ClimbEntryWithPitches
+import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.Pitch
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
 import java.util.*
 
 class AddEditEntryActivity : AppCompatActivity() {
-
     companion object {
         const val EXTRA_ID: String = "org.gnvo.climbing.tracking.climbingtracker.ui.main.EXTRA_ID"
-        const val EXTRA_DATETIME: String = "org.gnvo.climbing.tracking.climbingtracker.ui.main.EXTRA_DATETIME"
-        const val EXTRA_ROUTE_NAME: String = "org.gnvo.climbing.tracking.climbingtracker.ui.main.EXTRA_ROUTE_NAME"
-        const val EXTRA_RATING: String = "org.gnvo.climbing.tracking.climbingtracker.ui.main.EXTRA_RATING"
-        const val EXTRA_COMMENT: String = "org.gnvo.climbing.tracking.climbingtracker.ui.main.EXTRA_COMMENT"
-        const val EXTRA_PRIORITY: String = "org.gnvo.climbing.tracking.climbingtracker.ui.main.EXTRA_PRIORITY"
-        const val INVALID_ID: Int = -1
+        const val INVALID_ID: Long = -1
     }
 
-    private val formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
+    private lateinit var viewModel: MainViewModel
+    private var formatter = DateTimeFormatter.ofPattern("EEE, d MMM yyyy HH:mm:ss")
+
+    private var climbEntryWithPitches: ClimbEntryWithPitches = ClimbEntryWithPitches()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_update_climb_entry)
 
+        viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
+
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_close)
         if (intent.hasExtra(EXTRA_ID)) {
-            title = getString(R.string.edit_climb_entry)
-            button_datetime.text = intent.getStringExtra(EXTRA_DATETIME)
-//            TODO: radio_group_route_type.checkedRadioButtonId
-            edit_text_route_name.setText(intent.getStringExtra(EXTRA_ROUTE_NAME))
-            rating_bar_rating.numStars = intent.getIntExtra(EXTRA_RATING, -1)
-//            edit_text_description.setText(intent.getStringExtra(EXTRA_COMMENT))
-//            number_picker_priority.value = intent.getIntExtra(EXTRA_PRIORITY, 1)
+            climbEntryWithPitches?.climbEntry?.id = intent.getLongExtra(EXTRA_ID, INVALID_ID)
+//            title = getString(R.string.edit_climb_entry)
         } else {
             title = getString(R.string.add_climb_entry)
             button_datetime.text = LocalDateTime.now().format(formatter)
@@ -55,6 +52,18 @@ class AddEditEntryActivity : AppCompatActivity() {
     }
 
     private fun saveClimbingEntry() {
+        climbEntryWithPitches.climbEntry = ClimbEntry(
+            datetime = LocalDateTime.parse(button_datetime.text, formatter),
+            routeType = "Sport"
+        )
+        climbEntryWithPitches.climbEntry?.name = edit_text_route_name?.text.toString()
+        climbEntryWithPitches.pitches = listOf(
+            Pitch(pitchNumber = 3, routeGradeId = 4),
+            Pitch(pitchNumber = 2, routeGradeId = 5),
+            Pitch(pitchNumber = 1, routeGradeId = 16)
+        )
+        viewModel.insertClimbEntry(climbEntryWithPitches!!)
+
 //        val description = edit_text_description.text.toString().trim()
 //        val title = edit_text_title.text.toString().trim()
 //        if (description.isEmpty() || title.isEmpty()) {

@@ -10,6 +10,8 @@ import kotlinx.android.synthetic.main.climb_entry_item.view.*
 import org.gnvo.climbing.tracking.climbingtracker.R
 import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.ClimbEntrySummary
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 class EntryAdapter : ListAdapter<ClimbEntrySummary, EntryAdapter.ViewHolder>(
@@ -18,7 +20,7 @@ class EntryAdapter : ListAdapter<ClimbEntrySummary, EntryAdapter.ViewHolder>(
 
     private var listener: OnItemClickListener? = null
 
-    private val dateFormater = SimpleDateFormat("yyyy/MM/dd", Locale.getDefault())
+    private var formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd")
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.climb_entry_item, parent, false))
@@ -44,7 +46,7 @@ class EntryAdapter : ListAdapter<ClimbEntrySummary, EntryAdapter.ViewHolder>(
             } else {
                 itemView.text_view_max.visibility = View.GONE
             }
-            itemView.text_view_date.text = dateFormater.format(climbEntryWithPitches.datetime)
+            itemView.text_view_date.text = climbEntryWithPitches.datetime.format(formatter)
 
             itemView.setOnClickListener {
                 val position = adapterPosition
