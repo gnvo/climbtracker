@@ -22,30 +22,15 @@ import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
-    val ADD_CLIMBING_ENTRY_REQUEST: Int = 1
-    val EDIT_CLIMBING_ENTRY_REQUEST: Int = 2
-
     private lateinit var viewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
         button_add_climb_entry.setOnClickListener {
-            Log.d("gnvo", "CLICK")
-            for (climbEntry in ClimbEntry.initialData()){
-                viewModel.insertClimbEntry(climbEntry)
-            }
-//            viewModel.getAllRouteTypeNames().observe(this@MainActivity, Observer { routeTypeNames: List<String>? ->
-//                routeTypeNames?.forEach {
-//                    Log.d("gnvo", it)
-//
-//                }
-//            })
-
-//            val intent = Intent(this@MainActivity, AddEditEntryActivity::class.java)
-//            startActivityForResult(intent, ADD_CLIMBING_ENTRY_REQUEST)
+            val intent = Intent(this@MainActivity, AddEditEntryActivity::class.java)
+            startActivity(intent)
         }
 
         recycler_view.layoutManager = LinearLayoutManager(this)
@@ -77,8 +62,7 @@ class MainActivity : AppCompatActivity() {
             override fun onItemClick(climbEntry: ClimbEntrySummary) {
                 val intent = Intent(this@MainActivity, AddEditEntryActivity::class.java)
                 intent.putExtra(AddEditEntryActivity.EXTRA_ID, climbEntry.climbEntryId)
-
-                startActivityForResult(intent, EDIT_CLIMBING_ENTRY_REQUEST)
+                startActivity(intent)
             }
         })
 
@@ -88,41 +72,6 @@ class MainActivity : AppCompatActivity() {
         viewModel.getAllRouteGrades().observe(this, Observer { routeGrades: List<RouteGrade>? ->
             Log.d("gnvo", routeGrades.toString())
         })
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (resultCode != Activity.RESULT_OK) {
-            Toast.makeText(this, "ClimbEntry not saved", Toast.LENGTH_LONG).show()
-            return
-        }
-
-        val routeName = data?.getStringExtra(AddEditEntryActivity.EXTRA_ROUTE_NAME)
-        val description = data?.getStringExtra(AddEditEntryActivity.EXTRA_COMMENT)
-        val priority = data?.getIntExtra(AddEditEntryActivity.EXTRA_PRIORITY, -1)
-        val id = data?.getIntExtra(AddEditEntryActivity.EXTRA_ID, AddEditEntryActivity.INVALID_ID)
-
-        when (requestCode) {
-            ADD_CLIMBING_ENTRY_REQUEST -> {
-//                val climbEntry = ClimbEntry(name = title!!, comments = description!!, priority = priority)
-//                viewModel.insertClimbEntry(climbEntry)
-
-                Toast.makeText(this, "ClimbEntry created", Toast.LENGTH_LONG).show()
-            }
-            EDIT_CLIMBING_ENTRY_REQUEST -> {
-                if (id == AddEditEntryActivity.INVALID_ID) {
-                    Toast.makeText(this, "ClimbEntry could not be updated", Toast.LENGTH_LONG).show()
-                    return
-                }
-
-//                val climbEntry = ClimbEntry(name = title!!, comments = description!!, priority = priority)
-//                climbEntry.id = id
-//                viewModel.updateClimbEntry(climbEntry)
-
-                Toast.makeText(this, "ClimbEntry updated", Toast.LENGTH_LONG).show()
-            }
-        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

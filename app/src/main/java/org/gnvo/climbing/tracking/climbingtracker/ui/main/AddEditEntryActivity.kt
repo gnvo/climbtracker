@@ -12,6 +12,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.DatePicker
 import android.widget.TimePicker
+import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_add_update_climb_entry.*
 import org.gnvo.climbing.tracking.climbingtracker.R
 import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.ClimbEntry
@@ -30,7 +31,7 @@ class AddEditEntryActivity : AppCompatActivity() {
     private lateinit var viewModel: MainViewModel
     private var formatter = DateTimeFormatter.ofPattern("EEE, d MMM yyyy HH:mm:ss")
 
-    private var climbEntryWithPitches: ClimbEntryWithPitches = ClimbEntryWithPitches()
+    private var climbEntryIdFromIntentExtra: Long = INVALID_ID
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,8 +41,8 @@ class AddEditEntryActivity : AppCompatActivity() {
 
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_close)
         if (intent.hasExtra(EXTRA_ID)) {
-            climbEntryWithPitches?.climbEntry?.id = intent.getLongExtra(EXTRA_ID, INVALID_ID)
-//            title = getString(R.string.edit_climb_entry)
+            title = getString(R.string.edit_climb_entry)
+            climbEntryIdFromIntentExtra = intent.getLongExtra(EXTRA_ID, INVALID_ID)
         } else {
             title = getString(R.string.add_climb_entry)
             button_datetime.text = LocalDateTime.now().format(formatter)
@@ -52,36 +53,47 @@ class AddEditEntryActivity : AppCompatActivity() {
     }
 
     private fun saveClimbingEntry() {
-        climbEntryWithPitches.climbEntry = ClimbEntry(
-            datetime = LocalDateTime.parse(button_datetime.text, formatter),
-            routeType = "Sport"
+        when (climbEntryIdFromIntentExtra){
+            INVALID_ID -> {
+                val climbEntryWithPitches = generateClimbEntryWithPitchesObject()
+                viewModel.insertClimbEntry(climbEntryWithPitches!!)
+                Toast.makeText(this, "ClimbEntry created", Toast.LENGTH_LONG).show()
+            }
+            else -> {
+                //                viewModel.updateClimbEntry(climbEntry)
+                Toast.makeText(this, "ClimbEntry updated", Toast.LENGTH_LONG).show()
+            }
+
+        }
+        finish()
+    }
+
+    private fun generateClimbEntryWithPitchesObject(): ClimbEntryWithPitches? {
+        val climbEntryWithPitches = ClimbEntryWithPitches(
+            ClimbEntry(
+                datetime = LocalDateTime.parse(button_datetime.text, formatter),
+                routeType = "Sport"
+            )
         )
-        climbEntryWithPitches.climbEntry?.name = edit_text_route_name?.text.toString()
+        edit_text_route_name.text.let {
+            if (!it!!.isEmpty()) climbEntryWithPitches.climbEntry?.name = it.toString()
+        }
+        edit_text_area.text.let {
+            if (!it!!.isEmpty()) climbEntryWithPitches.climbEntry?.area = it.toString()
+        }
+        edit_text_sector.text.let {
+            if (!it!!.isEmpty()) climbEntryWithPitches.climbEntry?.sector = it.toString()
+        }
+        edit_text_comment.text.let {
+            if (!it!!.isEmpty()) climbEntryWithPitches.climbEntry?.comment = it.toString()
+        }
+
         climbEntryWithPitches.pitches = listOf(
             Pitch(pitchNumber = 3, routeGradeId = 4),
             Pitch(pitchNumber = 2, routeGradeId = 5),
             Pitch(pitchNumber = 1, routeGradeId = 16)
         )
-        viewModel.insertClimbEntry(climbEntryWithPitches!!)
-
-//        val description = edit_text_description.text.toString().trim()
-//        val title = edit_text_title.text.toString().trim()
-//        if (description.isEmpty() || title.isEmpty()) {
-//            Toast.makeText(this, "Pleas enter name and comments", Toast.LENGTH_LONG).show()
-//            return
-//        }
-//
-//        val data = Intent()
-//        data.putExtra(EXTRA_ROUTE_NAME, title)
-//        data.putExtra(EXTRA_COMMENT, description)
-////        data.putExtra(EXTRA_PRIORITY, number_picker_priority.value)
-//
-//        val id = intent.getIntExtra(EXTRA_ID, INVALID_ID)
-//        if (id != INVALID_ID)
-//            data.putExtra(EXTRA_ID, id )
-//
-//        setResult(Activity.RESULT_OK, data)
-        finish()
+        return climbEntryWithPitches
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
