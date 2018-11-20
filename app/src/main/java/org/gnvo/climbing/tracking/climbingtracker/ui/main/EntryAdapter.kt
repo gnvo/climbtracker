@@ -41,7 +41,7 @@ class EntryAdapter : ListAdapter<ClimbEntrySummary, EntryAdapter.ViewHolder>(
             val gradeText = orderedPitches?.map{it.french}?.joinToString(", ")
             itemView.text_view_grade.text = gradeText
             if (climbEntryWithPitches.pitches?.size!! > 1){
-                itemView.text_view_max.text = "($maxText)"
+                itemView.text_view_max.text = itemView.context.getString(R.string.max_message, maxText)
                 itemView.text_view_max.visibility = View.VISIBLE
             } else {
                 itemView.text_view_max.visibility = View.GONE

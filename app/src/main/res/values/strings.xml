@@ -14,6 +14,7 @@
         <item>Trad</item>
         <item>Boulder</item>
     </string-array>
+    <string name="max_message">(%1$s)</string>
 
     <string-array name="climbing_styles">
         <item>Lead</item>
