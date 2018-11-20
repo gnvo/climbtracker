@@ -47,15 +47,18 @@
                 <RadioButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/sport"/>
+                        android:text="@string/sport"
+                        android:id="@+id/radio_button_sport"/>
                 <RadioButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/trad"/>
+                        android:text="@string/trad"
+                        android:id="@+id/radio_button_trad"/>
                 <RadioButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/boulder"/>
+                        android:text="@string/boulder"
+                        android:id="@+id/radio_button_boulder"/>
             </RadioGroup>
         </RadioGroup>
 

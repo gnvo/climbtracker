@@ -47,6 +47,7 @@ class AddEditEntryActivity : AppCompatActivity() {
         if (intent.hasExtra(EXTRA_ID)) {
             title = getString(R.string.edit_climb_entry)
             climbEntryIdFromIntentExtra = intent.getLongExtra(EXTRA_ID, INVALID_ID)
+            populateClimbEntryData()
         } else {
             title = getString(R.string.add_climb_entry)
             button_datetime.text = LocalDateTime.now().format(formatter)
@@ -54,20 +55,37 @@ class AddEditEntryActivity : AppCompatActivity() {
         button_datetime.setOnClickListener {
             TimePickerFragment().show(supportFragmentManager, "timePicker")
         }
-        viewModel.getClimbingEntryFullById(1L).observe(this, Observer { climbEntry: ClimbEntryFull? ->
-            Log.d("gnvo", climbEntry.toString())
+    }
+
+    private fun populateClimbEntryData() {
+        viewModel.getClimbingEntryFullById(climbEntryIdFromIntentExtra).observe(this, Observer { climbEntryFull: ClimbEntryFull? ->
+            button_datetime.text = climbEntryFull?.datetime!!.format(formatter)
+
+            when (climbEntryFull.routeType) {
+                getString(R.string.sport) -> radio_group_route_type.check(radio_button_sport.id)
+                getString(R.string.trad) -> radio_group_route_type.check(radio_button_trad.id)
+                getString(R.string.boulder) -> radio_group_route_type.check(radio_button_boulder.id)
+            }
+
+            edit_text_route_name.setText(climbEntryFull.name)
+            edit_text_area.setText(climbEntryFull.area)
+            edit_text_sector.setText(climbEntryFull.sector)
+            edit_text_comment.setText(climbEntryFull.comment)
+
+            rating_bar_rating.rating = climbEntryFull.rating?.toFloat() ?: 0f
         })
     }
 
     private fun saveClimbingEntry() {
+        val climbEntryWithPitches = generateClimbEntryWithPitchesObject()
         when (climbEntryIdFromIntentExtra){
             INVALID_ID -> {
-                val climbEntryWithPitches = generateClimbEntryWithPitchesObject()
                 viewModel.insertClimbEntry(climbEntryWithPitches!!)
                 Toast.makeText(this, "ClimbEntry created", Toast.LENGTH_LONG).show()
             }
             else -> {
-                //                viewModel.updateClimbEntry(climbEntry)
+                climbEntryWithPitches?.climbEntry?.id = climbEntryIdFromIntentExtra
+                viewModel.updateClimbEntry(climbEntryWithPitches!!)
                 Toast.makeText(this, "ClimbEntry updated", Toast.LENGTH_LONG).show()
             }
 
