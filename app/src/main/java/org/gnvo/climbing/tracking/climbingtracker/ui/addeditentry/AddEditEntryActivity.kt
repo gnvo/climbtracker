@@ -22,7 +22,9 @@ import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.ClimbEntry
 import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.ClimbEntryFull
 import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.ClimbEntryWithPitches
 import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.Pitch
+import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 
@@ -33,7 +35,8 @@ class AddEditEntryActivity : AppCompatActivity() {
     }
 
     private lateinit var viewModel: AddEditViewModel
-    private var formatter = DateTimeFormatter.ofPattern("EEE, d MMM yyyy HH:mm:ss")
+    private var formatterDate = DateTimeFormatter.ofPattern("EEE, d MMM yyyy")
+    private var formatterTime = DateTimeFormatter.ofPattern("HH:mm")
 
     private var climbEntryIdFromIntentExtra: Long = INVALID_ID
 
@@ -50,35 +53,70 @@ class AddEditEntryActivity : AppCompatActivity() {
             populateClimbEntryData()
         } else {
             title = getString(R.string.add_climb_entry)
-            button_datetime.text = LocalDateTime.now().format(formatter)
+            val now = LocalDateTime.now()
+            button_date.text = now.format(formatterDate)
+            button_time.text = now.format(formatterTime)
         }
-        button_datetime.setOnClickListener {
-            TimePickerFragment().show(supportFragmentManager, "timePicker")
+        setDateTimeDialogs()
+    }
+
+    private fun setDateTimeDialogs() {
+        button_time.setOnClickListener {
+            val time = LocalTime.parse(button_time.text, formatterTime)
+            val timePickerDialog = TimePickerDialog(
+                this,
+                TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
+                    run {
+                        button_time.text = LocalTime.of(hourOfDay, minute).format(formatterTime)
+                    }
+                },
+                time.hour,
+                time.minute,
+                false
+            )
+            timePickerDialog.show()
         }
+        button_date.setOnClickListener {
+            val date = LocalDate.parse(button_date.text, formatterDate)
+            val datePickerDialog = DatePickerDialog(
+                this,
+                DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
+                    button_date.text = LocalDate.of(year, monthOfYear+1, dayOfMonth).format(formatterDate)
+                },
+                date.year,
+                date.monthValue-1,
+                date.dayOfMonth
+            )
+            datePickerDialog.show()
+        }
+
     }
 
     private fun populateClimbEntryData() {
-        viewModel.getClimbingEntryFullById(climbEntryIdFromIntentExtra).observe(this, Observer { climbEntryFull: ClimbEntryFull? ->
-            button_datetime.text = climbEntryFull?.datetime!!.format(formatter)
+        viewModel.getClimbingEntryFullById(climbEntryIdFromIntentExtra)
+            .observe(this, Observer { climbEntryFull: ClimbEntryFull? ->
+                button_date.text = climbEntryFull?.datetime!!.format(formatterDate)
+                button_time.text = climbEntryFull.datetime.format(formatterTime)
 
-            when (climbEntryFull.routeType) {
-                getString(R.string.sport) -> radio_group_route_type.check(radio_button_sport.id)
-                getString(R.string.trad) -> radio_group_route_type.check(radio_button_trad.id)
-                getString(R.string.boulder) -> radio_group_route_type.check(radio_button_boulder.id)
-            }
 
-            edit_text_route_name.setText(climbEntryFull.name)
-            edit_text_area.setText(climbEntryFull.area)
-            edit_text_sector.setText(climbEntryFull.sector)
-            edit_text_comment.setText(climbEntryFull.comment)
+                when (climbEntryFull.routeType) {
+                    getString(R.string.sport) -> radio_group_route_type.check(radio_button_sport.id)
+                    getString(R.string.trad) -> radio_group_route_type.check(radio_button_trad.id)
+                    getString(R.string.boulder) -> radio_group_route_type.check(radio_button_boulder.id)
+                }
 
-            rating_bar_rating.rating = climbEntryFull.rating?.toFloat() ?: 0f
-        })
+                edit_text_route_name.setText(climbEntryFull.name)
+                edit_text_area.setText(climbEntryFull.area)
+                edit_text_sector.setText(climbEntryFull.sector)
+                edit_text_comment.setText(climbEntryFull.comment)
+
+                rating_bar_rating.rating = climbEntryFull.rating?.toFloat() ?: 0f
+            })
     }
 
     private fun saveClimbingEntry() {
         val climbEntryWithPitches = generateClimbEntryWithPitchesObject()
-        when (climbEntryIdFromIntentExtra){
+        when (climbEntryIdFromIntentExtra) {
             INVALID_ID -> {
                 viewModel.insertClimbEntry(climbEntryWithPitches!!)
                 Toast.makeText(this, "ClimbEntry created", Toast.LENGTH_LONG).show()
@@ -88,15 +126,16 @@ class AddEditEntryActivity : AppCompatActivity() {
                 viewModel.updateClimbEntry(climbEntryWithPitches!!)
                 Toast.makeText(this, "ClimbEntry updated", Toast.LENGTH_LONG).show()
             }
-
         }
         finish()
     }
 
     private fun generateClimbEntryWithPitchesObject(): ClimbEntryWithPitches? {
+        val date = LocalDate.parse(button_date.text, formatterDate)
+        val time = LocalTime.parse(button_time.text, formatterTime)
         val climbEntryWithPitches = ClimbEntryWithPitches(
             ClimbEntry(
-                datetime = LocalDateTime.parse(button_datetime.text, formatter)
+                datetime = date.atTime(time)
             )
         )
         edit_text_route_name.text.let {
@@ -142,42 +181,6 @@ class AddEditEntryActivity : AppCompatActivity() {
                 true
             }
             else -> super.onOptionsItemSelected(item)
-        }
-    }
-
-    class TimePickerFragment : DialogFragment(), TimePickerDialog.OnTimeSetListener {
-        override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
-
-            val newFragment = DatePickerFragment()
-            newFragment.show(fragmentManager, "datePicker")
-        }
-
-        override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-            // Use the current time as the default values for the picker
-            val c = Calendar.getInstance()
-            val hour = c.get(Calendar.HOUR_OF_DAY)
-            val minute = c.get(Calendar.MINUTE)
-
-            // Create a new instance of TimePickerDialog and return it
-            return TimePickerDialog(activity, this, hour, minute, DateFormat.is24HourFormat(activity))
-        }
-    }
-
-    class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener {
-
-        override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-            // Use the current date as the default date in the picker
-            val c = Calendar.getInstance()
-            val year = c.get(Calendar.YEAR)
-            val month = c.get(Calendar.MONTH)
-            val day = c.get(Calendar.DAY_OF_MONTH)
-
-            // Create a new instance of DatePickerDialog and return it
-            return DatePickerDialog(activity, this, year, month, day)
-        }
-
-        override fun onDateSet(view: DatePicker, year: Int, month: Int, day: Int) {
-            // Do something with the date chosen by the user
         }
     }
 }

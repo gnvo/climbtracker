@@ -24,10 +24,19 @@
                 android:layout_height="wrap_content">
         </android.support.design.widget.TextInputLayout>
 
-        <Button
-                android:layout_width="match_parent"
+        <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/button_datetime"/>
+                android:orientation="horizontal">
+            <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/button_date"/>
+            <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/button_time"/>
+        </LinearLayout>
 
         <RadioGroup
                 android:orientation="vertical"
