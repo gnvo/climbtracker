@@ -1,6 +1,5 @@
 package org.gnvo.climbing.tracking.climbingtracker
 
-import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
@@ -18,7 +17,6 @@ import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.*
 import org.gnvo.climbing.tracking.climbingtracker.ui.main.AddEditEntryActivity
 import org.gnvo.climbing.tracking.climbingtracker.ui.main.MainViewModel
 import org.gnvo.climbing.tracking.climbingtracker.ui.main.EntryAdapter
-import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -40,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         recycler_view.adapter = adapter
 
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
-        viewModel.getAllClimbingEntriesSummary().observe(this, Observer {
+        viewModel.getAllClimbingEntriesFull().observe(this, Observer {
             adapter.submitList(it!!)
         })
 
@@ -59,15 +57,15 @@ class MainActivity : AppCompatActivity() {
         itemTouchHelper.attachToRecyclerView(recycler_view)
 
         adapter.setOnItemClickListener(object : EntryAdapter.OnItemClickListener {
-            override fun onItemClick(climbEntry: ClimbEntrySummary) {
+            override fun onItemClick(climbEntryFull: ClimbEntryFull) {
                 val intent = Intent(this@MainActivity, AddEditEntryActivity::class.java)
-                intent.putExtra(AddEditEntryActivity.EXTRA_ID, climbEntry.climbEntryId)
+                intent.putExtra(AddEditEntryActivity.EXTRA_ID, climbEntryFull.climbEntryId)
                 startActivity(intent)
             }
         })
 
-        viewModel.getAllClimbingEntriesSummary().observe(this, Observer { climbEntries: List<ClimbEntrySummary>? ->
-            Log.d("gnvo", climbEntries.toString())
+        viewModel.getAllClimbingEntriesFull().observe(this, Observer { climbEntriesFull: List<ClimbEntryFull>? ->
+            Log.d("gnvo", climbEntriesFull.toString())
         })
         viewModel.getAllRouteGrades().observe(this, Observer { routeGrades: List<RouteGrade>? ->
             Log.d("gnvo", routeGrades.toString())

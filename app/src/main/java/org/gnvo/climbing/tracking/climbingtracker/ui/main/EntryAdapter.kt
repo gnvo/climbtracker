@@ -7,11 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.climb_entry_item.view.*
 import org.gnvo.climbing.tracking.climbingtracker.R
-import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.ClimbEntrySummary
+import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.ClimbEntryFull
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-class EntryAdapter : ListAdapter<ClimbEntrySummary, EntryAdapter.ViewHolder>(
+class EntryAdapter : ListAdapter<ClimbEntryFull, EntryAdapter.ViewHolder>(
     EntryDiffCallback()
 ) {
 
@@ -27,17 +27,17 @@ class EntryAdapter : ListAdapter<ClimbEntrySummary, EntryAdapter.ViewHolder>(
         holder.bind(getItem(position))
     }
 
-    fun getClimbingEntryAt(position: Int): ClimbEntrySummary {
+    fun getClimbingEntryAt(position: Int): ClimbEntryFull {
         return getItem(position)
     }
 
     open inner class ViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(ClimbEntrySummary: ClimbEntrySummary) {
-            val orderedPitchesWithGrades = ClimbEntrySummary.pitches?.sortedWith(compareBy{it.pitchNumber})
-            val maxText = ClimbEntrySummary.pitches?.sortedWith(compareBy{it.french})?.last()?.french
+        fun bind(ClimbEntryFull: ClimbEntryFull) {
+            val orderedPitchesWithGrades = ClimbEntryFull.pitches?.sortedWith(compareBy{it.pitchNumber})
+            val maxText = ClimbEntryFull.pitches?.sortedWith(compareBy{it.french})?.last()?.french
             val gradeText = orderedPitchesWithGrades?.map{it.french}?.joinToString(", ")
             itemView.text_view_grade.text = gradeText
-            if (ClimbEntrySummary.pitches?.size!! > 1){
+            if (ClimbEntryFull.pitches?.size!! > 1){
                 itemView.text_view_max.text = itemView.context.getString(R.string.max_message, maxText)
                 itemView.text_view_max.visibility = View.VISIBLE
             } else {
@@ -45,8 +45,8 @@ class EntryAdapter : ListAdapter<ClimbEntrySummary, EntryAdapter.ViewHolder>(
             }
 
             val listOfDetails = LinkedList<String?>()
-            listOfDetails.add(ClimbEntrySummary.datetime.format(formatter))
-            listOfDetails.add(ClimbEntrySummary.routeType)
+            listOfDetails.add(ClimbEntryFull.datetime.format(formatter))
+            listOfDetails.add(ClimbEntryFull.routeType)
 
             itemView.text_view_details.text = listOfDetails.filter{!it.isNullOrEmpty()}.joinToString()
             
@@ -59,7 +59,7 @@ class EntryAdapter : ListAdapter<ClimbEntrySummary, EntryAdapter.ViewHolder>(
     }
 
     interface OnItemClickListener {
-        fun onItemClick(climbEntry: ClimbEntrySummary)
+        fun onItemClick(climbEntryFull: ClimbEntryFull)
     }
 
     fun setOnItemClickListener(listener: OnItemClickListener){
