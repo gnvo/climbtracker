@@ -12,6 +12,7 @@ data class ClimbEntryFull(
     var name: String? = null,
     var area: String? = null,
     var sector: String? = null,
+    var comment: String? = null,
     var rating: Int? = null,
     @ColumnInfo(name = "route_type") val routeType: String? = null,
     @ColumnInfo(name = "pitches_full") val pitchesFull: List<PitchFull>? = null
