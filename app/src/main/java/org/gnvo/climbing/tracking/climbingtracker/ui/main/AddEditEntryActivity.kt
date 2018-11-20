@@ -89,8 +89,8 @@ class AddEditEntryActivity : AppCompatActivity() {
             if (!it!!.isEmpty()) climbEntryWithPitches.climbEntry?.comment = it.toString()
         }
 
-        radio_group_route_type.checkedRadioButtonId.let{
-            if (it != -1){
+        radio_group_route_type.checkedRadioButtonId.let {
+            if (it != -1) {
                 val checkedRouteType: RadioButton? = findViewById(it)
                 climbEntryWithPitches.climbEntry?.routeType = checkedRouteType?.text.toString()
             }
