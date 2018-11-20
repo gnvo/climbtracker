@@ -5,7 +5,6 @@ import android.arch.persistence.room.Embedded
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
 import java.time.LocalDateTime
-import java.util.Date
 
 @Entity(tableName = "climbing_entry")
 data class ClimbEntry(
