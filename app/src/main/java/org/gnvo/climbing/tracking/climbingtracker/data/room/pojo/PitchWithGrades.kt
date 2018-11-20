@@ -9,6 +9,7 @@ data class PitchWithGrades(
     @ColumnInfo(name = "route_style") var routeStyle: List<String>? = null,
     @ColumnInfo(name = "length") var length: Int? = null,
 
+    @ColumnInfo(name = "route_grade_id") var routeGradeId: Long,
     var french: String? = null,
     var yds: String? = null,
     var uiaa: String? = null

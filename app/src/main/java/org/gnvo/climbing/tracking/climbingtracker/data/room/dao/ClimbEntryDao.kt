@@ -37,7 +37,7 @@ interface ClimbEntryDao {
                 "climbing_style, " +
                 "route_style, " +
                 "length, " +
-                "group_concat(pitch_number || \"/\" || french || \"/\" || uiaa || \"/\" || yds) as pitches " +
+                "group_concat(pitch_number || \"/\" || french || \"/\" || uiaa || \"/\" || yds || \"/\" || route_grade_id) as pitches " +
             "FROM climbing_entry " +
             "INNER JOIN pitch ON pitch.climb_entry_id = climbing_entry.id " +
             "INNER JOIN route_grade on route_grade.id = pitch.route_grade_id " +
