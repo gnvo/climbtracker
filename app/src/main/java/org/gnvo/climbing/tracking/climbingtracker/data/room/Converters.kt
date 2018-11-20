@@ -30,8 +30,7 @@ class Converters {
                 pitchNumber = detailsList[0].toInt(),
                 french = detailsList[1],
                 uiaa = detailsList[2],
-                yds = detailsList[3],
-                routeGradeId = detailsList[4].toLong()
+                yds = detailsList[3]
             )
         }
     }
