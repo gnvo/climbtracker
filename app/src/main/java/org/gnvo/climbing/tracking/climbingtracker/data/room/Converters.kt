@@ -1,10 +1,9 @@
 package org.gnvo.climbing.tracking.climbingtracker.data.room
 
 import android.arch.persistence.room.TypeConverter
-import java.util.Date
 import com.google.gson.reflect.TypeToken
 import com.google.gson.Gson
-import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.PitchSummaryWithGrades
+import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.PitchWithGrades
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneOffset
@@ -22,12 +21,12 @@ class Converters {
     }
 
     @TypeConverter
-    fun fromPitches(pitches: String): List<PitchSummaryWithGrades> {
+    fun fromPitches(pitches: String): List<PitchWithGrades> {
         val pitchesStringList = pitches.split(",")
 
         return pitchesStringList.map{
             val detailsList = it.split("/")
-            PitchSummaryWithGrades(
+            PitchWithGrades(
                 pitchNumber = detailsList[0].toInt(),
                 french = detailsList[1],
                 uiaa = detailsList[2],

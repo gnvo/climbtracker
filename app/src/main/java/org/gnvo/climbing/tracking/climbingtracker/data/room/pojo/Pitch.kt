@@ -18,5 +18,5 @@ data class Pitch(
     @ColumnInfo(name = "attempt_outcome") var attemptOutcome: String? = null,
     @ColumnInfo(name = "climbing_style") var climbingStyle: String? = null,
     @ColumnInfo(name = "route_style") var routeStyle: List<String>? = null,//TODO: currently storing as JSON, migrate away from JSON
-    @ColumnInfo(name = "length") var length: Float? = null
+    @ColumnInfo(name = "length") var length: Int? = null
 )

@@ -30,12 +30,18 @@ interface ClimbEntryDao {
 
     @Transaction
     @Query("SELECT " +
-            "climb_entry_id, datetime, route_type, group_concat(pitch_number || \"/\" || french || \"/\" || uiaa || \"/\" || yds) as pitches " +
+                "climb_entry_id, " +
+                "datetime, " +
+                "route_type, " +
+                "attempt_outcome, " +
+                "climbing_style, " +
+                "route_style, " +
+                "length, " +
+                "group_concat(pitch_number || \"/\" || french || \"/\" || uiaa || \"/\" || yds) as pitches " +
             "FROM climbing_entry " +
             "INNER JOIN pitch ON pitch.climb_entry_id = climbing_entry.id " +
             "INNER JOIN route_grade on route_grade.id = pitch.route_grade_id " +
             "GROUP BY climb_entry_id " +
             "ORDER BY datetime")
     fun getAllSummary(): LiveData<List<ClimbEntrySummary>>
-
 }

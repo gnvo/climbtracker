@@ -10,5 +10,5 @@ data class ClimbEntrySummary(
     @ColumnInfo(name = "climb_entry_id") val climbEntryId: Long? = null,
     val datetime: LocalDateTime,
     @ColumnInfo(name = "route_type") val routeType: String? = null,
-    val pitches: List<PitchSummaryWithGrades>? = null
+    val pitches: List<PitchWithGrades>? = null
 )
