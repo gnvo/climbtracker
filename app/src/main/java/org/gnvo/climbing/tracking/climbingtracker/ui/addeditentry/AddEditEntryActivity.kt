@@ -1,4 +1,4 @@
-package org.gnvo.climbing.tracking.climbingtracker.ui.main
+package org.gnvo.climbing.tracking.climbingtracker.ui.addeditentry
 
 import android.app.DatePickerDialog
 import android.app.Dialog
