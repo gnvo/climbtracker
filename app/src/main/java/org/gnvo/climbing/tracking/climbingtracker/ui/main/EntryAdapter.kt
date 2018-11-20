@@ -2,15 +2,12 @@ package org.gnvo.climbing.tracking.climbingtracker.ui.main
 
 import android.support.v7.recyclerview.extensions.ListAdapter
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.climb_entry_item.view.*
 import org.gnvo.climbing.tracking.climbingtracker.R
 import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.ClimbEntrySummary
-import java.text.SimpleDateFormat
-import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 
@@ -35,22 +32,26 @@ class EntryAdapter : ListAdapter<ClimbEntrySummary, EntryAdapter.ViewHolder>(
     }
 
     open inner class ViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(climbEntryWithPitches: ClimbEntrySummary) {
-            val orderedPitches = climbEntryWithPitches.pitches?.sortedWith(compareBy{it.pitchNumber})
-            val maxText = climbEntryWithPitches.pitches?.sortedWith(compareBy{it.french})?.last()?.french
-            val gradeText = orderedPitches?.map{it.french}?.joinToString(", ")
+        fun bind(ClimbEntrySummary: ClimbEntrySummary) {
+            val orderedPitchesWithGrades = ClimbEntrySummary.pitches?.sortedWith(compareBy{it.pitchNumber})
+            val maxText = ClimbEntrySummary.pitches?.sortedWith(compareBy{it.french})?.last()?.french
+            val gradeText = orderedPitchesWithGrades?.map{it.french}?.joinToString(", ")
             itemView.text_view_grade.text = gradeText
-            if (climbEntryWithPitches.pitches?.size!! > 1){
+            if (ClimbEntrySummary.pitches?.size!! > 1){
                 itemView.text_view_max.text = itemView.context.getString(R.string.max_message, maxText)
                 itemView.text_view_max.visibility = View.VISIBLE
             } else {
                 itemView.text_view_max.visibility = View.GONE
             }
-            itemView.text_view_date.text = climbEntryWithPitches.datetime.format(formatter)
 
+            val listOfDetails = LinkedList<String?>()
+            listOfDetails.add(ClimbEntrySummary.datetime.format(formatter))//datetime
+            listOfDetails.add(ClimbEntrySummary.routeType)
+
+            itemView.text_view_details.text = listOfDetails.filter{!it.isNullOrEmpty()}.joinToString()
+            
             itemView.setOnClickListener {
                 val position = adapterPosition
-                Log.d("gnvo", "clicked $listener, $position")
                 if (position != RecyclerView.NO_POSITION)
                     listener?.onItemClick(getItem(position))
             }

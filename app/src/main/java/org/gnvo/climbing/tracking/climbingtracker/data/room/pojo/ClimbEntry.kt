@@ -15,7 +15,7 @@ data class ClimbEntry(
     var area: String? = null,
     var sector: String? = null,
     var comment: String? = null,
-    @ColumnInfo(name = "route_type") var routeType: String,
+    @ColumnInfo(name = "route_type") var routeType: String? = null,
     var rating: Int? = null,
     @Embedded var coordinates: Coordinates? = null
 )

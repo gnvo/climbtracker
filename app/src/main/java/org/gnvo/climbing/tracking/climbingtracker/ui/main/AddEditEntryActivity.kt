@@ -8,9 +8,11 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.text.format.DateFormat
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.DatePicker
+import android.widget.RadioButton
 import android.widget.TimePicker
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_add_update_climb_entry.*
@@ -71,8 +73,7 @@ class AddEditEntryActivity : AppCompatActivity() {
     private fun generateClimbEntryWithPitchesObject(): ClimbEntryWithPitches? {
         val climbEntryWithPitches = ClimbEntryWithPitches(
             ClimbEntry(
-                datetime = LocalDateTime.parse(button_datetime.text, formatter),
-                routeType = "Sport"
+                datetime = LocalDateTime.parse(button_datetime.text, formatter)
             )
         )
         edit_text_route_name.text.let {
@@ -86,6 +87,13 @@ class AddEditEntryActivity : AppCompatActivity() {
         }
         edit_text_comment.text.let {
             if (!it!!.isEmpty()) climbEntryWithPitches.climbEntry?.comment = it.toString()
+        }
+
+        radio_group_route_type.checkedRadioButtonId.let{
+            if (it != -1){
+                val checkedRouteType: RadioButton? = findViewById(it)
+                climbEntryWithPitches.climbEntry?.routeType = checkedRouteType?.text.toString()
+            }
         }
 
         climbEntryWithPitches.pitches = listOf(

@@ -27,8 +27,8 @@
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/text_view_date"
-                android:text="Date"
+                android:id="@+id/text_view_details"
+                android:text="Details text"
                 android:layout_below="@id/text_view_grade"
         />
 

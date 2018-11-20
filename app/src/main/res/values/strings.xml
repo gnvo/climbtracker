@@ -9,12 +9,12 @@
     <string name="edit_climb_entry">Edit climb entry</string>
     <string name="add_climb_entry">Add climb entry</string>
 
-    <string-array name="route_type">
-        <item>Sport</item>
-        <item>Trad</item>
-        <item>Boulder</item>
-    </string-array>
     <string name="max_message">(%1$s)</string>
+
+    <!--route type-->
+    <string name="trad">Trad</string>
+    <string name="boulder">Boulder</string>
+    <string name="sport">Sport</string>
 
     <string-array name="climbing_styles">
         <item>Lead</item>
