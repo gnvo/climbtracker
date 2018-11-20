@@ -96,7 +96,8 @@ class AddEditEntryActivity : AppCompatActivity() {
             }
         }
 
-        climbEntryWithPitches.climbEntry?.rating = rating_bar_rating.rating.toInt()
+        if (rating_bar_rating.rating > 0)
+            climbEntryWithPitches.climbEntry?.rating = rating_bar_rating.rating.toInt()
 
         climbEntryWithPitches.pitches = listOf(
             Pitch(pitchNumber = 3, routeGradeId = 4),
