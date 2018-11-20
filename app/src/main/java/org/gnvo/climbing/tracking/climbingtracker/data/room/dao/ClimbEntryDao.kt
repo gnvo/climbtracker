@@ -42,9 +42,10 @@ interface ClimbEntryDao {
             "FROM climbing_entry " +
             "INNER JOIN pitch ON pitch.climb_entry_id = climbing_entry.id " +
             "INNER JOIN route_grade on route_grade.id = pitch.route_grade_id " +
+            "WHERE climbing_entry.id = :climbEntryId " +
             "GROUP BY climb_entry_id " +
             "ORDER BY datetime")
-    fun getAllFull(): LiveData<List<ClimbEntryFull>>
+    fun getFullById(climbEntryId:Long): LiveData<ClimbEntryFull>
 
     @Transaction
     @Query("SELECT " +

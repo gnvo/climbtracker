@@ -3,6 +3,7 @@ package org.gnvo.climbing.tracking.climbingtracker.ui.main
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.app.TimePickerDialog
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -18,6 +19,7 @@ import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_add_update_climb_entry.*
 import org.gnvo.climbing.tracking.climbingtracker.R
 import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.ClimbEntry
+import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.ClimbEntryFull
 import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.ClimbEntryWithPitches
 import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.Pitch
 import java.time.LocalDateTime
@@ -30,7 +32,7 @@ class AddEditEntryActivity : AppCompatActivity() {
         const val INVALID_ID: Long = -1
     }
 
-    private lateinit var viewModel: MainViewModel
+    private lateinit var viewModel: AddEditViewModel
     private var formatter = DateTimeFormatter.ofPattern("EEE, d MMM yyyy HH:mm:ss")
 
     private var climbEntryIdFromIntentExtra: Long = INVALID_ID
@@ -39,7 +41,7 @@ class AddEditEntryActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_update_climb_entry)
 
-        viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
+        viewModel = ViewModelProviders.of(this).get(AddEditViewModel::class.java)
 
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_close)
         if (intent.hasExtra(EXTRA_ID)) {
@@ -52,6 +54,9 @@ class AddEditEntryActivity : AppCompatActivity() {
         button_datetime.setOnClickListener {
             TimePickerFragment().show(supportFragmentManager, "timePicker")
         }
+        viewModel.getClimbingEntryFullById(1L).observe(this, Observer { climbEntry: ClimbEntryFull? ->
+            Log.d("gnvo", climbEntry.toString())
+        })
     }
 
     private fun saveClimbingEntry() {

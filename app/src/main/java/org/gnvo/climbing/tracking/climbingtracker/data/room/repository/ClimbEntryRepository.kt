@@ -16,7 +16,6 @@ class ClimbEntryRepository(application: Application) {
     private val climbEntryDao: ClimbEntryDao? = db?.climbEntryDao()
     private val pitchDao: PitchDao? = db?.pitchDao()
     private val allSummary: LiveData<List<ClimbEntrySummary>> = climbEntryDao?.getAllSummary()!!
-    private val allFull: LiveData<List<ClimbEntryFull>> = climbEntryDao?.getAllFull()!!
 
     fun insert(climbEntryWithPitches: ClimbEntryWithPitches) {
         doAsync {
@@ -52,8 +51,8 @@ class ClimbEntryRepository(application: Application) {
         return allSummary
     }
 
-    fun getAllFull(): LiveData<List<ClimbEntryFull>> {
-        return allFull
+    fun getFullById(climbEntryId:Long): LiveData<ClimbEntryFull> {
+        return climbEntryDao?.getFullById(climbEntryId)!!
     }
 
     fun deleteClimbEntryById(climbEntryId: Long?) {
