@@ -32,6 +32,10 @@ interface ClimbEntryDao {
     @Query("SELECT " +
                 "climb_entry_id, " +
                 "datetime, " +
+                "name, " +
+                "area, " +
+                "sector, " +
+                "rating, " +
                 "route_type, " +
                 "attempt_outcome, " +
                 "climbing_style, " +

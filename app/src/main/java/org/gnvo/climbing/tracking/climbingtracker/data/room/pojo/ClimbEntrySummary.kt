@@ -9,6 +9,10 @@ import java.time.LocalDateTime
 data class ClimbEntrySummary(
     @ColumnInfo(name = "climb_entry_id") val climbEntryId: Long? = null,
     val datetime: LocalDateTime,
+    var name: String? = null,
+    var area: String? = null,
+    var sector: String? = null,
+    var rating: Int? = null,
     @ColumnInfo(name = "route_type") val routeType: String? = null,
     val pitches: List<PitchWithGrades>? = null
 )
