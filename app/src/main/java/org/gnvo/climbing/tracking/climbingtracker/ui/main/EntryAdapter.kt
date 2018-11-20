@@ -45,7 +45,7 @@ class EntryAdapter : ListAdapter<ClimbEntrySummary, EntryAdapter.ViewHolder>(
             }
 
             val listOfDetails = LinkedList<String?>()
-            listOfDetails.add(ClimbEntrySummary.datetime.format(formatter))//datetime
+            listOfDetails.add(ClimbEntrySummary.datetime.format(formatter))
             listOfDetails.add(ClimbEntrySummary.routeType)
 
             itemView.text_view_details.text = listOfDetails.filter{!it.isNullOrEmpty()}.joinToString()
