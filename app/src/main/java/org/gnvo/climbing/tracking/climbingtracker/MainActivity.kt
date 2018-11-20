@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         recycler_view.adapter = adapter
 
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
-        viewModel.getAllClimbingEntriesFull().observe(this, Observer {
+        viewModel.getAllClimbingEntriesSummary().observe(this, Observer {
             adapter.submitList(it!!)
         })
 
@@ -57,15 +57,15 @@ class MainActivity : AppCompatActivity() {
         itemTouchHelper.attachToRecyclerView(recycler_view)
 
         adapter.setOnItemClickListener(object : EntryAdapter.OnItemClickListener {
-            override fun onItemClick(climbEntryFull: ClimbEntryFull) {
+            override fun onItemClick(climbEntrySummary: ClimbEntrySummary) {
                 val intent = Intent(this@MainActivity, AddEditEntryActivity::class.java)
-                intent.putExtra(AddEditEntryActivity.EXTRA_ID, climbEntryFull.climbEntryId)
+                intent.putExtra(AddEditEntryActivity.EXTRA_ID, climbEntrySummary.climbEntryId)
                 startActivity(intent)
             }
         })
 
-        viewModel.getAllClimbingEntriesFull().observe(this, Observer { climbEntriesFull: List<ClimbEntryFull>? ->
-            Log.d("gnvo", climbEntriesFull.toString())
+        viewModel.getAllClimbingEntriesSummary().observe(this, Observer { climbEntriesSummary: List<ClimbEntrySummary>? ->
+            Log.d("gnvo", climbEntriesSummary.toString())
         })
         viewModel.getAllRouteGrades().observe(this, Observer { routeGrades: List<RouteGrade>? ->
             Log.d("gnvo", routeGrades.toString())

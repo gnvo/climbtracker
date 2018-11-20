@@ -3,7 +3,7 @@ package org.gnvo.climbing.tracking.climbingtracker.data.room.dao
 import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.*
 import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.ClimbEntry
-import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.ClimbEntryFull
+import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.ClimbEntrySummary
 
 @Dao
 interface ClimbEntryDao {
@@ -43,5 +43,5 @@ interface ClimbEntryDao {
             "INNER JOIN route_grade on route_grade.id = pitch.route_grade_id " +
             "GROUP BY climb_entry_id " +
             "ORDER BY datetime")
-    fun getAllFull(): LiveData<List<ClimbEntryFull>>
+    fun getAllSummary(): LiveData<List<ClimbEntrySummary>>
 }
