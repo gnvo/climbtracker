@@ -14,9 +14,9 @@ data class Pitch(
     @ColumnInfo(name = "route_grade_id") var routeGradeId: Long,
     @ColumnInfo(name = "climb_entry_id") var climbEntryId: Long? = null,
     
-    @ColumnInfo(name = "pitch_number") var pitchNumber: Int? = null,
-    @ColumnInfo(name = "attempt_outcome") var attemptOutcome: String? = null,
-    @ColumnInfo(name = "climbing_style") var climbingStyle: String? = null,
-    @ColumnInfo(name = "route_style") var routeStyle: List<String>? = null,//TODO: currently storing as JSON, migrate away from JSON
-    @ColumnInfo(name = "length") var length: Int? = null
+    @ColumnInfo(name = "pitch_number") var pitchNumber: Int? = null//,
+//    @ColumnInfo(name = "attempt_outcome") var attemptOutcome: String? = null,
+//    @ColumnInfo(name = "climbing_style") var climbingStyle: String? = null,
+//    @ColumnInfo(name = "route_style") var routeStyle: List<String>? = null,//TODO: currently storing as JSON, migrate away from JSON
+//    @ColumnInfo(name = "length") var length: Int? = null
 )

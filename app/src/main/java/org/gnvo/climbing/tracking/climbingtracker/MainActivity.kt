@@ -63,13 +63,6 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         })
-
-        viewModel.getAllClimbingEntriesSummary().observe(this, Observer { climbEntriesSummary: List<ClimbEntrySummary>? ->
-            Log.d("gnvo", climbEntriesSummary.toString())
-        })
-        viewModel.getAllRouteGrades().observe(this, Observer { routeGrades: List<RouteGrade>? ->
-            Log.d("gnvo", routeGrades.toString())
-        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
