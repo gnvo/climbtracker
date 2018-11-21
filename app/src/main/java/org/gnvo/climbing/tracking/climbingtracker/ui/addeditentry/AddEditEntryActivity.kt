@@ -112,6 +112,20 @@ class AddEditEntryActivity : AppCompatActivity() {
                     getString(R.string.indoors) -> radio_group_route_type.check(radio_button_indoors.id)
                 }
 
+                when (climbEntryFull.pitchesFull?.get(0)?.climbingStyle) {
+                    getString(R.string.lead) -> radio_group_climbing_styles.check(radio_button_lead.id)
+                    getString(R.string.follow) -> radio_group_climbing_styles.check(radio_button_follow.id)
+                    getString(R.string.top_rope) -> radio_group_climbing_styles.check(radio_button_top_rope.id)
+                    getString(R.string.solo) -> radio_group_climbing_styles.check(radio_button_solo.id)
+                }
+
+                when (climbEntryFull.pitchesFull?.get(0)?.attemptOutcome) {
+                    getString(R.string.onsight) -> radio_group_attempt_outcome.check(radio_button_onsight.id)
+                    getString(R.string.flash) -> radio_group_attempt_outcome.check(radio_button_flash.id)
+                    getString(R.string.redpoint) -> radio_group_attempt_outcome.check(radio_button_redpoint.id)
+                    getString(R.string.fell_hung) -> radio_group_attempt_outcome.check(radio_button_fell_hung.id)
+                }
+                
                 edit_text_route_name.setText(climbEntryFull.name)
                 edit_text_area.setText(climbEntryFull.area)
                 edit_text_sector.setText(climbEntryFull.sector)
