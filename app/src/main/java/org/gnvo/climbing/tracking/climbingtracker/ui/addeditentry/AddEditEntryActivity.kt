@@ -32,6 +32,7 @@ class AddEditEntryActivity : AppCompatActivity() {
     private var formatterTime = DateTimeFormatter.ofPattern("HH:mm")
 
     private var climbEntryIdFromIntentExtra: Long = INVALID_ID
+    private var pitchIdFromRetrievedPitch: Long = INVALID_ID
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -133,6 +134,8 @@ class AddEditEntryActivity : AppCompatActivity() {
                 edit_text_comment.setText(climbEntryFull.comment)
 
                 rating_bar_rating.rating = climbEntryFull.rating?.toFloat() ?: 0f
+
+                pitchIdFromRetrievedPitch = climbEntryFull.pitchesFull!![0].id!!
             })
     }
 
@@ -140,12 +143,15 @@ class AddEditEntryActivity : AppCompatActivity() {
         val climbEntryWithPitches = generateClimbEntryWithPitchesObject() ?: return
         when (climbEntryIdFromIntentExtra) {
             INVALID_ID -> {
-                viewModel.insertClimbEntry(climbEntryWithPitches!!)
+                viewModel.insertClimbEntry(climbEntryWithPitches)
                 Toast.makeText(this, "ClimbEntry created", Toast.LENGTH_LONG).show()
             }
             else -> {
-                climbEntryWithPitches?.climbEntry?.id = climbEntryIdFromIntentExtra
-                viewModel.updateClimbEntry(climbEntryWithPitches!!)
+                climbEntryWithPitches.climbEntry?.id = climbEntryIdFromIntentExtra
+                climbEntryWithPitches.pitches[0].climbEntryId = climbEntryIdFromIntentExtra
+                climbEntryWithPitches.pitches[0].id = pitchIdFromRetrievedPitch
+
+                viewModel.updateClimbEntry(climbEntryWithPitches)
                 Toast.makeText(this, "ClimbEntry updated", Toast.LENGTH_LONG).show()
             }
         }
