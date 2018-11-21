@@ -55,7 +55,7 @@ class AddEditEntryActivity : AppCompatActivity() {
 
     private fun setRouteGradesSpinner() {
         viewModel.getAllRouteGrades().observe(this, Observer {
-            val adapter = ArrayAdapter(
+            ArrayAdapter(
                 this,
                 android.R.layout.simple_list_item_1, android.R.id.text1, it
             ).also { adapter ->
