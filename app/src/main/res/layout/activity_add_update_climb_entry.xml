@@ -85,15 +85,15 @@
                     android:id="@+id/radio_button_solo"/>
         </RadioGroup>
         <Spinner
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/spinner_grade"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginEnd="8dp"
-                app:layout_constraintStart_toEndOf="@+id/radio_group_climbing_styles"
                 app:layout_constraintTop_toTopOf="@+id/radio_group_climbing_styles"
-                android:layout_marginStart="8dp"
-                app:layout_constraintBottom_toBottomOf="@+id/radio_group_climbing_styles"/>
+                app:layout_constraintBottom_toBottomOf="@+id/radio_group_climbing_styles"
+                app:layout_constraintStart_toEndOf="@+id/radio_group_climbing_styles" android:layout_marginStart="8dp"
+                app:layout_constraintHorizontal_bias="1.0"/>
         <RadioGroup
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

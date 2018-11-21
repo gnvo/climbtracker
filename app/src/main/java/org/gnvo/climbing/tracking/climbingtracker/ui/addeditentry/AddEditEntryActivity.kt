@@ -1,32 +1,24 @@
 package org.gnvo.climbing.tracking.climbingtracker.ui.addeditentry
 
 import android.app.DatePickerDialog
-import android.app.Dialog
 import android.app.TimePickerDialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
-import android.text.format.DateFormat
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.DatePicker
-import android.widget.RadioButton
-import android.widget.TimePicker
-import android.widget.Toast
+import android.view.View
+import android.widget.*
 import kotlinx.android.synthetic.main.activity_add_update_climb_entry.*
 import org.gnvo.climbing.tracking.climbingtracker.R
-import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.ClimbEntry
-import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.ClimbEntryFull
-import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.ClimbEntryWithPitches
-import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.Pitch
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
-import java.util.*
+import android.widget.ArrayAdapter
+import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.*
+import android.widget.RadioButton
 
 class AddEditEntryActivity : AppCompatActivity() {
     companion object {
@@ -58,6 +50,21 @@ class AddEditEntryActivity : AppCompatActivity() {
             button_time.text = now.format(formatterTime)
         }
         setDateTimeDialogs()
+        setRouteGradesSpinner()
+    }
+
+    private fun setRouteGradesSpinner() {
+        viewModel.getAllRouteGrades().observe(this, Observer {
+            val adapter = ArrayAdapter(
+                this,
+                android.R.layout.simple_list_item_1, android.R.id.text1, it
+            ).also { adapter ->
+                // Specify the layout to use when the list of choices appears
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                // Apply the adapter to the spinner
+                spinner_grade.adapter = adapter
+            }
+        })
     }
 
     private fun setDateTimeDialogs() {
@@ -161,10 +168,14 @@ class AddEditEntryActivity : AppCompatActivity() {
         if (rating_bar_rating.rating > 0)
             climbEntryWithPitches.climbEntry?.rating = rating_bar_rating.rating.toInt()
 
+        val selectedRouteGrade = spinner_grade.selectedItem as RouteGrade
+
         climbEntryWithPitches.pitches = listOf(
-            Pitch(pitchNumber = 3, routeGradeId = 4, attemptOutcome = "Onsight", climbingStyle = "Lead"),
-            Pitch(pitchNumber = 2, routeGradeId = 5, attemptOutcome = "Flash", climbingStyle = "Follow"),
-            Pitch(pitchNumber = 1, routeGradeId = 16, attemptOutcome = "Onsight", climbingStyle = "Lead")
+            Pitch(
+                pitchNumber = 1,
+                routeGradeId = selectedRouteGrade.id!!,
+                attemptOutcome = (findViewById<View>(radio_group_attempt_outcome.checkedRadioButtonId) as RadioButton).text.toString(),
+                climbingStyle = (findViewById<View>(radio_group_climbing_styles.checkedRadioButtonId) as RadioButton).text.toString())
         )
         return climbEntryWithPitches
     }

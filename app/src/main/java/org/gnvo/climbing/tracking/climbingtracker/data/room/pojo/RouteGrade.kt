@@ -11,6 +11,10 @@ data class RouteGrade(
     var uiaa: String? = null
 ) {
 
+    override fun toString(): String {
+        return french!!
+    }
+
     companion object {
         fun initialData(): List<RouteGrade> {
             return listOf(
