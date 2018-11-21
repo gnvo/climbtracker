@@ -54,6 +54,78 @@
                     android:id="@+id/radio_button_indoors"/>
         </RadioGroup>
 
+        <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:id="@+id/radio_group_climbing_styles"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@+id/radio_group_route_type"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="8dp">
+            <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lead"
+                    android:id="@+id/radio_button_lead"/>
+            <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/follow"
+                    android:id="@+id/radio_button_follow"/>
+            <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/top_rope"
+                    android:id="@+id/radio_button_top_rope"/>
+            <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/solo"
+                    android:id="@+id/radio_button_solo"/>
+        </RadioGroup>
+        <Spinner
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinner_grade"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintStart_toEndOf="@+id/radio_group_climbing_styles"
+                app:layout_constraintTop_toTopOf="@+id/radio_group_climbing_styles"
+                android:layout_marginStart="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/radio_group_climbing_styles"/>
+        <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:id="@+id/radio_group_attempt_outcome"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@+id/radio_group_climbing_styles"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="8dp">
+
+            <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/onsight"
+                    android:id="@+id/radio_button_onsight"/>
+            <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/flash"
+                    android:id="@+id/radio_button_flash"/>
+            <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/redpoint"
+                    android:id="@+id/radio_button_redpoint"/>
+            <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/fell_hung"
+                    android:id="@+id/radio_button_fell_hung"/>
+        </RadioGroup>
+
         <android.support.design.widget.TextInputLayout
                 android:id="@+id/til_route_name"
                 app:layout_constraintTop_toBottomOf="@+id/rating_bar_rating"
@@ -82,7 +154,7 @@
                 android:stepSize="1"
                 android:layout_gravity="center"
                 android:layout_marginTop="8dp"
-                app:layout_constraintTop_toBottomOf="@+id/radio_group_route_type"
+                app:layout_constraintTop_toBottomOf="@+id/radio_group_attempt_outcome"
                 android:layout_marginStart="8dp"
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginEnd="8dp"
@@ -165,6 +237,5 @@
                     android:ems="10"
                     android:id="@+id/edit_text_comment"/>
         </android.support.design.widget.TextInputLayout>
-
     </android.support.constraint.ConstraintLayout>
 </ScrollView>

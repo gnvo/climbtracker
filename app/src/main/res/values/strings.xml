@@ -16,12 +16,17 @@
     <string name="sport">Sport</string>
     <string name="indoors">Indoors</string>
 
-    <string-array name="climbing_styles">
-        <item>Lead</item>
-        <item>Follow</item>
-        <item>Top rope</item>
-        <item>Solo</item>
-    </string-array>
+    <!--attempt_outcome-->
+    <string name="onsight">Onsight</string>
+    <string name="flash">Flash</string>
+    <string name="redpoint">Redpoint</string>
+    <string name="fell_hung">Fell/Hung</string>
+
+    <!--climbing_styles-->
+    <string name="lead">Lead</string>
+    <string name="follow">Follow</string>
+    <string name="top_rope">Top rope</string>
+    <string name="solo">Solo</string>
 
     <string-array name="route_styles">
         <item>Slab</item>
@@ -30,12 +35,4 @@
         <item>Tufas</item>
         <item>Pockets</item>
     </string-array>
-
-    <string-array name="attempt_outcome">
-        <item>Onsight</item>
-        <item>Flash</item>
-        <item>Redpoint</item>
-        <item>Fell/Hung</item>
-    </string-array>
-
 </resources>
