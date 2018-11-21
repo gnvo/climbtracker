@@ -162,9 +162,9 @@ class AddEditEntryActivity : AppCompatActivity() {
             climbEntryWithPitches.climbEntry?.rating = rating_bar_rating.rating.toInt()
 
         climbEntryWithPitches.pitches = listOf(
-            Pitch(pitchNumber = 3, routeGradeId = 4),
-            Pitch(pitchNumber = 2, routeGradeId = 5),
-            Pitch(pitchNumber = 1, routeGradeId = 16)
+            Pitch(pitchNumber = 3, routeGradeId = 4, attemptOutcome = "Onsight", climbingStyle = "Lead"),
+            Pitch(pitchNumber = 2, routeGradeId = 5, attemptOutcome = "Flash", climbingStyle = "Follow"),
+            Pitch(pitchNumber = 1, routeGradeId = 16, attemptOutcome = "Onsight", climbingStyle = "Lead")
         )
         return climbEntryWithPitches
     }
