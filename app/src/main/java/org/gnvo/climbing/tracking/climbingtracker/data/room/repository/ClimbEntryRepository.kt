@@ -32,9 +32,12 @@ class ClimbEntryRepository(application: Application) {
         }
     }
 
-    fun update(climbEntry: ClimbEntry) {
+    //Todo: Check that if there's an error in the pitches, the insert of climb entry rollsback
+    @Transaction
+    fun update(climbEntryWithPitches: ClimbEntryWithPitches) {
         doAsync {
-            climbEntryDao?.update(climbEntry)
+            climbEntryDao?.update(climbEntryWithPitches.climbEntry!!)
+            pitchDao?.update(climbEntryWithPitches.pitches)
         }
     }
 

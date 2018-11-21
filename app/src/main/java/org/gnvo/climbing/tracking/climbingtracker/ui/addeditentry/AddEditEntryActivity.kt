@@ -136,7 +136,7 @@ class AddEditEntryActivity : AppCompatActivity() {
     }
 
     private fun saveClimbingEntry() {
-        val climbEntryWithPitches = generateClimbEntryWithPitchesObject()
+        val climbEntryWithPitches = generateClimbEntryWithPitchesObject() ?: return
         when (climbEntryIdFromIntentExtra) {
             INVALID_ID -> {
                 viewModel.insertClimbEntry(climbEntryWithPitches!!)
@@ -152,6 +152,28 @@ class AddEditEntryActivity : AppCompatActivity() {
     }
 
     private fun generateClimbEntryWithPitchesObject(): ClimbEntryWithPitches? {
+        if (radio_group_route_type.checkedRadioButtonId == -1){
+            AlertDialog.Builder(this).
+                setMessage("Select a route type. Eg. Sport").
+                setPositiveButton("OK", null).
+                show()
+            return null
+        }
+        if (radio_group_climbing_styles.checkedRadioButtonId == -1){
+            AlertDialog.Builder(this).
+                setMessage("Select a climb stile. Eg. Lead").
+                setPositiveButton("OK", null).
+                show()
+            return null
+        }
+        if (radio_group_attempt_outcome.checkedRadioButtonId == -1){
+            AlertDialog.Builder(this).
+                setMessage("Select a attempt outcome. Eg. Onsight").
+                setPositiveButton("OK", null).
+                show()
+            return null
+        }
+
         val date = LocalDate.parse(button_date.text, formatterDate)
         val time = LocalTime.parse(button_time.text, formatterTime)
         val climbEntryWithPitches = ClimbEntryWithPitches(
@@ -172,12 +194,7 @@ class AddEditEntryActivity : AppCompatActivity() {
             if (!it!!.isEmpty()) climbEntryWithPitches.climbEntry?.comment = it.toString()
         }
 
-        radio_group_route_type.checkedRadioButtonId.let {
-            if (it != -1) {
-                val checkedRouteType: RadioButton? = findViewById(it)
-                climbEntryWithPitches.climbEntry?.routeType = checkedRouteType?.text.toString()
-            }
-        }
+        climbEntryWithPitches.climbEntry?.routeType = (findViewById<View>(radio_group_route_type.checkedRadioButtonId) as RadioButton).text.toString()
 
         if (rating_bar_rating.rating > 0)
             climbEntryWithPitches.climbEntry?.rating = rating_bar_rating.rating.toInt()

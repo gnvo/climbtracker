@@ -9,7 +9,7 @@ interface PitchDao {
     fun insert(pitches: List<Pitch?>)
 
     @Update
-    fun update(pitch: Pitch)
+    fun update(pitches: List<Pitch?>)
 
     @Query("DELETE FROM pitch WHERE climb_entry_id = :climbEntryId")
     fun deleteByClimbEntryId(climbEntryId: Long?)
