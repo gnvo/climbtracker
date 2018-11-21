@@ -24,10 +24,10 @@ class Converters {
 
     @TypeConverter
     fun fromPitches(pitches: String): List<PitchWithGrades> {
-        val pitchesStringList = pitches.split(",")
+        val pitchesStringList = pitches.split("^^")
 
         return pitchesStringList.map{
-            val detailsList = it.split("/")
+            val detailsList = it.split("@@")
             PitchWithGrades(
                 pitchNumber = detailsList[0].toInt(),
                 french = detailsList[1],
@@ -39,10 +39,10 @@ class Converters {
 
     @TypeConverter
     fun fromPitchesFull(pitchesFull: String): List<PitchFull> {
-        val pitchesStringList = pitchesFull.split(",")
+        val pitchesStringList = pitchesFull.split("^^")
 
         return pitchesStringList.map{
-            val detailsList = it.split("/")
+            val detailsList = it.split("@@")
             PitchFull(
                 pitchNumber = detailsList[0].toInt(),
                 id = detailsList[5].toLong(),
