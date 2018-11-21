@@ -35,7 +35,7 @@ class AddEditEntryActivity : AppCompatActivity() {
     }
 
     private lateinit var viewModel: AddEditViewModel
-    private var formatterDate = DateTimeFormatter.ofPattern("EEE, d MMM yyyy")
+    private var formatterDate = DateTimeFormatter.ofPattern("EEEE, d MMM yyyy")
     private var formatterTime = DateTimeFormatter.ofPattern("HH:mm")
 
     private var climbEntryIdFromIntentExtra: Long = INVALID_ID
