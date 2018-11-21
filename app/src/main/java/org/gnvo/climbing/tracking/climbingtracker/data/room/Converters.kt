@@ -46,6 +46,8 @@ class Converters {
             PitchFull(
                 pitchNumber = detailsList[0].toInt(),
                 id = detailsList[5].toLong(),
+                attemptOutcome = detailsList[6],
+                climbingStyle = detailsList[7],
                 routeGrade = RouteGrade(
                     french = detailsList[1],
                     uiaa = detailsList[2],
