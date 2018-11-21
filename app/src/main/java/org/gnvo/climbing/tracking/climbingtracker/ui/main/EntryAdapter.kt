@@ -32,12 +32,12 @@ class EntryAdapter : ListAdapter<ClimbEntrySummary, EntryAdapter.ViewHolder>(
     }
 
     open inner class ViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(ClimbEntrySummary: ClimbEntrySummary) {
-            val orderedPitchesWithGrades = ClimbEntrySummary.pitches?.sortedWith(compareBy{it.pitchNumber})
-            val maxText = ClimbEntrySummary.pitches?.sortedWith(compareBy{it.french})?.last()?.french
+        fun bind(climbEntrySummary: ClimbEntrySummary) {
+            val orderedPitchesWithGrades = climbEntrySummary.pitches?.sortedWith(compareBy{it.pitchNumber})
+            val maxText = climbEntrySummary.pitches?.sortedWith(compareBy{it.french})?.last()?.french
             val gradeText = orderedPitchesWithGrades?.map{it.french}?.joinToString(", ")
             itemView.text_view_grade.text = gradeText
-            if (ClimbEntrySummary.pitches?.size!! > 1){
+            if (climbEntrySummary.pitches?.size!! > 1){
                 itemView.text_view_max.text = itemView.context.getString(R.string.max_message, maxText)
                 itemView.text_view_max.visibility = View.VISIBLE
             } else {
@@ -45,12 +45,12 @@ class EntryAdapter : ListAdapter<ClimbEntrySummary, EntryAdapter.ViewHolder>(
             }
 
             val listOfDetails = LinkedList<String?>()
-            listOfDetails.add(ClimbEntrySummary.datetime.format(formatter))
-            listOfDetails.add(ClimbEntrySummary.routeType)
-            listOfDetails.add(ClimbEntrySummary.name)
-            listOfDetails.add(ClimbEntrySummary.area)
-            listOfDetails.add(ClimbEntrySummary.sector)
-            listOfDetails.add(ClimbEntrySummary.rating?.toString())
+            listOfDetails.add(climbEntrySummary.datetime.format(formatter))
+            listOfDetails.add(climbEntrySummary.routeType)
+            listOfDetails.add(climbEntrySummary.name)
+            listOfDetails.add(climbEntrySummary.area)
+            listOfDetails.add(climbEntrySummary.sector)
+            listOfDetails.add(climbEntrySummary.rating?.toString())
 
             itemView.text_view_details.text = listOfDetails.filter{!it.isNullOrEmpty()}.joinToString()
             
