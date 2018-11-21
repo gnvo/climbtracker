@@ -2,6 +2,7 @@ package org.gnvo.climbing.tracking.climbingtracker.data.room.repository
 
 import android.app.Application
 import android.arch.lifecycle.LiveData
+import android.arch.persistence.room.Transaction
 import org.gnvo.climbing.tracking.climbingtracker.data.room.AppDatabase
 import org.gnvo.climbing.tracking.climbingtracker.data.room.dao.ClimbEntryDao
 import org.gnvo.climbing.tracking.climbingtracker.data.room.dao.PitchDao
@@ -17,6 +18,8 @@ class ClimbEntryRepository(application: Application) {
     private val pitchDao: PitchDao? = db?.pitchDao()
     private val allSummary: LiveData<List<ClimbEntrySummary>> = climbEntryDao?.getAllSummary()!!
 
+    //Todo: Check that if there's an error in the pitches, the insert of climb entry rollsback
+    @Transaction
     fun insert(climbEntryWithPitches: ClimbEntryWithPitches) {
         doAsync {
             val climbEntryId = climbEntryDao?.insert(climbEntryWithPitches.climbEntry)
