@@ -102,7 +102,7 @@ class AddEditEntryActivity : AppCompatActivity() {
                 when (climbEntryFull.routeType) {
                     getString(R.string.sport) -> radio_group_route_type.check(radio_button_sport.id)
                     getString(R.string.trad) -> radio_group_route_type.check(radio_button_trad.id)
-                    getString(R.string.boulder) -> radio_group_route_type.check(radio_button_boulder.id)
+                    getString(R.string.indoors) -> radio_group_route_type.check(radio_button_indoors.id)
                 }
 
                 edit_text_route_name.setText(climbEntryFull.name)

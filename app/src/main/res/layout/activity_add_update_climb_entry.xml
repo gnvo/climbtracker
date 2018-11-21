@@ -67,8 +67,8 @@
                 <RadioButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/boulder"
-                        android:id="@+id/radio_button_boulder"/>
+                        android:text="@string/indoors"
+                        android:id="@+id/radio_button_indoors"/>
             </RadioGroup>
         </RadioGroup>
 

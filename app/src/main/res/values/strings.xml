@@ -13,8 +13,8 @@
 
     <!--route type-->
     <string name="trad">Trad</string>
-    <string name="boulder">Boulder</string>
     <string name="sport">Sport</string>
+    <string name="indoors">Indoors</string>
 
     <string-array name="climbing_styles">
         <item>Lead</item>
