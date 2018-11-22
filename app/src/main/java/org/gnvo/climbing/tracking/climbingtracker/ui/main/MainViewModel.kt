@@ -1,32 +1,20 @@
 package org.gnvo.climbing.tracking.climbingtracker.ui.main
 
 import android.app.Application
-import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.AndroidViewModel
-import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.*
-import org.gnvo.climbing.tracking.climbingtracker.data.room.repository.ClimbEntryRepository
-import org.gnvo.climbing.tracking.climbingtracker.data.room.repository.PitchRepository
+import android.arch.lifecycle.LiveData
+import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.AttemptWithDetails
+import org.gnvo.climbing.tracking.climbingtracker.data.room.repository.AttemptRepository
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
-    private val repositoryClimbEntry: ClimbEntryRepository = ClimbEntryRepository(application)
-    private val repositoryPitch: PitchRepository = PitchRepository(application)
+    private val repositoryAttempt: AttemptRepository = AttemptRepository(application)
+    private val attemptsWithDetails: LiveData<List<AttemptWithDetails>> = repositoryAttempt.getAllWithDetails()
 
-    private val climbingEntriesSummary: LiveData<List<ClimbEntrySummary>> = repositoryClimbEntry.getAllSummary()
-
-    fun deleteClimbEntry(climbEntry: ClimbEntry) {
-        repositoryClimbEntry.delete(climbEntry)
+    fun getAllAttemptsWithDetails(): LiveData<List<AttemptWithDetails>> {
+        return attemptsWithDetails
     }
 
-    fun deleteAllClimbingEntries() {
-        repositoryClimbEntry.deleteAllClimbingEntries()
-    }
-
-    fun getAllClimbingEntriesSummary(): LiveData<List<ClimbEntrySummary>> {
-        return climbingEntriesSummary
-    }
-
-    fun deleteClimbEntryById(climbEntryId: Long?) {
-        repositoryPitch.deleteClimbEntryById(climbEntryId)
-        repositoryClimbEntry.deleteClimbEntryById(climbEntryId)
+    fun deleteAllAttempts() {
+        repositoryAttempt.deleteAll()
     }
 }

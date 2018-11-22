@@ -8,20 +8,16 @@ import android.arch.persistence.room.RoomDatabase
 import android.arch.persistence.room.TypeConverters
 import android.content.Context
 import android.support.annotation.NonNull
-import org.gnvo.climbing.tracking.climbingtracker.data.room.dao.ClimbEntryDao
-import org.gnvo.climbing.tracking.climbingtracker.data.room.dao.PitchDao
+import org.gnvo.climbing.tracking.climbingtracker.data.room.dao.AttemptDao
 import org.gnvo.climbing.tracking.climbingtracker.data.room.dao.RouteGradeDao
-import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.ClimbEntry
-import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.ClimbEntryWithPitches
-import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.Pitch
+import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.Attempt
 import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.RouteGrade
 import org.jetbrains.anko.doAsync
 
-@Database(entities = [ClimbEntry::class, Pitch::class, RouteGrade::class], version = 1)
+@Database(entities = [Attempt::class, RouteGrade::class], version = 1)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
-    abstract fun pitchDao(): PitchDao
-    abstract fun climbEntryDao(): ClimbEntryDao
+    abstract fun attemptDao(): AttemptDao
     abstract fun routeGradeDao(): RouteGradeDao
 
     companion object {

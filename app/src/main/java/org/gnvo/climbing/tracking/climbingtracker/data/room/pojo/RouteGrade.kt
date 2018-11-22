@@ -1,15 +1,22 @@
 package org.gnvo.climbing.tracking.climbingtracker.data.room.pojo
 
+import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
 
 @Entity(tableName = "route_grade")
 data class RouteGrade(
-    @PrimaryKey(autoGenerate = true) var id: Long? = null,
+    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "route_grade_id") var routeGradeId: Long? = null,
     var french: String? = null,
     var yds: String? = null,
     var uiaa: String? = null
 ) {
+    override fun equals(other: Any?): Boolean {
+        return other is RouteGrade &&
+                french == other.french &&
+                yds == other.yds &&
+                uiaa == other.uiaa
+    }
 
     override fun toString(): String {
         return french!!

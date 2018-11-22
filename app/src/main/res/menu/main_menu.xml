@@ -6,4 +6,20 @@
             app:showAsAction="never"
             android:id="@+id/delete_all_climb_entries"
     />
+    <item
+            android:title="Show max grade of multipitch"
+            app:showAsAction="never"
+    />
+    <item
+            android:title="Show French notation"
+            app:showAsAction="never"
+    />
+    <item
+            android:title="Show UUIA notation"
+            app:showAsAction="never"
+    />
+    <item
+            android:title="Show Yosemite Decimal System notation"
+            app:showAsAction="never"
+    />
 </menu>

@@ -7,11 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.climb_entry_item.view.*
 import org.gnvo.climbing.tracking.climbingtracker.R
-import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.ClimbEntrySummary
+import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.AttemptWithDetails
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-class EntryAdapter : ListAdapter<ClimbEntrySummary, EntryAdapter.ViewHolder>(
+class EntryAdapter : ListAdapter<AttemptWithDetails, EntryAdapter.ViewHolder>(
     EntryDiffCallback()
 ) {
 
@@ -27,30 +27,21 @@ class EntryAdapter : ListAdapter<ClimbEntrySummary, EntryAdapter.ViewHolder>(
         holder.bind(getItem(position))
     }
 
-    fun getClimbingEntryAt(position: Int): ClimbEntrySummary {
-        return getItem(position)
-    }
+//    fun getClimbingEntryAt(position: Int): AttemptWithDetails {
+//        return getItem(position)
+//    }
 
     open inner class ViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(climbEntrySummary: ClimbEntrySummary) {
-            val orderedPitchesWithGrades = climbEntrySummary.pitches?.sortedWith(compareBy{it.pitchNumber})
-            val maxText = climbEntrySummary.pitches?.sortedWith(compareBy{it.french})?.last()?.french
-            val gradeText = orderedPitchesWithGrades?.map{it.french}?.joinToString(", ")
-            itemView.text_view_grade.text = gradeText
-            if (climbEntrySummary.pitches?.size!! > 1){
-                itemView.text_view_max.text = itemView.context.getString(R.string.max_message, maxText)
-                itemView.text_view_max.visibility = View.VISIBLE
-            } else {
-                itemView.text_view_max.visibility = View.GONE
-            }
+        fun bind(attemptWithDetails: AttemptWithDetails) {
+            itemView.text_view_grade.text = attemptWithDetails.routeGrade.french
 
             val listOfDetails = LinkedList<String?>()
-            listOfDetails.add(climbEntrySummary.datetime.format(formatter))
-            listOfDetails.add(climbEntrySummary.routeType)
-            listOfDetails.add(climbEntrySummary.name)
-            listOfDetails.add(climbEntrySummary.area)
-            listOfDetails.add(climbEntrySummary.sector)
-            listOfDetails.add(climbEntrySummary.rating?.toString())
+            listOfDetails.add(attemptWithDetails.attempt.datetime.format(formatter))
+            listOfDetails.add(attemptWithDetails.attempt.routeType)
+            listOfDetails.add(attemptWithDetails.attempt.routeName)
+            listOfDetails.add(attemptWithDetails.attempt.location?.area)
+            listOfDetails.add(attemptWithDetails.attempt.location?.sector)
+            listOfDetails.add(attemptWithDetails.attempt.rating?.toString())
 
             itemView.text_view_details.text = listOfDetails.filter{!it.isNullOrEmpty()}.joinToString()
             
@@ -63,11 +54,11 @@ class EntryAdapter : ListAdapter<ClimbEntrySummary, EntryAdapter.ViewHolder>(
     }
 
     interface OnItemClickListener {
-        fun onItemClick(climbEntrySummary: ClimbEntrySummary)
+        fun onItemClick(attemptWithDetails: AttemptWithDetails)
     }
 
-    fun setOnItemClickListener(listener: OnItemClickListener){
-        this.listener = listener
-    }
+//    fun setOnItemClickListener(listener: OnItemClickListener){
+//        this.listener = listener
+//    }
 }
 

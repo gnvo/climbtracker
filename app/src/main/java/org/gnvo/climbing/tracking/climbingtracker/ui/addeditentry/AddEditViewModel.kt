@@ -3,34 +3,33 @@ package org.gnvo.climbing.tracking.climbingtracker.ui.addeditentry
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.LiveData
-import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.*
-import org.gnvo.climbing.tracking.climbingtracker.data.room.repository.ClimbEntryRepository
-import org.gnvo.climbing.tracking.climbingtracker.data.room.repository.PitchRepository
+import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.Attempt
+import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.RouteGrade
+import org.gnvo.climbing.tracking.climbingtracker.data.room.repository.AttemptRepository
 import org.gnvo.climbing.tracking.climbingtracker.data.room.repository.RouteGradeRepository
 
 class AddEditViewModel(application: Application) : AndroidViewModel(application) {
-    private val repositoryClimbEntry: ClimbEntryRepository = ClimbEntryRepository(application)
-    private val repositoryPitch: PitchRepository = PitchRepository(application)
+    private val repositoryAttempt: AttemptRepository = AttemptRepository(application)
     private val repositoryRouteGrade: RouteGradeRepository = RouteGradeRepository(application)
 
-    fun insertClimbEntry(climbEntryWithPitches: ClimbEntryWithPitches) {
-        repositoryClimbEntry.insert(climbEntryWithPitches)
-    }
-
-    fun updateClimbEntry(climbEntryWithPitches: ClimbEntryWithPitches) {
-        repositoryClimbEntry.update(climbEntryWithPitches)
-    }
-
-    fun deleteClimbEntryById(climbEntryId: Long?) {
-        repositoryPitch.deleteClimbEntryById(climbEntryId)
-        repositoryClimbEntry.deleteClimbEntryById(climbEntryId)
-    }
-
-    fun getClimbingEntryFullById(climbEntryId: Long): LiveData<ClimbEntryFull> {
-        return repositoryClimbEntry.getFullById(climbEntryId)
+    fun insertAttempt(attempt: Attempt) {
+        repositoryAttempt.insert(attempt)
     }
 
     fun getAllRouteGrades(): LiveData<List<RouteGrade>> {
         return repositoryRouteGrade.getAll()
     }
+
+//    fun updateAttempt(attempt: Attempt) {
+//        repositoryAttempt.update(attempt)
+//    }
+//
+//    fun deleteAttemptById(attemptId: Long?) {
+//        repositoryPitch.deleteAttemptById(attemptId)
+//        repositoryAttempt.deleteAttemptById(attemptId)
+//    }
+//
+//    fun getClimbingEntryFullById(attemptId: Long): LiveData<AttemptFull> {
+//        return repositoryAttempt.getFullById(attemptId)
+//    }
 }

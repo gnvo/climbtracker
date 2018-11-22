@@ -6,20 +6,21 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v7.app.AlertDialog
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.*
+import android.widget.ArrayAdapter
+import android.widget.RadioButton
+import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_add_update_climb_entry.*
 import org.gnvo.climbing.tracking.climbingtracker.R
+import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.Attempt
+import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.Location
+import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.RouteGrade
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
-import android.widget.ArrayAdapter
-import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.*
-import android.widget.RadioButton
 
 class AddEditEntryActivity : AppCompatActivity() {
     companion object {
@@ -32,7 +33,6 @@ class AddEditEntryActivity : AppCompatActivity() {
     private var formatterTime = DateTimeFormatter.ofPattern("HH:mm")
 
     private var climbEntryIdFromIntentExtra: Long = INVALID_ID
-    private var pitchIdFromRetrievedPitch: Long = INVALID_ID
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -90,10 +90,10 @@ class AddEditEntryActivity : AppCompatActivity() {
             val datePickerDialog = DatePickerDialog(
                 this,
                 DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
-                    button_date.text = LocalDate.of(year, monthOfYear+1, dayOfMonth).format(formatterDate)
+                    button_date.text = LocalDate.of(year, monthOfYear + 1, dayOfMonth).format(formatterDate)
                 },
                 date.year,
-                date.monthValue-1,
+                date.monthValue - 1,
                 date.dayOfMonth
             )
             datePickerDialog.show()
@@ -101,121 +101,111 @@ class AddEditEntryActivity : AppCompatActivity() {
 
     }
 
-    private fun populateClimbEntryData() {
-        viewModel.getClimbingEntryFullById(climbEntryIdFromIntentExtra)
-            .observe(this, Observer { climbEntryFull: ClimbEntryFull? ->
-                button_date.text = climbEntryFull?.datetime!!.format(formatterDate)
-                button_time.text = climbEntryFull.datetime.format(formatterTime)
-
-
-                when (climbEntryFull.routeType) {
-                    getString(R.string.sport) -> radio_group_route_type.check(radio_button_sport.id)
-                    getString(R.string.trad) -> radio_group_route_type.check(radio_button_trad.id)
-                    getString(R.string.indoors) -> radio_group_route_type.check(radio_button_indoors.id)
-                }
-
-                when (climbEntryFull.pitchesFull?.get(0)?.climbingStyle) {
-                    getString(R.string.lead) -> radio_group_climbing_styles.check(radio_button_lead.id)
-                    getString(R.string.follow) -> radio_group_climbing_styles.check(radio_button_follow.id)
-                    getString(R.string.top_rope) -> radio_group_climbing_styles.check(radio_button_top_rope.id)
-                    getString(R.string.solo) -> radio_group_climbing_styles.check(radio_button_solo.id)
-                }
-
-                when (climbEntryFull.pitchesFull?.get(0)?.attemptOutcome) {
-                    getString(R.string.onsight) -> radio_group_attempt_outcome.check(radio_button_onsight.id)
-                    getString(R.string.flash) -> radio_group_attempt_outcome.check(radio_button_flash.id)
-                    getString(R.string.redpoint) -> radio_group_attempt_outcome.check(radio_button_redpoint.id)
-                    getString(R.string.fell_hung) -> radio_group_attempt_outcome.check(radio_button_fell_hung.id)
-                }
-                
-                edit_text_route_name.setText(climbEntryFull.name)
-                edit_text_area.setText(climbEntryFull.area)
-                edit_text_sector.setText(climbEntryFull.sector)
-                edit_text_comment.setText(climbEntryFull.comment)
-
-                rating_bar_rating.rating = climbEntryFull.rating?.toFloat() ?: 0f
-
-                pitchIdFromRetrievedPitch = climbEntryFull.pitchesFull!![0].id!!
-            })
+    private fun populateClimbEntryData() {//todo
+//        viewModel.getClimbingEntryFullById(climbEntryIdFromIntentExtra)
+//            .observe(this, Observer { climbEntryFull: ClimbEntryFull? ->
+//                button_date.text = climbEntryFull?.datetime!!.format(formatterDate)
+//                button_time.text = climbEntryFull.datetime.format(formatterTime)
+//
+//
+//                when (climbEntryFull.routeType) {
+//                    getString(R.string.sport) -> radio_group_route_type.check(radio_button_sport.id)
+//                    getString(R.string.trad) -> radio_group_route_type.check(radio_button_trad.id)
+//                    getString(R.string.indoors) -> radio_group_route_type.check(radio_button_indoors.id)
+//                }
+//
+//                when (climbEntryFull.pitchesFull?.get(0)?.climbingStyle) {
+//                    getString(R.string.lead) -> radio_group_climbing_styles.check(radio_button_lead.id)
+//                    getString(R.string.follow) -> radio_group_climbing_styles.check(radio_button_follow.id)
+//                    getString(R.string.top_rope) -> radio_group_climbing_styles.check(radio_button_top_rope.id)
+//                    getString(R.string.solo) -> radio_group_climbing_styles.check(radio_button_solo.id)
+//                }
+//
+//                when (climbEntryFull.pitchesFull?.get(0)?.attemptOutcome) {
+//                    getString(R.string.onsight) -> radio_group_attempt_outcome.check(radio_button_onsight.id)
+//                    getString(R.string.flash) -> radio_group_attempt_outcome.check(radio_button_flash.id)
+//                    getString(R.string.redpoint) -> radio_group_attempt_outcome.check(radio_button_redpoint.id)
+//                    getString(R.string.fell_hung) -> radio_group_attempt_outcome.check(radio_button_fell_hung.id)
+//                }
+//
+//                edit_text_route_name.setText(climbEntryFull.name)
+//                edit_text_area.setText(climbEntryFull.area)
+//                edit_text_sector.setText(climbEntryFull.sector)
+//                edit_text_comment.setText(climbEntryFull.comment)
+//
+//                rating_bar_rating.rating = climbEntryFull.rating?.toFloat() ?: 0f
+//
+//                pitchIdFromRetrievedPitch = climbEntryFull.pitchesFull!![0].id!!
+//            })
     }
 
     private fun saveClimbingEntry() {
-        val climbEntryWithPitches = generateClimbEntryWithPitchesObject() ?: return
+        val attempt = generateClimbEntryWithPitchesObject() ?: return
         when (climbEntryIdFromIntentExtra) {
             INVALID_ID -> {
-                viewModel.insertClimbEntry(climbEntryWithPitches)
+                viewModel.insertAttempt(attempt)
                 Toast.makeText(this, "ClimbEntry created", Toast.LENGTH_LONG).show()
             }
             else -> {
-                climbEntryWithPitches.climbEntry?.id = climbEntryIdFromIntentExtra
-                climbEntryWithPitches.pitches[0].climbEntryId = climbEntryIdFromIntentExtra
-                climbEntryWithPitches.pitches[0].id = pitchIdFromRetrievedPitch
-
-                viewModel.updateClimbEntry(climbEntryWithPitches)
+                //todo
+//                climbEntryWithPitches.climbEntry?.id = climbEntryIdFromIntentExtra
+//                climbEntryWithPitches.pitches[0].climbEntryId = climbEntryIdFromIntentExtra
+//                climbEntryWithPitches.pitches[0].id = pitchIdFromRetrievedPitch
+//
+//                viewModel.updateClimbEntry(climbEntryWithPitches)
                 Toast.makeText(this, "ClimbEntry updated", Toast.LENGTH_LONG).show()
             }
         }
         finish()
     }
 
-    private fun generateClimbEntryWithPitchesObject(): ClimbEntryWithPitches? {
-        if (radio_group_route_type.checkedRadioButtonId == -1){
-            AlertDialog.Builder(this).
-                setMessage("Select a route type. Eg. Sport").
-                setPositiveButton("OK", null).
-                show()
+    private fun generateClimbEntryWithPitchesObject(): Attempt? {
+        if (radio_group_route_type.checkedRadioButtonId == -1) {
+            Toast.makeText(this, "Select a route type. Eg. Sport", Toast.LENGTH_LONG).show()
             return null
         }
-        if (radio_group_climbing_styles.checkedRadioButtonId == -1){
-            AlertDialog.Builder(this).
-                setMessage("Select a climb stile. Eg. Lead").
-                setPositiveButton("OK", null).
-                show()
+        if (radio_group_climbing_styles.checkedRadioButtonId == -1) {
+            Toast.makeText(this, "Select a climb stile. Eg. Lead", Toast.LENGTH_LONG).show()
             return null
         }
-        if (radio_group_attempt_outcome.checkedRadioButtonId == -1){
-            AlertDialog.Builder(this).
-                setMessage("Select a attempt outcome. Eg. Onsight").
-                setPositiveButton("OK", null).
-                show()
+        if (radio_group_attempt_outcome.checkedRadioButtonId == -1) {
+            Toast.makeText(this, "Select a attempt outcome. Eg. Onsight", Toast.LENGTH_LONG).show()
             return null
         }
 
         val date = LocalDate.parse(button_date.text, formatterDate)
         val time = LocalTime.parse(button_time.text, formatterTime)
-        val climbEntryWithPitches = ClimbEntryWithPitches(
-            ClimbEntry(
-                datetime = date.atTime(time)
-            )
-        )
-        edit_text_route_name.text.let {
-            if (!it!!.isEmpty()) climbEntryWithPitches.climbEntry?.name = it.toString()
-        }
-        edit_text_area.text.let {
-            if (!it!!.isEmpty()) climbEntryWithPitches.climbEntry?.area = it.toString()
-        }
-        edit_text_sector.text.let {
-            if (!it!!.isEmpty()) climbEntryWithPitches.climbEntry?.sector = it.toString()
-        }
-        edit_text_comment.text.let {
-            if (!it!!.isEmpty()) climbEntryWithPitches.climbEntry?.comment = it.toString()
-        }
-
-        climbEntryWithPitches.climbEntry?.routeType = (findViewById<View>(radio_group_route_type.checkedRadioButtonId) as RadioButton).text.toString()
-
-        if (rating_bar_rating.rating > 0)
-            climbEntryWithPitches.climbEntry?.rating = rating_bar_rating.rating.toInt()
 
         val selectedRouteGrade = spinner_grade.selectedItem as RouteGrade
 
-        climbEntryWithPitches.pitches = listOf(
-            Pitch(
-                pitchNumber = 1,
-                routeGradeId = selectedRouteGrade.id!!,
-                attemptOutcome = (findViewById<View>(radio_group_attempt_outcome.checkedRadioButtonId) as RadioButton).text.toString(),
-                climbingStyle = (findViewById<View>(radio_group_climbing_styles.checkedRadioButtonId) as RadioButton).text.toString())
+        val attempt = Attempt(
+            climbingStyle = (findViewById<View>(radio_group_climbing_styles.checkedRadioButtonId) as RadioButton).text.toString(),
+            datetime = date.atTime(time),
+            outcome = (findViewById<View>(radio_group_attempt_outcome.checkedRadioButtonId) as RadioButton).text.toString(),
+            routeGrade = selectedRouteGrade.routeGradeId!!,
+            location = Location()
         )
-        return climbEntryWithPitches
+
+        edit_text_route_name.text.let {
+            if (!it!!.isEmpty()) attempt.routeName = it.toString()
+        }
+        edit_text_area.text.let {
+            if (!it!!.isEmpty()) attempt.location!!.area = it.toString()
+        }
+        edit_text_sector.text.let {
+            if (!it!!.isEmpty()) attempt.location!!.sector = it.toString()
+        }
+        edit_text_comment.text.let {
+            if (!it!!.isEmpty()) attempt.comment = it.toString()
+        }
+
+        attempt.routeType =
+                (findViewById<View>(radio_group_route_type.checkedRadioButtonId) as RadioButton).text.toString()
+
+        if (rating_bar_rating.rating > 0)
+            attempt.rating = rating_bar_rating.rating.toInt()
+
+        return attempt
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

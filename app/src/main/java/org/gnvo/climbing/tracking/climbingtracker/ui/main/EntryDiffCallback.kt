@@ -1,20 +1,14 @@
 package org.gnvo.climbing.tracking.climbingtracker.ui.main
 
 import android.support.v7.util.DiffUtil
-import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.ClimbEntrySummary
+import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.AttemptWithDetails
 
-class EntryDiffCallback : DiffUtil.ItemCallback<ClimbEntrySummary>() {
-    override fun areItemsTheSame(oldItem: ClimbEntrySummary, newItem: ClimbEntrySummary): Boolean {
-        return oldItem.climbEntryId == newItem.climbEntryId
+class EntryDiffCallback : DiffUtil.ItemCallback<AttemptWithDetails>() {
+    override fun areItemsTheSame(oldItem: AttemptWithDetails, newItem: AttemptWithDetails): Boolean {
+        return oldItem.attempt.id == newItem.attempt.id
     }
 
-    override fun areContentsTheSame(oldItem: ClimbEntrySummary, newItem: ClimbEntrySummary): Boolean {
-        return oldItem.datetime == newItem.datetime &&
-                oldItem.name == newItem.name &&
-                oldItem.area == newItem.area &&
-                oldItem.sector == newItem.sector &&
-                oldItem.rating == newItem.rating &&
-                oldItem.routeType == newItem.routeType &&
-                oldItem.pitches?.sortedBy { it.french } == newItem.pitches?.sortedBy { it.french }
+    override fun areContentsTheSame(oldItem: AttemptWithDetails, newItem: AttemptWithDetails): Boolean {
+        return oldItem.equals(newItem)
     }
 }
