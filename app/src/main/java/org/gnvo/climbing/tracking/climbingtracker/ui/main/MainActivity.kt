@@ -13,6 +13,7 @@ import android.view.MenuItem
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 import org.gnvo.climbing.tracking.climbingtracker.R
+import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.AttemptWithDetails
 import org.gnvo.climbing.tracking.climbingtracker.ui.addeditentry.AddEditEntryActivity
 
 class MainActivity : AppCompatActivity() {
@@ -54,14 +55,13 @@ class MainActivity : AppCompatActivity() {
         val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallback)
         itemTouchHelper.attachToRecyclerView(recycler_view)
 
-        //TODO:
-//        adapter.setOnItemClickListener(object : EntryAdapter.OnItemClickListener {
-//            override fun onItemClick(climbEntrySummary: ClimbEntrySummary) {
-//                val intent = Intent(this@MainActivity, AddEditEntryActivity::class.java)
-//                intent.putExtra(AddEditEntryActivity.EXTRA_ID, climbEntrySummary.climbEntryId)
-//                startActivity(intent)
-//            }
-//        })
+        adapter.setOnItemClickListener(object : EntryAdapter.OnItemClickListener {
+            override fun onItemClick(attemptWithDetails: AttemptWithDetails) {
+                val intent = Intent(this@MainActivity, AddEditEntryActivity::class.java)
+                intent.putExtra(AddEditEntryActivity.EXTRA_ID, attemptWithDetails.attempt.id)
+                startActivity(intent)
+            }
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

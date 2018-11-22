@@ -57,8 +57,8 @@ class EntryAdapter : ListAdapter<AttemptWithDetails, EntryAdapter.ViewHolder>(
         fun onItemClick(attemptWithDetails: AttemptWithDetails)
     }
 
-//    fun setOnItemClickListener(listener: OnItemClickListener){
-//        this.listener = listener
-//    }
+    fun setOnItemClickListener(listener: OnItemClickListener){
+        this.listener = listener
+    }
 }
 
