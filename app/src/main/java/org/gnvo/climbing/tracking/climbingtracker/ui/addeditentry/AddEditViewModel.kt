@@ -18,7 +18,7 @@ class AddEditViewModel(application: Application) : AndroidViewModel(application)
     }
 
     fun updateClimbEntry(climbEntryWithPitches: ClimbEntryWithPitches) {
-        climbEntryWithPitches.climbEntry?.let { repositoryClimbEntry.update(it) }
+        repositoryClimbEntry.update(climbEntryWithPitches)
     }
 
     fun deleteClimbEntryById(climbEntryId: Long?) {
