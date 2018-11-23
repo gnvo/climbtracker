@@ -20,10 +20,10 @@ data class Attempt(
     var outcome: String,
     @ColumnInfo(name = "route_type") var routeType: String? = null,
     @ColumnInfo(name = "climb_style") var climbStyle: String,
-    @ColumnInfo(name = "route_style") var routeStyle: List<String>? = null,
-    var length: Int? = null,
+    @ColumnInfo(name = "route_style") var routeStyle: List<String>? = null,//Todo
+    var length: Int? = null,//Todo
 
-    @Embedded var location: Location? = null
+    @Embedded var location: Location? = null//todo
 ) {
     override fun equals(other: Any?): Boolean {
         return other is Attempt &&
