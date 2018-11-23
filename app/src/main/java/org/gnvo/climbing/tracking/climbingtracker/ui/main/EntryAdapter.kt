@@ -27,9 +27,9 @@ class EntryAdapter : ListAdapter<AttemptWithDetails, EntryAdapter.ViewHolder>(
         holder.bind(getItem(position))
     }
 
-//    fun getClimbingEntryAt(position: Int): AttemptWithDetails {
-//        return getItem(position)
-//    }
+    fun getItemAt(position: Int): AttemptWithDetails {
+        return getItem(position)
+    }
 
     open inner class ViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(attemptWithDetails: AttemptWithDetails) {

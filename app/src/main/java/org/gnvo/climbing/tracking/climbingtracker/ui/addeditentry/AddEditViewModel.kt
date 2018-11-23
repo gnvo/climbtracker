@@ -28,10 +28,4 @@ class AddEditViewModel(application: Application) : AndroidViewModel(application)
     fun updateAttempt(attempt: Attempt) {
         repositoryAttempt.update(attempt)
     }
-
-//    fun deleteAttemptById(attemptId: Long?) {
-//        repositoryPitch.deleteAttemptById(attemptId)
-//        repositoryAttempt.deleteAttemptById(attemptId)
-//    }
-//
 }

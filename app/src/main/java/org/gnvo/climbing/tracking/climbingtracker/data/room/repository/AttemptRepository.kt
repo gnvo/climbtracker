@@ -17,12 +17,6 @@ class AttemptRepository(application: Application) {
         return attemptsWithDetails
     }
 
-    fun deleteAll() {
-        doAsync {
-            attemptDao?.deleteAll()
-        }
-    }
-
     fun insert(attempt: Attempt) {
         doAsync {
             attemptDao?.insert(attempt)
@@ -39,18 +33,9 @@ class AttemptRepository(application: Application) {
         }
     }
 
-//    fun delete(attempt: Attempt) {
-//        doAsync {
-//            attemptDao?.delete(attempt)
-//        }
-//    }
-//
-
-//
-//
-//    fun deleteById(attemptId: Long?) {
-//        doAsync {
-//            attemptDao?.deleteById(attemptId)
-//        }
-//    }
+    fun delete(attempt: Attempt) {
+        doAsync {
+            attemptDao?.delete(attempt)
+        }
+    }
 }

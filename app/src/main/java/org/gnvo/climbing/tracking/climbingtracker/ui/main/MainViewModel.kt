@@ -3,6 +3,7 @@ package org.gnvo.climbing.tracking.climbingtracker.ui.main
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.LiveData
+import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.Attempt
 import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.AttemptWithDetails
 import org.gnvo.climbing.tracking.climbingtracker.data.room.repository.AttemptRepository
 
@@ -14,7 +15,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         return attemptsWithDetails
     }
 
-    fun deleteAllAttempts() {
-        repositoryAttempt.deleteAll()
+    fun deleteAttempt(attempt: Attempt) {
+        repositoryAttempt.delete(attempt)
     }
 }

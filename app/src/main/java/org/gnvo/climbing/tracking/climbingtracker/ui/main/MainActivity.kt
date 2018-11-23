@@ -47,9 +47,8 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                //TODO:
-//                val position = viewHolder.adapterPosition
-//                viewModel.deleteClimbEntryById(adapter.getClimbingEntryAt(position).climbEntryId)
+                val position = viewHolder.adapterPosition
+                viewModel.deleteAttempt(adapter.getItemAt(position).attempt)
             }
         }
         val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallback)
@@ -72,8 +71,8 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         return when (item?.itemId) {
             R.id.delete_all_climb_entries -> {
-                viewModel.deleteAllAttempts()
-                Toast.makeText(this, "All climb entries deleted", Toast.LENGTH_LONG).show()
+//                viewModel.deleteAllAttempts()
+                Toast.makeText(this, "Non existing funct", Toast.LENGTH_LONG).show()
                 true
             }
             else -> super.onOptionsItemSelected(item)
