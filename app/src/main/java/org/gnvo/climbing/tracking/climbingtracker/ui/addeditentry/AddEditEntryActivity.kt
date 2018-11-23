@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.text.Editable
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
@@ -18,7 +17,6 @@ import org.gnvo.climbing.tracking.climbingtracker.R
 import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.Attempt
 import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.AttemptWithDetails
 import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.Location
-import org.jetbrains.anko.attempt
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -35,7 +33,7 @@ class AddEditEntryActivity : AppCompatActivity() {
     private var formatterTime = DateTimeFormatter.ofPattern("HH:mm")
     private var gradesMapper: Map<String, Long>? = null
 
-    private var climbEntryIdFromIntentExtra: Long = INVALID_ID
+    private var attemptIdFromIntentExtra: Long = INVALID_ID
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,8 +44,8 @@ class AddEditEntryActivity : AppCompatActivity() {
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_close)
         if (intent.hasExtra(EXTRA_ID)) {
             title = getString(R.string.edit_attempt)
-            climbEntryIdFromIntentExtra = intent.getLongExtra(EXTRA_ID, INVALID_ID)
-            populateClimbEntryData()
+            attemptIdFromIntentExtra = intent.getLongExtra(EXTRA_ID, INVALID_ID)
+            restoreAttemptData()
         } else {
             title = getString(R.string.add_attempt)
             val now = LocalDateTime.now()
@@ -75,7 +73,7 @@ class AddEditEntryActivity : AppCompatActivity() {
 
     private fun setDialog(button: Button, arrayId: Int, title: String) {
         button.setOnClickListener {
-            AlertDialog.Builder(this).setTitle(title).setItems(arrayId) { dialog, which ->
+            AlertDialog.Builder(this).setTitle(title).setItems(arrayId) { _, which ->
                 button.text = resources.getStringArray(arrayId)[which]
             }.create().show()
         }
@@ -113,11 +111,11 @@ class AddEditEntryActivity : AppCompatActivity() {
 
     }
 
-    private fun populateClimbEntryData() {
-        viewModel.getClimbingEntryFullById(climbEntryIdFromIntentExtra)
+    private fun restoreAttemptData() {
+        viewModel.getClimbingEntryFullById(attemptIdFromIntentExtra)
             .observe(this, Observer { attemptWithDetails: AttemptWithDetails? ->
                 button_date.text = attemptWithDetails?.attempt?.datetime!!.format(formatterDate)
-                button_time.text = attemptWithDetails.attempt.datetime!!.format(formatterTime)
+                button_time.text = attemptWithDetails.attempt.datetime.format(formatterTime)
 
                 button_route_type.text = attemptWithDetails.attempt.routeType
                 button_climb_style.text = attemptWithDetails.attempt.climbingStyle
@@ -134,14 +132,14 @@ class AddEditEntryActivity : AppCompatActivity() {
     }
 
     private fun saveClimbingEntry() {
-        val attempt = generateClimbEntryWithPitchesObject() ?: return
-        when (climbEntryIdFromIntentExtra) {
+        val attempt = generateAttemptWithDetails() ?: return
+        when (attemptIdFromIntentExtra) {
             INVALID_ID -> {
                 viewModel.insertAttempt(attempt)
                 Toast.makeText(this, "Climb attempt created", Toast.LENGTH_LONG).show()
             }
             else -> {
-                attempt.id = climbEntryIdFromIntentExtra
+                attempt.id = attemptIdFromIntentExtra
                 viewModel.updateAttempt(attempt)
                 Toast.makeText(this, "Climb attempt updated", Toast.LENGTH_LONG).show()
             }
@@ -149,7 +147,7 @@ class AddEditEntryActivity : AppCompatActivity() {
         finish()
     }
 
-    private fun generateClimbEntryWithPitchesObject(): Attempt? {
+    private fun generateAttemptWithDetails(): Attempt? {
         val date = LocalDate.parse(button_date.text, formatterDate)
         val time = LocalTime.parse(button_time.text, formatterTime)
         val datetime = date.atTime(time)

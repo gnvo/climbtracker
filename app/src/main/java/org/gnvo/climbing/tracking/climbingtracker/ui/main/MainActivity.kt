@@ -71,7 +71,7 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         return when (item?.itemId) {
             R.id.delete_all_climb_entries -> {
-//                viewModel.deleteAllAttempts()
+//                viewModel.deleteAllAttempts()//TODO implement other menu options
                 Toast.makeText(this, "Non existing funct", Toast.LENGTH_LONG).show()
                 true
             }

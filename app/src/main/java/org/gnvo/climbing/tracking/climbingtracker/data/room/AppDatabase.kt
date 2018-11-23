@@ -32,9 +32,9 @@ abstract class AppDatabase : RoomDatabase() {
             return INSTANCE
         }
 
-//        fun destroyDataBase() {
-//            INSTANCE = null
-//        }
+        fun destroyDataBase() {
+            INSTANCE = null
+        }
 
         private fun buildDatabase(context: Context): AppDatabase {
             return Room.databaseBuilder(
