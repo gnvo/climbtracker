@@ -5,7 +5,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.climb_entry_item.view.*
+import kotlinx.android.synthetic.main.attempt_item.view.*
 import org.gnvo.climbing.tracking.climbingtracker.R
 import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.AttemptWithDetails
 import java.time.format.DateTimeFormatter
@@ -20,7 +20,7 @@ class EntryAdapter : ListAdapter<AttemptWithDetails, EntryAdapter.ViewHolder>(
     private var formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd")
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.climb_entry_item, parent, false))
+        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.attempt_item, parent, false))
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

@@ -6,8 +6,8 @@
     <string name="area">Area</string>
     <string name="sector">Sector</string>
     <string name="comment">Comment</string>
-    <string name="edit_attempt">Edit attempt entry</string>
-    <string name="add_attempt">Add attempt entry</string>
+    <string name="edit_attempt">Edit attempt</string>
+    <string name="add_attempt">Add attempt</string>
 
     <string name="max_message">(%1$s)</string>
 

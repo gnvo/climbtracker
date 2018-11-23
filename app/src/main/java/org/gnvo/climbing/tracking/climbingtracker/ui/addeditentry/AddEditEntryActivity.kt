@@ -12,7 +12,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
 import android.widget.Toast
-import kotlinx.android.synthetic.main.activity_add_update_climb_entry.*
+import kotlinx.android.synthetic.main.activity_add_update_attempt.*
 import org.gnvo.climbing.tracking.climbingtracker.R
 import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.Attempt
 import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.AttemptWithDetails
@@ -22,9 +22,9 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
-class AddEditEntryActivity : AppCompatActivity() {
+class AddEditAttemptActivity : AppCompatActivity() {
     companion object {
-        const val EXTRA_ID: String = "org.gnvo.climbing.tracking.climbingtracker.ui.main.EXTRA_ID"
+        const val EXTRA_ID: String = "org.gnvo.climbing.tracking.climbingtracker.ui.addeditentry.EXTRA_ID"
         const val INVALID_ID: Long = -1
     }
 
@@ -37,7 +37,7 @@ class AddEditEntryActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_update_climb_entry)
+        setContentView(R.layout.activity_add_update_attempt)
 
         viewModel = ViewModelProviders.of(this).get(AddEditViewModel::class.java)
 
@@ -112,13 +112,13 @@ class AddEditEntryActivity : AppCompatActivity() {
     }
 
     private fun restoreAttemptData() {
-        viewModel.getClimbingEntryFullById(attemptIdFromIntentExtra)
+        viewModel.getAttemptWithDetailsById(attemptIdFromIntentExtra)
             .observe(this, Observer { attemptWithDetails: AttemptWithDetails? ->
                 button_date.text = attemptWithDetails?.attempt?.datetime!!.format(formatterDate)
                 button_time.text = attemptWithDetails.attempt.datetime.format(formatterTime)
 
                 button_route_type.text = attemptWithDetails.attempt.routeType
-                button_climb_style.text = attemptWithDetails.attempt.climbingStyle
+                button_climb_style.text = attemptWithDetails.attempt.climbStyle
                 button_grade.text = attemptWithDetails.routeGrade.french
                 button_outcome.text = attemptWithDetails.attempt.outcome
 
@@ -131,7 +131,7 @@ class AddEditEntryActivity : AppCompatActivity() {
             })
     }
 
-    private fun saveClimbingEntry() {
+    private fun saveAttempt() {
         val attempt = generateAttemptWithDetails() ?: return
         when (attemptIdFromIntentExtra) {
             INVALID_ID -> {
@@ -160,7 +160,7 @@ class AddEditEntryActivity : AppCompatActivity() {
         val attempt = Attempt(
             datetime = datetime,
             routeType = routeType,
-            climbingStyle = climbStyle,
+            climbStyle = climbStyle,
             routeGrade = routeGrade,
             outcome = outcome,
             location = Location()
@@ -171,8 +171,8 @@ class AddEditEntryActivity : AppCompatActivity() {
             Toast.makeText(this, "Set route type", Toast.LENGTH_LONG).show()
             return null
         }
-        if (! resources.getStringArray(R.array.climb_styles).contains(attempt.climbingStyle)){
-            Toast.makeText(this, "Set climbing style", Toast.LENGTH_LONG).show()
+        if (! resources.getStringArray(R.array.climb_styles).contains(attempt.climbStyle)){
+            Toast.makeText(this, "Set climb style", Toast.LENGTH_LONG).show()
             return null
         }
         if (attempt.routeGrade == INVALID_ID){
@@ -203,14 +203,14 @@ class AddEditEntryActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.add_climb_entry_menu, menu)
+        menuInflater.inflate(R.menu.add_edit_attempt_menu, menu)
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         return when (item?.itemId) {
-            R.id.save_climb_entry -> {
-                saveClimbingEntry()
+            R.id.save_attempt-> {
+                saveAttempt()
                 true
             }
             else -> super.onOptionsItemSelected(item)

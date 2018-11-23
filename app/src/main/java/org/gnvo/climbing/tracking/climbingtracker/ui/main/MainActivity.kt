@@ -14,7 +14,7 @@ import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 import org.gnvo.climbing.tracking.climbingtracker.R
 import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.AttemptWithDetails
-import org.gnvo.climbing.tracking.climbingtracker.ui.addeditentry.AddEditEntryActivity
+import org.gnvo.climbing.tracking.climbingtracker.ui.addeditentry.AddEditAttemptActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -24,8 +24,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        button_add_climb_entry.setOnClickListener {
-            val intent = Intent(this@MainActivity, AddEditEntryActivity::class.java)
+        button_add_attempt.setOnClickListener {
+            val intent = Intent(this@MainActivity, AddEditAttemptActivity::class.java)
             startActivity(intent)
         }
 
@@ -56,8 +56,8 @@ class MainActivity : AppCompatActivity() {
 
         adapter.setOnItemClickListener(object : EntryAdapter.OnItemClickListener {
             override fun onItemClick(attemptWithDetails: AttemptWithDetails) {
-                val intent = Intent(this@MainActivity, AddEditEntryActivity::class.java)
-                intent.putExtra(AddEditEntryActivity.EXTRA_ID, attemptWithDetails.attempt.id)
+                val intent = Intent(this@MainActivity, AddEditAttemptActivity::class.java)
+                intent.putExtra(AddEditAttemptActivity.EXTRA_ID, attemptWithDetails.attempt.id)
                 startActivity(intent)
             }
         })

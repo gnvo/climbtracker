@@ -10,11 +10,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/recycler_view"
-            tools:listitem="@layout/climb_entry_item"
+            tools:listitem="@layout/attempt_item"
     />
 
     <android.support.design.widget.FloatingActionButton
-            android:id="@+id/button_add_climb_entry"
+            android:id="@+id/button_add_attempt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_add"

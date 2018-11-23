@@ -21,7 +21,7 @@ class AddEditViewModel(application: Application) : AndroidViewModel(application)
         return repositoryRouteGrade.getAll()
     }
 
-    fun getClimbingEntryFullById(attemptId: Long): LiveData<AttemptWithDetails> {
+    fun getAttemptWithDetailsById(attemptId: Long): LiveData<AttemptWithDetails> {
         return repositoryAttempt.getByIdWithDetails(attemptId)
     }
 

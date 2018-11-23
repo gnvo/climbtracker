@@ -19,7 +19,7 @@ data class Attempt(
 
     var outcome: String,
     @ColumnInfo(name = "route_type") var routeType: String? = null,
-    @ColumnInfo(name = "climbing_style") var climbingStyle: String,
+    @ColumnInfo(name = "climb_style") var climbStyle: String,
     @ColumnInfo(name = "route_style") var routeStyle: List<String>? = null,
     var length: Int? = null,
 
@@ -35,7 +35,7 @@ data class Attempt(
                 rating == other.rating &&
                 outcome == other.outcome &&
                 routeType == other.routeType &&
-                climbingStyle == other.climbingStyle &&
+                climbStyle == other.climbStyle &&
                 routeStyle == other.routeStyle &&
                 length == other.length
     }
