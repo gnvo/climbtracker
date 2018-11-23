@@ -22,6 +22,7 @@ data class Attempt(
     @ColumnInfo(name = "climb_style") var climbStyle: String,
     @ColumnInfo(name = "route_style") var routeStyle: List<String>? = null,//Todo
     var length: Int? = null,//Todo
+    //todo rock type, per sector?
 
     @Embedded var location: Location? = null//todo
 ) {
