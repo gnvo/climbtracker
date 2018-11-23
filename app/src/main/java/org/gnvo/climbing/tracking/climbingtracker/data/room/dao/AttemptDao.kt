@@ -15,23 +15,31 @@ interface AttemptDao {
     )
     fun getAllWithDetails(): LiveData<List<AttemptWithDetails>>
 
+    @Query("SELECT attempt.*, route_grade.*  " +
+            "FROM attempt " +
+            "INNER JOIN route_grade on route_grade.route_grade_id = attempt.route_grade " +
+            "WHERE attempt.id = :attemptId " +
+            "ORDER BY datetime ASC"
+    )
+    fun getByIdWithDetails(attemptId:Long): LiveData<AttemptWithDetails>
+
     @Query("DELETE FROM attempt")
     fun deleteAll()
 
     @Insert
-    fun insert(climbEntry: Attempt?)
+    fun insert(attempt: Attempt?)
 
+    @Update
+    fun update(attempt: Attempt)
 //    @Insert
-//    fun init(climbEntry: List<Attempt>)
+//    fun init(attempt: List<Attempt>)
 //
-//    @Update
-//    fun update(climbEntry: ClimbEntry)
 //
 //    @Delete
-//    fun delete(climbEntry: ClimbEntry)
+//    fun delete(attempt: ClimbEntry)
 //
-//    @Query("DELETE FROM climbing_entry WHERE id = :climbEntryId")
-//    fun deleteByClimbEntryId(climbEntryId: Long?)
+//    @Query("DELETE FROM climbing_entry WHERE id = :attemptId")
+//    fun deleteByClimbEntryId(attemptId: Long?)
 //
 //
 //    @Query("SELECT * FROM climbing_entry ORDER BY datetime ASC")
@@ -51,10 +59,10 @@ interface AttemptDao {
 //            "FROM climbing_entry " +
 //            "INNER JOIN pitch ON pitch.climb_entry_id = climbing_entry.id " +
 //            "INNER JOIN route_grade on route_grade.id = pitch.route_grade_id " +
-//            "WHERE climbing_entry.id = :climbEntryId " +
+//            "WHERE climbing_entry.id = :attemptId " +
 //            "GROUP BY climb_entry_id " +
 //            "ORDER BY datetime")
-//    fun getFullById(climbEntryId:Long): LiveData<ClimbEntryFull>
+//    fun getFullById(attemptId:Long): LiveData<ClimbEntryFull>
 //
 //    @Transaction
 //    @Query("SELECT " +

@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.text.Editable
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
@@ -15,7 +16,9 @@ import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_add_update_climb_entry.*
 import org.gnvo.climbing.tracking.climbingtracker.R
 import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.Attempt
+import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.AttemptWithDetails
 import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.Location
+import org.jetbrains.anko.attempt
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -110,42 +113,24 @@ class AddEditEntryActivity : AppCompatActivity() {
 
     }
 
-    private fun populateClimbEntryData() {//todo
-//        viewModel.getClimbingEntryFullById(climbEntryIdFromIntentExtra)
-//            .observe(this, Observer { climbEntryFull: ClimbEntryFull? ->
-//                button_date.text = climbEntryFull?.datetime!!.format(formatterDate)
-//                button_time.text = climbEntryFull.datetime.format(formatterTime)
-//
-//
-//                when (climbEntryFull.routeType) {
-//                    getString(R.string.sport) -> button_route_type.check(radio_button_sport.id)
-//                    getString(R.string.trad) -> button_route_type.check(radio_button_trad.id)
-//                    getString(R.string.indoors) -> button_route_type.check(radio_button_indoors.id)
-//                }
-//
-//                when (climbEntryFull.pitchesFull?.get(0)?.climbingStyle) {
-//                    getString(R.string.lead) -> button_climbing_styles.check(radio_button_lead.id)
-//                    getString(R.string.follow) -> button_climbing_styles.check(radio_button_follow.id)
-//                    getString(R.string.top_rope) -> button_climbing_styles.check(radio_button_top_rope.id)
-//                    getString(R.string.solo) -> button_climbing_styles.check(radio_button_solo.id)
-//                }
-//
-//                when (climbEntryFull.pitchesFull?.get(0)?.attemptOutcome) {
-//                    getString(R.string.onsight) -> button_attempt_outcome.check(radio_button_onsight.id)
-//                    getString(R.string.flash) -> button_attempt_outcome.check(radio_button_flash.id)
-//                    getString(R.string.redpoint) -> button_attempt_outcome.check(radio_button_redpoint.id)
-//                    getString(R.string.fell_hung) -> button_attempt_outcome.check(radio_button_fell_hung.id)
-//                }
-//
-//                edit_text_route_name.setText(climbEntryFull.name)
-//                edit_text_area.setText(climbEntryFull.area)
-//                edit_text_sector.setText(climbEntryFull.sector)
-//                edit_text_comment.setText(climbEntryFull.comment)
-//
-//                rating_bar_rating.rating = climbEntryFull.rating?.toFloat() ?: 0f
-//
-//                pitchIdFromRetrievedPitch = climbEntryFull.pitchesFull!![0].id!!
-//            })
+    private fun populateClimbEntryData() {
+        viewModel.getClimbingEntryFullById(climbEntryIdFromIntentExtra)
+            .observe(this, Observer { attemptWithDetails: AttemptWithDetails? ->
+                button_date.text = attemptWithDetails?.attempt?.datetime!!.format(formatterDate)
+                button_time.text = attemptWithDetails.attempt.datetime!!.format(formatterTime)
+
+                button_route_type.text = attemptWithDetails.attempt.routeType
+                button_climb_style.text = attemptWithDetails.attempt.climbingStyle
+                button_grade.text = attemptWithDetails.routeGrade.french
+                button_outcome.text = attemptWithDetails.attempt.outcome
+
+                edit_text_route_name.setText(attemptWithDetails.attempt.routeName)
+                edit_text_area.setText(attemptWithDetails.attempt.location?.area)
+                edit_text_sector.setText(attemptWithDetails.attempt.location?.sector)
+                edit_text_comment.setText(attemptWithDetails.attempt.comment)
+
+                rating_bar_rating.rating = attemptWithDetails.attempt.rating?.toFloat() ?: 0f
+            })
     }
 
     private fun saveClimbingEntry() {
@@ -153,16 +138,12 @@ class AddEditEntryActivity : AppCompatActivity() {
         when (climbEntryIdFromIntentExtra) {
             INVALID_ID -> {
                 viewModel.insertAttempt(attempt)
-                Toast.makeText(this, "ClimbEntry created", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Climb attempt created", Toast.LENGTH_LONG).show()
             }
             else -> {
-                //todo
-//                climbEntryWithPitches.climbEntry?.id = climbEntryIdFromIntentExtra
-//                climbEntryWithPitches.pitches[0].climbEntryId = climbEntryIdFromIntentExtra
-//                climbEntryWithPitches.pitches[0].id = pitchIdFromRetrievedPitch
-//
-//                viewModel.updateClimbEntry(climbEntryWithPitches)
-                Toast.makeText(this, "ClimbEntry updated", Toast.LENGTH_LONG).show()
+                attempt.id = climbEntryIdFromIntentExtra
+                viewModel.updateAttempt(attempt)
+                Toast.makeText(this, "Climb attempt updated", Toast.LENGTH_LONG).show()
             }
         }
         finish()

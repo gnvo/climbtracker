@@ -4,6 +4,7 @@ import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.LiveData
 import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.Attempt
+import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.AttemptWithDetails
 import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.RouteGrade
 import org.gnvo.climbing.tracking.climbingtracker.data.room.repository.AttemptRepository
 import org.gnvo.climbing.tracking.climbingtracker.data.room.repository.RouteGradeRepository
@@ -20,16 +21,17 @@ class AddEditViewModel(application: Application) : AndroidViewModel(application)
         return repositoryRouteGrade.getAll()
     }
 
-//    fun updateAttempt(attempt: Attempt) {
-//        repositoryAttempt.update(attempt)
-//    }
-//
+    fun getClimbingEntryFullById(attemptId: Long): LiveData<AttemptWithDetails> {
+        return repositoryAttempt.getByIdWithDetails(attemptId)
+    }
+
+    fun updateAttempt(attempt: Attempt) {
+        repositoryAttempt.update(attempt)
+    }
+
 //    fun deleteAttemptById(attemptId: Long?) {
 //        repositoryPitch.deleteAttemptById(attemptId)
 //        repositoryAttempt.deleteAttemptById(attemptId)
 //    }
 //
-//    fun getClimbingEntryFullById(attemptId: Long): LiveData<AttemptFull> {
-//        return repositoryAttempt.getFullById(attemptId)
-//    }
 }

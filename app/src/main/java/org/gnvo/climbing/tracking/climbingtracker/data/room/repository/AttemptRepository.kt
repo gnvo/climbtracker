@@ -28,13 +28,17 @@ class AttemptRepository(application: Application) {
             attemptDao?.insert(attempt)
         }
     }
-//
-//    fun update(attempt: Attempt) {
-//        doAsync {
-//            attemptDao?.update(attempt.attempt!!)
-//        }
-//    }
-//
+
+    fun getByIdWithDetails(attemptId: Long): LiveData<AttemptWithDetails> {
+        return attemptDao?.getByIdWithDetails(attemptId)!!
+    }
+
+    fun update(attempt: Attempt) {
+        doAsync {
+            attemptDao?.update(attempt)
+        }
+    }
+
 //    fun delete(attempt: Attempt) {
 //        doAsync {
 //            attemptDao?.delete(attempt)
@@ -43,9 +47,6 @@ class AttemptRepository(application: Application) {
 //
 
 //
-//    fun getById(attemptId:Long): LiveData<Attempt> {
-//        return attemptDao?.getById(attemptId)!!
-//    }
 //
 //    fun deleteById(attemptId: Long?) {
 //        doAsync {
