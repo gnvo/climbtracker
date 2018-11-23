@@ -187,6 +187,24 @@ class AddEditEntryActivity : AppCompatActivity() {
             location = Location()
         )
 
+        //Todo: create tests to validate validations
+        if (! resources.getStringArray(R.array.route_type).contains(attempt.routeType)){
+            Toast.makeText(this, "Set route type", Toast.LENGTH_LONG).show()
+            return null
+        }
+        if (! resources.getStringArray(R.array.climb_styles).contains(attempt.climbingStyle)){
+            Toast.makeText(this, "Set climbing style", Toast.LENGTH_LONG).show()
+            return null
+        }
+        if (attempt.routeGrade == INVALID_ID){
+            Toast.makeText(this, "Set route grade", Toast.LENGTH_LONG).show()
+            return null
+        }
+        if (! resources.getStringArray(R.array.outcome).contains(attempt.outcome)){
+            Toast.makeText(this, "Set outcome", Toast.LENGTH_LONG).show()
+            return null
+        }
+
         attempt.routeName = getStringOrNull(edit_text_route_name.text)
         attempt.location!!.area = getStringOrNull(edit_text_area.text)
         attempt.location!!.sector = getStringOrNull(edit_text_sector.text)
