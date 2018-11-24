@@ -7,26 +7,25 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.simple_recycler_view_item_1.view.*
 import org.gnvo.climbing.tracking.climbingtracker.R
-import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.RouteGrade
 
-class RouteGradeAdapter : RecyclerView.Adapter<RouteGradeAdapter.ViewHolder>() {
+class GenericAdapter<T> : RecyclerView.Adapter<GenericAdapter<T>.ViewHolder>() {
 
     private var selected: Int? = null
-    private var selectedItem: RouteGrade? = null
-    private var items = ArrayList<RouteGrade>()
+    private var selectedItem: T? = null
+    private var items = ArrayList<T>()
 
-    fun setItems(items: List<RouteGrade>) {
+    fun setItems(items: List<T>) {
         this.items = ArrayList(items)
         selected = items.indexOf(selectedItem)
         notifyDataSetChanged()
     }
 
-    fun getSelected(): RouteGrade? {
+    fun getSelected(): T? {
         return selected?.let{items[it]}
     }
 
-    fun setSelected(routeGrade: RouteGrade?) {
-        selectedItem = routeGrade
+    fun setSelected(item: T?) {
+        selectedItem = item
     }
 
     override fun getItemCount(): Int {
@@ -44,7 +43,7 @@ class RouteGradeAdapter : RecyclerView.Adapter<RouteGradeAdapter.ViewHolder>() {
     open inner class ViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(position: Int) {
             val item = items[position]
-            itemView.text_view_1.text = item.french
+            itemView.text_view_1.text = item.toString()
             when (position){
                 selected -> itemView.text_view_1.setBackgroundColor(Color.LTGRAY)
                 else -> itemView.text_view_1.setBackgroundColor(Color.TRANSPARENT)//TODO: this is a hack, better color handling

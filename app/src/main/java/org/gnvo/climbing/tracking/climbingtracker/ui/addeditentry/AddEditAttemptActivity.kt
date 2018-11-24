@@ -2,6 +2,7 @@ package org.gnvo.climbing.tracking.climbingtracker.ui.addeditentry
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
@@ -9,7 +10,6 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
@@ -19,7 +19,8 @@ import org.gnvo.climbing.tracking.climbingtracker.R
 import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.Attempt
 import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.AttemptWithDetails
 import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.Location
-import org.gnvo.climbing.tracking.climbingtracker.ui.addeditentry.adapters.RouteGradeAdapter
+import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.RouteGrade
+import org.gnvo.climbing.tracking.climbingtracker.ui.addeditentry.adapters.GenericAdapter
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -55,21 +56,20 @@ class AddEditAttemptActivity : AppCompatActivity() {
             button_time.text = now.format(formatterTime)
         }
         setDateTimeDialogs()
-        setRouteGradesDialog()
+        setAdapterToRecyclerView(GenericAdapter<RouteGrade>(), viewModel.getAllRouteGrades())
         setDialog(button_route_type, R.array.route_type, "Select a route type")
         setDialog(button_climb_style, R.array.climb_styles, "Select a climb style")
         setDialog(button_outcome, R.array.outcome, "Select the attempt outcome")
     }
 
-    private fun setRouteGradesDialog() {
-        recycle_view_route_grade.layoutManager = LinearLayoutManager(this)
-        recycle_view_route_grade.setHasFixedSize(true)
+    private fun <T>setAdapterToRecyclerView(genericAdapter: GenericAdapter<T>, liveData: LiveData<List<T>>) {
+        recycler_view_route_grade.layoutManager = LinearLayoutManager(this)
+        recycler_view_route_grade.setHasFixedSize(true)
 
-        val adapter = RouteGradeAdapter()
-        recycle_view_route_grade.adapter = adapter
+        recycler_view_route_grade.adapter = genericAdapter
 
-        viewModel.getAllRouteGrades().observe(this, Observer {
-            adapter.setItems(it!!)
+        liveData.observe(this, Observer {
+            genericAdapter.setItems(it!!)
         })
     }
 
@@ -121,7 +121,7 @@ class AddEditAttemptActivity : AppCompatActivity() {
 
                 button_route_type.text = attemptWithDetails.attempt.routeType
                 button_climb_style.text = attemptWithDetails.attempt.climbStyle
-                (recycle_view_route_grade.adapter as RouteGradeAdapter).setSelected(attemptWithDetails.routeGrade)
+                (recycler_view_route_grade.adapter as GenericAdapter<RouteGrade>).setSelected(attemptWithDetails.routeGrade)
                 button_outcome.text = attemptWithDetails.attempt.outcome
 
                 edit_text_route_name.setText(attemptWithDetails.attempt.routeName)
@@ -156,7 +156,7 @@ class AddEditAttemptActivity : AppCompatActivity() {
 
         val routeType = button_route_type.text.toString()
         val climbStyle= button_climb_style.text.toString()
-        val routeGrade= (recycle_view_route_grade.adapter as RouteGradeAdapter).getSelected()?.routeGradeId ?: INVALID_ID
+        val routeGrade= (recycler_view_route_grade.adapter as GenericAdapter<RouteGrade>).getSelected()?.routeGradeId ?: INVALID_ID
         val outcome = button_outcome.text.toString()
 
         val attempt = Attempt(
