@@ -45,10 +45,10 @@ class RouteGradeAdapter : RecyclerView.Adapter<RouteGradeAdapter.ViewHolder>() {
         fun bind(position: Int) {
             val item = items[position]
             itemView.text_view_1.text = item.french
-            if (selected == position)
-                itemView.text_view_1.setBackgroundColor(Color.LTGRAY)
-            else
-                itemView.text_view_1.setBackgroundColor(Color.WHITE)
+            when (position){
+                selected -> itemView.text_view_1.setBackgroundColor(Color.LTGRAY)
+                else -> itemView.text_view_1.setBackgroundColor(Color.TRANSPARENT)//TODO: this is a hack, better color handling
+            }
 
             itemView.setOnClickListener {view ->
                 if (adapterPosition != RecyclerView.NO_POSITION) {
@@ -59,6 +59,5 @@ class RouteGradeAdapter : RecyclerView.Adapter<RouteGradeAdapter.ViewHolder>() {
             }
         }
     }
-
 }
 
