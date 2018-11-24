@@ -43,7 +43,7 @@ class EntryAdapter : ListAdapter<AttemptWithDetails, EntryAdapter.ViewHolder>(
             listOfDetails.add(attemptWithDetails.attempt.routeName)
             listOfDetails.add(attemptWithDetails.attempt.location?.area)
             listOfDetails.add(attemptWithDetails.attempt.location?.sector)
-            listOfDetails.add("rating:" + attemptWithDetails.attempt.rating?.toString() + "/5")
+            attemptWithDetails.attempt.rating?.let {listOfDetails.add("rating:" + it.toString() + "/5") }
 
             itemView.text_view_details.text = listOfDetails.filter{!it.isNullOrEmpty()}.joinToString()
             
