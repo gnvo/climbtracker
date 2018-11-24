@@ -3,6 +3,7 @@ package org.gnvo.climbing.tracking.climbingtracker.data.room.pojo
 import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
+import java.util.*
 
 @Entity(tableName = "route_grade")
 data class RouteGrade(
@@ -12,12 +13,22 @@ data class RouteGrade(
     var uiaa: String? = null
 ) {
     override fun equals(other: Any?): Boolean {
-        return other is RouteGrade &&
-                french == other.french &&
-                yds == other.yds &&
-                uiaa == other.uiaa
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as RouteGrade
+
+        if (french != other.french) return false
+        if (yds != other.yds) return false
+        if (uiaa != other.uiaa) return false
+
+        return true
     }
 
+    override fun hashCode(): Int {
+        return Objects.hash(routeGradeId, french, yds, uiaa)
+    }
+    
     override fun toString(): String {
         return french!!
     }
