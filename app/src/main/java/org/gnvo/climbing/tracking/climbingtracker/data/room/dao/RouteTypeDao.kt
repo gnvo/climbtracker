@@ -6,7 +6,7 @@ import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.RouteType
 
 @Dao
 interface RouteTypeDao {
-    @Query("SELECT * FROM route_type ORDER BY route_type_name ASC")
+    @Query("SELECT * FROM route_type ORDER BY route_type_id ASC")
     fun getAll(): LiveData<List<RouteType>>
 
     @Insert

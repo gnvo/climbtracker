@@ -6,7 +6,7 @@ import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.Outcome
 
 @Dao
 interface OutcomeDao {
-    @Query("SELECT * FROM outcome ORDER BY outcome_name ASC")
+    @Query("SELECT * FROM outcome ORDER BY outcome_id ASC")
     fun getAll(): LiveData<List<Outcome>>
 
     @Insert
