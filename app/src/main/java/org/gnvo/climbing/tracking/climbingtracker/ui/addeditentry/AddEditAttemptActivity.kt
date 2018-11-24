@@ -159,9 +159,6 @@ class AddEditAttemptActivity : AppCompatActivity() {
         val routeGrade= (recycle_view_route_grade.adapter as RouteGradeAdapter).getSelected()?.routeGradeId ?: INVALID_ID
         val outcome = button_outcome.text.toString()
 
-        val adapter = recycle_view_route_grade.adapter as RouteGradeAdapter
-        Log.d("gnvog", adapter.getSelected().toString())
-
         val attempt = Attempt(
             datetime = datetime,
             routeType = routeType,
