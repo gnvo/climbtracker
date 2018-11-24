@@ -19,7 +19,6 @@ import org.gnvo.climbing.tracking.climbingtracker.R
 import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.Attempt
 import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.AttemptWithDetails
 import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.Location
-import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.RouteGrade
 import org.gnvo.climbing.tracking.climbingtracker.ui.addeditentry.adapters.RouteGradeAdapter
 import java.time.LocalDate
 import java.time.LocalDateTime
