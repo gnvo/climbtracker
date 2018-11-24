@@ -7,7 +7,9 @@ import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
@@ -17,6 +19,8 @@ import org.gnvo.climbing.tracking.climbingtracker.R
 import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.Attempt
 import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.AttemptWithDetails
 import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.Location
+import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.RouteGrade
+import org.gnvo.climbing.tracking.climbingtracker.ui.addeditentry.adapters.RouteGradeAdapter
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -31,7 +35,6 @@ class AddEditAttemptActivity : AppCompatActivity() {
     private lateinit var viewModel: AddEditViewModel
     private var formatterDate = DateTimeFormatter.ofPattern("EEEE, d MMM yyyy")
     private var formatterTime = DateTimeFormatter.ofPattern("HH:mm")
-    private var gradesMapper: Map<String, Long>? = null
 
     private var attemptIdFromIntentExtra: Long = INVALID_ID
 
@@ -60,14 +63,14 @@ class AddEditAttemptActivity : AppCompatActivity() {
     }
 
     private fun setRouteGradesDialog() {
-        viewModel.getAllRouteGrades().observe(this, Observer { list ->
-            val array = list?.map { it.french as CharSequence }?.toTypedArray()
-            gradesMapper = list?.map{it.french!! to it.routeGradeId!!}?.toMap()
-            button_grade.setOnClickListener {
-                AlertDialog.Builder(this).setTitle("Pick a route grade").setItems(array) { _, which ->
-                    button_grade.text = list?.get(which).toString()
-                }.create().show()
-            }
+        recycle_view_route_grade.layoutManager = LinearLayoutManager(this)
+        recycle_view_route_grade.setHasFixedSize(true)
+
+        val adapter = RouteGradeAdapter()
+        recycle_view_route_grade.adapter = adapter
+
+        viewModel.getAllRouteGrades().observe(this, Observer {
+            adapter.setItems(it!!)
         })
     }
 
@@ -119,7 +122,8 @@ class AddEditAttemptActivity : AppCompatActivity() {
 
                 button_route_type.text = attemptWithDetails.attempt.routeType
                 button_climb_style.text = attemptWithDetails.attempt.climbStyle
-                button_grade.text = attemptWithDetails.routeGrade.french
+//                button_grade.text = attemptWithDetails.routeGrade.french//todo set routegrade on edit
+                (recycle_view_route_grade.adapter as RouteGradeAdapter).setSelected(attemptWithDetails.routeGrade)
                 button_outcome.text = attemptWithDetails.attempt.outcome
 
                 edit_text_route_name.setText(attemptWithDetails.attempt.routeName)
@@ -154,8 +158,11 @@ class AddEditAttemptActivity : AppCompatActivity() {
 
         val routeType = button_route_type.text.toString()
         val climbStyle= button_climb_style.text.toString()
-        val routeGrade = gradesMapper?.get(button_grade.text.toString()) ?: -1
+        val routeGrade= (recycle_view_route_grade.adapter as RouteGradeAdapter).getSelected()?.routeGradeId ?: INVALID_ID
         val outcome = button_outcome.text.toString()
+
+        val adapter = recycle_view_route_grade.adapter as RouteGradeAdapter
+        Log.d("gnvog", adapter.getSelected().toString())
 
         val attempt = Attempt(
             datetime = datetime,
