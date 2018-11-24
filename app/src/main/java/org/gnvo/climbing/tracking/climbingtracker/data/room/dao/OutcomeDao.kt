@@ -1,0 +1,14 @@
+package org.gnvo.climbing.tracking.climbingtracker.data.room.dao
+
+import android.arch.lifecycle.LiveData
+import android.arch.persistence.room.*
+import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.Outcome
+
+@Dao
+interface OutcomeDao {
+    @Query("SELECT * FROM outcome ORDER BY outcome_name ASC")
+    fun getAll(): LiveData<List<Outcome>>
+
+    @Insert
+    fun init(outcomes: List<Outcome>)
+}

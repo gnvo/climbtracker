@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.text.Editable
 import android.view.Menu
 import android.view.MenuItem
@@ -16,10 +17,7 @@ import android.widget.Button
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_add_update_attempt.*
 import org.gnvo.climbing.tracking.climbingtracker.R
-import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.Attempt
-import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.AttemptWithDetails
-import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.Location
-import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.RouteGrade
+import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.*
 import org.gnvo.climbing.tracking.climbingtracker.ui.addeditentry.adapters.GenericAdapter
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -56,29 +54,21 @@ class AddEditAttemptActivity : AppCompatActivity() {
             button_time.text = now.format(formatterTime)
         }
         setDateTimeDialogs()
-        setAdapterToRecyclerView(GenericAdapter<RouteGrade>(), viewModel.getAllRouteGrades())
-        setDialog(button_route_type, R.array.route_type, "Select a route type")
-        setDialog(button_climb_style, R.array.climb_styles, "Select a climb style")
-        setDialog(button_outcome, R.array.outcome, "Select the attempt outcome")
+        setAdapterToRecyclerView(recycler_view_climb_style, GenericAdapter<ClimbStyle>(), viewModel.getAllClimbStyles())
+        setAdapterToRecyclerView(recycler_view_outcome, GenericAdapter<Outcome>(), viewModel.getAllOutcomes())
+        setAdapterToRecyclerView(recycler_view_route_grade, GenericAdapter<RouteGrade>(), viewModel.getAllRouteGrades())
+        setAdapterToRecyclerView(recycler_view_route_type, GenericAdapter<RouteType>(), viewModel.getAllRouteTypes())
     }
 
-    private fun <T>setAdapterToRecyclerView(genericAdapter: GenericAdapter<T>, liveData: LiveData<List<T>>) {
-        recycler_view_route_grade.layoutManager = LinearLayoutManager(this)
-        recycler_view_route_grade.setHasFixedSize(true)
+    private fun <T>setAdapterToRecyclerView(recycler_view: RecyclerView, genericAdapter: GenericAdapter<T>, liveData: LiveData<List<T>>) {
+        recycler_view.layoutManager = LinearLayoutManager(this)
+        recycler_view.setHasFixedSize(true)
 
-        recycler_view_route_grade.adapter = genericAdapter
+        recycler_view.adapter = genericAdapter
 
         liveData.observe(this, Observer {
             genericAdapter.setItems(it!!)
         })
-    }
-
-    private fun setDialog(button: Button, arrayId: Int, title: String) {
-        button.setOnClickListener {
-            AlertDialog.Builder(this).setTitle(title).setItems(arrayId) { _, which ->
-                button.text = resources.getStringArray(arrayId)[which]
-            }.create().show()
-        }
     }
 
     private fun setDateTimeDialogs() {
@@ -119,10 +109,10 @@ class AddEditAttemptActivity : AppCompatActivity() {
                 button_date.text = attemptWithDetails?.attempt?.datetime!!.format(formatterDate)
                 button_time.text = attemptWithDetails.attempt.datetime.format(formatterTime)
 
-                button_route_type.text = attemptWithDetails.attempt.routeType
-                button_climb_style.text = attemptWithDetails.attempt.climbStyle
+                (recycler_view_climb_style.adapter as GenericAdapter<ClimbStyle>).setSelected(attemptWithDetails.climbStyle)
+                (recycler_view_outcome.adapter as GenericAdapter<Outcome>).setSelected(attemptWithDetails.outcome)
                 (recycler_view_route_grade.adapter as GenericAdapter<RouteGrade>).setSelected(attemptWithDetails.routeGrade)
-                button_outcome.text = attemptWithDetails.attempt.outcome
+                (recycler_view_route_type.adapter as GenericAdapter<RouteType>).setSelected(attemptWithDetails.routeType)
 
                 edit_text_route_name.setText(attemptWithDetails.attempt.routeName)
                 edit_text_area.setText(attemptWithDetails.attempt.location?.area)
@@ -154,10 +144,10 @@ class AddEditAttemptActivity : AppCompatActivity() {
         val time = LocalTime.parse(button_time.text, formatterTime)
         val datetime = date.atTime(time)
 
-        val routeType = button_route_type.text.toString()
-        val climbStyle= button_climb_style.text.toString()
+        val climbStyle= (recycler_view_climb_style.adapter as GenericAdapter<ClimbStyle>).getSelected()?.climbStyleId ?: INVALID_ID
+        val outcome= (recycler_view_outcome.adapter as GenericAdapter<Outcome>).getSelected()?.outcomeId ?: INVALID_ID
         val routeGrade= (recycler_view_route_grade.adapter as GenericAdapter<RouteGrade>).getSelected()?.routeGradeId ?: INVALID_ID
-        val outcome = button_outcome.text.toString()
+        val routeType= (recycler_view_route_type.adapter as GenericAdapter<RouteType>).getSelected()?.routeTypeId ?: INVALID_ID
 
         val attempt = Attempt(
             datetime = datetime,
@@ -169,11 +159,11 @@ class AddEditAttemptActivity : AppCompatActivity() {
         )
 
         //Todo: create tests to validate validations
-        if (! resources.getStringArray(R.array.route_type).contains(attempt.routeType)){
+        if (attempt.routeType == INVALID_ID){
             Toast.makeText(this, "Set route type", Toast.LENGTH_LONG).show()
             return null
         }
-        if (! resources.getStringArray(R.array.climb_styles).contains(attempt.climbStyle)){
+        if (attempt.climbStyle == INVALID_ID){
             Toast.makeText(this, "Set climb style", Toast.LENGTH_LONG).show()
             return null
         }
@@ -181,7 +171,7 @@ class AddEditAttemptActivity : AppCompatActivity() {
             Toast.makeText(this, "Set route grade", Toast.LENGTH_LONG).show()
             return null
         }
-        if (! resources.getStringArray(R.array.outcome).contains(attempt.outcome)){
+        if (attempt.outcome == INVALID_ID){
             Toast.makeText(this, "Set outcome", Toast.LENGTH_LONG).show()
             return null
         }

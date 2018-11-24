@@ -10,32 +10,4 @@
     <string name="add_attempt">Add attempt</string>
 
     <string name="max_message">(%1$s)</string>
-
-    <string-array name="route_type">
-        <item>Trad</item>
-        <item>Sport</item>
-        <item>Indoors</item>
-    </string-array>
-
-    <string-array name="climb_styles">
-        <item>Lead</item>
-        <item>Follow</item>
-        <item>Top rope</item>
-        <item>Solo</item>
-    </string-array>
-
-    <string-array name="outcome">
-        <item>Onsight</item>
-        <item>Flash</item>
-        <item>Redpoint</item>
-        <item>Fell/Hung</item>
-    </string-array>
-
-    <string-array name="route_styles">
-        <item>Slab</item>
-        <item>Face</item>
-        <item>Overhang</item>
-        <item>Tufas</item>
-        <item>Pockets</item>
-    </string-array>
 </resources>

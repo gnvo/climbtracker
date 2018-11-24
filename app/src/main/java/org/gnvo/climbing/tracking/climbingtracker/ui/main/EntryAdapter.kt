@@ -37,9 +37,9 @@ class EntryAdapter : ListAdapter<AttemptWithDetails, EntryAdapter.ViewHolder>(
 
             val listOfDetails = LinkedList<String?>()
             listOfDetails.add(attemptWithDetails.attempt.datetime.format(formatter))
-            listOfDetails.add(attemptWithDetails.attempt.outcome)
-            listOfDetails.add(attemptWithDetails.attempt.climbStyle)
-            listOfDetails.add(attemptWithDetails.attempt.routeType)
+            listOfDetails.add(attemptWithDetails.outcome.outcomeName)
+            listOfDetails.add(attemptWithDetails.climbStyle.climbStyleName)
+            listOfDetails.add(attemptWithDetails.routeType.routeTypeName)
             listOfDetails.add(attemptWithDetails.attempt.routeName)
             listOfDetails.add(attemptWithDetails.attempt.location?.area)
             listOfDetails.add(attemptWithDetails.attempt.location?.sector)
