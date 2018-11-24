@@ -2,7 +2,6 @@ package org.gnvo.climbing.tracking.climbingtracker.ui.addeditentry.adapters
 
 import android.graphics.Color
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,10 +12,12 @@ import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.RouteGrade
 class RouteGradeAdapter : RecyclerView.Adapter<RouteGradeAdapter.ViewHolder>() {
 
     private var selected: Int? = null
+    private var selectedItem: RouteGrade? = null
     private var items = ArrayList<RouteGrade>()
 
     fun setItems(items: List<RouteGrade>) {
         this.items = ArrayList(items)
+        selected = items.indexOf(selectedItem)
         notifyDataSetChanged()
     }
 
@@ -25,8 +26,7 @@ class RouteGradeAdapter : RecyclerView.Adapter<RouteGradeAdapter.ViewHolder>() {
     }
 
     fun setSelected(routeGrade: RouteGrade?) {
-        Log.d("gnvog", "setting selected: $routeGrade")
-        selected = items.indexOf(routeGrade)
+        selectedItem = routeGrade
     }
 
     override fun getItemCount(): Int {
@@ -44,7 +44,6 @@ class RouteGradeAdapter : RecyclerView.Adapter<RouteGradeAdapter.ViewHolder>() {
     open inner class ViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(position: Int) {
             val item = items[position]
-            Log.d("gnvog", "binding $item")
             itemView.text_view_1.text = item.french
             if (selected == position)
                 itemView.text_view_1.setBackgroundColor(Color.LTGRAY)
@@ -53,7 +52,6 @@ class RouteGradeAdapter : RecyclerView.Adapter<RouteGradeAdapter.ViewHolder>() {
 
             itemView.setOnClickListener {view ->
                 if (adapterPosition != RecyclerView.NO_POSITION) {
-                    Log.d("gnvog", "select change")
                     selected?.let{ notifyItemChanged(it) } //Uncheck old selection
                     selected = position
                     selected?.let{ notifyItemChanged(it) } //check new selection

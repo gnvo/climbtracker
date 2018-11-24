@@ -122,7 +122,6 @@ class AddEditAttemptActivity : AppCompatActivity() {
 
                 button_route_type.text = attemptWithDetails.attempt.routeType
                 button_climb_style.text = attemptWithDetails.attempt.climbStyle
-//                button_grade.text = attemptWithDetails.routeGrade.french//todo set routegrade on edit
                 (recycle_view_route_grade.adapter as RouteGradeAdapter).setSelected(attemptWithDetails.routeGrade)
                 button_outcome.text = attemptWithDetails.attempt.outcome
 
