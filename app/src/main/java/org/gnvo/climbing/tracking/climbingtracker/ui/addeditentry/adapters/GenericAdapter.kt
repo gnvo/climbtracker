@@ -26,6 +26,12 @@ class GenericAdapter<T> : RecyclerView.Adapter<GenericAdapter<T>.ViewHolder>() {
 
     fun setSelected(item: T?) {
         selectedItem = item
+        if (items.isNotEmpty()) {
+            with (items.indexOf(selectedItem)) {
+                selected = this
+                notifyItemChanged(this)
+            }
+        }
     }
 
     override fun getItemCount(): Int {
