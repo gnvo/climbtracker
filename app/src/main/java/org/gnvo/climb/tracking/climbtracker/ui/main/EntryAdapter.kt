@@ -33,13 +33,13 @@ class EntryAdapter : ListAdapter<AttemptWithDetails, EntryAdapter.ViewHolder>(
 
     open inner class ViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(attemptWithDetails: AttemptWithDetails) {
-            itemView.text_view_grade.text = attemptWithDetails.routeGrade.french
+            itemView.text_view_route_type.text = attemptWithDetails.routeType.routeTypeName
+            itemView.text_view_climb_style.text = attemptWithDetails.climbStyle.climbStyleName
+            itemView.text_view_outcome.text = attemptWithDetails.outcome.outcomeName
+            itemView.text_view_route_grade.text = attemptWithDetails.routeGrade.french
 
             val listOfDetails = LinkedList<String?>()
             listOfDetails.add(attemptWithDetails.attempt.datetime.format(formatter))
-            listOfDetails.add(attemptWithDetails.outcome.outcomeName)
-            listOfDetails.add(attemptWithDetails.climbStyle.climbStyleName)
-            listOfDetails.add(attemptWithDetails.routeType.routeTypeName)
             listOfDetails.add(attemptWithDetails.attempt.routeName)
             listOfDetails.add(attemptWithDetails.attempt.location?.area)
             listOfDetails.add(attemptWithDetails.attempt.location?.sector)
