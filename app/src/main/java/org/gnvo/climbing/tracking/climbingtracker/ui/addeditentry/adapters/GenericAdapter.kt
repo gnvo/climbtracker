@@ -13,6 +13,7 @@ class GenericAdapter<T> : RecyclerView.Adapter<GenericAdapter<T>.ViewHolder>() {
     private var selected: Int? = null
     private var selectedItem: T? = null
     private var items = ArrayList<T>()
+    private var formatter: CustomFormatter<T>? = null
 
     fun setItems(items: List<T>) {
         this.items = ArrayList(items)
@@ -49,7 +50,10 @@ class GenericAdapter<T> : RecyclerView.Adapter<GenericAdapter<T>.ViewHolder>() {
     open inner class ViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(position: Int) {
             val item = items[position]
-            itemView.text_view_1.text = item.toString()
+            when (formatter){
+                null -> itemView.text_view_1.text = item.toString()
+                else -> itemView.text_view_1.text = formatter?.format(item)
+            }
             when (position){
                 selected -> itemView.text_view_1.setBackgroundColor(Color.LTGRAY)
                 else -> itemView.text_view_1.setBackgroundColor(Color.TRANSPARENT)//TODO: this is a hack, better color handling
@@ -64,5 +68,14 @@ class GenericAdapter<T> : RecyclerView.Adapter<GenericAdapter<T>.ViewHolder>() {
             }
         }
     }
+
+    interface CustomFormatter<T> {
+        fun format(item: T): String
+    }
+
+    fun setCustomFormatter(formatter: CustomFormatter<T>){
+        this.formatter = formatter
+    }
+
 }
 

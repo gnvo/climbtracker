@@ -56,7 +56,13 @@ class AddEditAttemptActivity : AppCompatActivity() {
         setDateTimeDialogs()
         setAdapterToRecyclerView(recycler_view_climb_style, GenericAdapter(), viewModel.getAllClimbStyles())
         setAdapterToRecyclerView(recycler_view_outcome, GenericAdapter(), viewModel.getAllOutcomes())
-        setAdapterToRecyclerView(recycler_view_route_grade, GenericAdapter(), viewModel.getAllRouteGrades())
+        val routeGradeAdapter = GenericAdapter<RouteGrade>()
+        routeGradeAdapter.setCustomFormatter(object : GenericAdapter.CustomFormatter<RouteGrade> {
+            override fun format(item: RouteGrade): String {
+                return "${item.french}"
+            }
+        })
+        setAdapterToRecyclerView(recycler_view_route_grade, routeGradeAdapter, viewModel.getAllRouteGrades())
         setAdapterToRecyclerView(recycler_view_route_type, GenericAdapter(), viewModel.getAllRouteTypes())
     }
 

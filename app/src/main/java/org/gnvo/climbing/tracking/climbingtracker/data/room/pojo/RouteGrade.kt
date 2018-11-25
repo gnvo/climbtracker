@@ -28,10 +28,6 @@ data class RouteGrade(
     override fun hashCode(): Int {
         return Objects.hash(routeGradeId, french, yds, uiaa)
     }
-    
-    override fun toString(): String {
-        return french!!
-    }
 
     companion object {
         fun initialData(): List<RouteGrade> {
