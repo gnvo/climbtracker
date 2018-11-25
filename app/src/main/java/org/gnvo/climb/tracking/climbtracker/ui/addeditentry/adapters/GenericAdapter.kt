@@ -22,7 +22,8 @@ class GenericAdapter<T> : RecyclerView.Adapter<GenericAdapter<T>.ViewHolder>() {
     }
 
     fun getSelected(): T? {
-        return selected?.let{items[it]}
+        return if (selected == null || selected == RecyclerView.NO_POSITION || items.isEmpty()) null
+            else { selected?.let {items[it]} }
     }
 
     fun setSelected(item: T?) {
