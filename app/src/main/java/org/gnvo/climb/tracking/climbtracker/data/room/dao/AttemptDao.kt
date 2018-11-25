@@ -14,7 +14,7 @@ interface AttemptDao {
                 "INNER JOIN outcome on outcome.outcome_id = attempt.outcome " +
                 "INNER JOIN route_grade on route_grade.route_grade_id = attempt.route_grade " +
                 "INNER JOIN route_type on route_type.route_type_id = attempt.route_type " +
-                "ORDER BY datetime ASC"
+                "ORDER BY datetime DESC"
     )
     fun getAllWithDetails(): LiveData<List<AttemptWithDetails>>
 
