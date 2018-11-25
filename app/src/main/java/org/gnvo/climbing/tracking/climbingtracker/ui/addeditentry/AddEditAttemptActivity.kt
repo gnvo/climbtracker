@@ -54,10 +54,10 @@ class AddEditAttemptActivity : AppCompatActivity() {
             button_time.text = now.format(formatterTime)
         }
         setDateTimeDialogs()
-        setAdapterToRecyclerView(recycler_view_climb_style, GenericAdapter<ClimbStyle>(), viewModel.getAllClimbStyles())
-        setAdapterToRecyclerView(recycler_view_outcome, GenericAdapter<Outcome>(), viewModel.getAllOutcomes())
-        setAdapterToRecyclerView(recycler_view_route_grade, GenericAdapter<RouteGrade>(), viewModel.getAllRouteGrades())
-        setAdapterToRecyclerView(recycler_view_route_type, GenericAdapter<RouteType>(), viewModel.getAllRouteTypes())
+        setAdapterToRecyclerView(recycler_view_climb_style, GenericAdapter(), viewModel.getAllClimbStyles())
+        setAdapterToRecyclerView(recycler_view_outcome, GenericAdapter(), viewModel.getAllOutcomes())
+        setAdapterToRecyclerView(recycler_view_route_grade, GenericAdapter(), viewModel.getAllRouteGrades())
+        setAdapterToRecyclerView(recycler_view_route_type, GenericAdapter(), viewModel.getAllRouteTypes())
     }
 
     private fun <T>setAdapterToRecyclerView(recycler_view: RecyclerView, genericAdapter: GenericAdapter<T>, liveData: LiveData<List<T>>) {
