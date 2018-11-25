@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Climbingtracker</string>
+    <string name="app_name">Climb tracker</string>
     <string name="route_type">Route type</string>
     <string name="route_name">Route name</string>
     <string name="coordinates">Coordinates</string>

@@ -1,4 +1,4 @@
-package org.gnvo.climbing.tracking.climbingtracker.ui.main
+package org.gnvo.climb.tracking.climbtracker.ui.main
 
 import android.support.v7.recyclerview.extensions.ListAdapter
 import android.support.v7.widget.RecyclerView
@@ -6,8 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.attempt_item.view.*
-import org.gnvo.climbing.tracking.climbingtracker.R
-import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.AttemptWithDetails
+import org.gnvo.climb.tracking.climbtracker.R
+import org.gnvo.climb.tracking.climbtracker.data.room.pojo.AttemptWithDetails
 import java.time.format.DateTimeFormatter
 import java.util.*
 

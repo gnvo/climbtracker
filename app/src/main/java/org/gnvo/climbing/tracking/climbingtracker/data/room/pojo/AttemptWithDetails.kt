@@ -1,4 +1,4 @@
-package org.gnvo.climbing.tracking.climbingtracker.data.room.pojo
+package org.gnvo.climb.tracking.climbtracker.data.room.pojo
 
 import android.arch.persistence.room.*
 

@@ -1,4 +1,4 @@
-package org.gnvo.climbing.tracking.climbingtracker.data.room
+package org.gnvo.climb.tracking.climbtracker.data.room
 
 import android.app.Application
 import android.arch.persistence.db.SupportSQLiteDatabase
@@ -8,8 +8,8 @@ import android.arch.persistence.room.RoomDatabase
 import android.arch.persistence.room.TypeConverters
 import android.content.Context
 import android.support.annotation.NonNull
-import org.gnvo.climbing.tracking.climbingtracker.data.room.dao.*
-import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.*
+import org.gnvo.climb.tracking.climbtracker.data.room.dao.*
+import org.gnvo.climb.tracking.climbtracker.data.room.pojo.*
 import org.jetbrains.anko.doAsync
 
 @Database(entities = [Attempt::class, ClimbStyle::class, Outcome::class, RouteGrade::class, RouteType::class], version = 1)

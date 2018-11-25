@@ -1,4 +1,4 @@
-package org.gnvo.climbing.tracking.climbingtracker.ui.addeditentry
+package org.gnvo.climb.tracking.climbtracker.ui.addeditentry
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
@@ -14,9 +14,9 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_add_update_attempt.*
-import org.gnvo.climbing.tracking.climbingtracker.R
-import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.*
-import org.gnvo.climbing.tracking.climbingtracker.ui.addeditentry.adapters.GenericAdapter
+import org.gnvo.climb.tracking.climbtracker.R
+import org.gnvo.climb.tracking.climbtracker.data.room.pojo.*
+import org.gnvo.climb.tracking.climbtracker.ui.addeditentry.adapters.GenericAdapter
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -24,7 +24,7 @@ import java.time.format.DateTimeFormatter
 
 class AddEditAttemptActivity : AppCompatActivity() {
     companion object {
-        const val EXTRA_ID: String = "org.gnvo.climbing.tracking.climbingtracker.ui.addeditentry.EXTRA_ID"
+        const val EXTRA_ID: String = "org.gnvo.climb.tracking.climbtracker.ui.addeditentry.EXTRA_ID"
         const val INVALID_ID: Long = -1
     }
 

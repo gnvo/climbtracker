@@ -1,10 +1,10 @@
-package org.gnvo.climbing.tracking.climbingtracker.ui.addeditentry
+package org.gnvo.climb.tracking.climbtracker.ui.addeditentry
 
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.LiveData
-import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.*
-import org.gnvo.climbing.tracking.climbingtracker.data.room.repository.*
+import org.gnvo.climb.tracking.climbtracker.data.room.pojo.*
+import org.gnvo.climb.tracking.climbtracker.data.room.repository.*
 
 class AddEditViewModel(application: Application) : AndroidViewModel(application) {
     private val repositoryAttempt: AttemptRepository = AttemptRepository(application)

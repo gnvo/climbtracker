@@ -1,4 +1,4 @@
-package org.gnvo.climbing.tracking.climbingtracker.ui.addeditentry.adapters
+package org.gnvo.climb.tracking.climbtracker.ui.addeditentry.adapters
 
 import android.graphics.Color
 import android.support.v7.widget.RecyclerView
@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.simple_recycler_view_item_1.view.*
-import org.gnvo.climbing.tracking.climbingtracker.R
+import org.gnvo.climb.tracking.climbtracker.R
 
 class GenericAdapter<T> : RecyclerView.Adapter<GenericAdapter<T>.ViewHolder>() {
 

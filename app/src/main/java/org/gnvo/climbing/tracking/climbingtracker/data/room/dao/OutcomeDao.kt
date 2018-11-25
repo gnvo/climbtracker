@@ -1,8 +1,8 @@
-package org.gnvo.climbing.tracking.climbingtracker.data.room.dao
+package org.gnvo.climb.tracking.climbtracker.data.room.dao
 
 import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.*
-import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.Outcome
+import org.gnvo.climb.tracking.climbtracker.data.room.pojo.Outcome
 
 @Dao
 interface OutcomeDao {

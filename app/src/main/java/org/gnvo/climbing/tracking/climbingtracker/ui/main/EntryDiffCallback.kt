@@ -1,7 +1,7 @@
-package org.gnvo.climbing.tracking.climbingtracker.ui.main
+package org.gnvo.climb.tracking.climbtracker.ui.main
 
 import android.support.v7.util.DiffUtil
-import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.AttemptWithDetails
+import org.gnvo.climb.tracking.climbtracker.data.room.pojo.AttemptWithDetails
 
 class EntryDiffCallback : DiffUtil.ItemCallback<AttemptWithDetails>() {
     override fun areItemsTheSame(oldItem: AttemptWithDetails, newItem: AttemptWithDetails): Boolean {

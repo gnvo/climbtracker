@@ -1,4 +1,4 @@
-package org.gnvo.climbing.tracking.climbingtracker.ui.main
+package org.gnvo.climb.tracking.climbtracker.ui.main
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
@@ -12,9 +12,9 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
-import org.gnvo.climbing.tracking.climbingtracker.R
-import org.gnvo.climbing.tracking.climbingtracker.data.room.pojo.AttemptWithDetails
-import org.gnvo.climbing.tracking.climbingtracker.ui.addeditentry.AddEditAttemptActivity
+import org.gnvo.climb.tracking.climbtracker.R
+import org.gnvo.climb.tracking.climbtracker.data.room.pojo.AttemptWithDetails
+import org.gnvo.climb.tracking.climbtracker.ui.addeditentry.AddEditAttemptActivity
 
 class MainActivity : AppCompatActivity() {
 

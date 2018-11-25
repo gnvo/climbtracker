@@ -1,4 +1,4 @@
-package org.gnvo.climbing.tracking.climbingtracker.data.room
+package org.gnvo.climb.tracking.climbtracker.data.room
 
 import android.arch.persistence.room.TypeConverter
 import com.google.gson.reflect.TypeToken
