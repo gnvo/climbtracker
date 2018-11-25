@@ -148,37 +148,37 @@ class AddEditAttemptActivity : AppCompatActivity() {
         val time = LocalTime.parse(button_time.text, formatterTime)
         val datetime = date.atTime(time)
 
-        val climbStyle= (recycler_view_climb_style.adapter as GenericAdapter<ClimbStyle>).getSelected()?.climbStyleId ?: INVALID_ID
-        val outcome= (recycler_view_outcome.adapter as GenericAdapter<Outcome>).getSelected()?.outcomeId ?: INVALID_ID
-        val routeGrade= (recycler_view_route_grade.adapter as GenericAdapter<RouteGrade>).getSelected()?.routeGradeId ?: INVALID_ID
-        val routeType= (recycler_view_route_type.adapter as GenericAdapter<RouteType>).getSelected()?.routeTypeId ?: INVALID_ID
+        val climbStyleId= (recycler_view_climb_style.adapter as GenericAdapter<ClimbStyle>).getSelected()?.climbStyleId ?: INVALID_ID
+        val outcomeId= (recycler_view_outcome.adapter as GenericAdapter<Outcome>).getSelected()?.outcomeId ?: INVALID_ID
+        val routeGradeId= (recycler_view_route_grade.adapter as GenericAdapter<RouteGrade>).getSelected()?.routeGradeId ?: INVALID_ID
+        val routeTypeId= (recycler_view_route_type.adapter as GenericAdapter<RouteType>).getSelected()?.routeTypeId ?: INVALID_ID
+
+        //Todo: create tests to validate validations
+        if (routeTypeId == INVALID_ID){
+            Toast.makeText(this, "Set route type. Eg. Sport", Toast.LENGTH_LONG).show()
+            return null
+        }
+        if (climbStyleId == INVALID_ID){
+            Toast.makeText(this, "Set climb style. Eg. Lead", Toast.LENGTH_LONG).show()
+            return null
+        }
+        if (routeGradeId == INVALID_ID){
+            Toast.makeText(this, "Set route grade. Eg. 7a", Toast.LENGTH_LONG).show()
+            return null
+        }
+        if (outcomeId == INVALID_ID){
+            Toast.makeText(this, "Set outcome. Eg. Onsight", Toast.LENGTH_LONG).show()
+            return null
+        }
 
         val attempt = Attempt(
             datetime = datetime,
-            routeType = routeType,
-            climbStyle = climbStyle,
-            routeGrade = routeGrade,
-            outcome = outcome,
+            routeType = routeTypeId,
+            climbStyle = climbStyleId,
+            routeGrade = routeGradeId,
+            outcome = outcomeId,
             location = Location()
         )
-
-        //Todo: create tests to validate validations
-        if (attempt.routeType == INVALID_ID){
-            Toast.makeText(this, "Set route type", Toast.LENGTH_LONG).show()
-            return null
-        }
-        if (attempt.climbStyle == INVALID_ID){
-            Toast.makeText(this, "Set climb style", Toast.LENGTH_LONG).show()
-            return null
-        }
-        if (attempt.routeGrade == INVALID_ID){
-            Toast.makeText(this, "Set route grade", Toast.LENGTH_LONG).show()
-            return null
-        }
-        if (attempt.outcome == INVALID_ID){
-            Toast.makeText(this, "Set outcome", Toast.LENGTH_LONG).show()
-            return null
-        }
 
         attempt.routeName = getStringOrNull(edit_text_route_name.text)
         attempt.location!!.area = getStringOrNull(edit_text_area.text)
