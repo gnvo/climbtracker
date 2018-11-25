@@ -56,14 +56,13 @@
                 android:layout_marginEnd="4dp"/>
         <android.support.v7.widget.RecyclerView
                 android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_height="250dp"
                 android:id="@+id/recycler_view_route_grade"
                 tools:listitem="@layout/simple_recycler_view_item_1"
                 app:layout_constraintStart_toEndOf="@+id/recycler_view_outcome"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/recycler_view_outcome"
-                app:layout_constraintBottom_toBottomOf="@+id/recycler_view_outcome"
                 android:layout_marginStart="4dp"
                 android:layout_marginEnd="8dp"/>
 

@@ -72,6 +72,9 @@ class AddEditAttemptActivity : AppCompatActivity() {
 
         liveData.observe(this, Observer {
             genericAdapter.setItems(it!!)
+            if (recycler_view == recycler_view_route_grade) {
+                (recycler_view_route_grade.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(9, 0)
+            }
         })
     }
 
