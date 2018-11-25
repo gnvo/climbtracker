@@ -1,4 +1,4 @@
-package org.gnvo.climbing.tracking.climbingtracker
+package org.gnvo.climb.tracking.climbtracker
 
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4
@@ -19,6 +19,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getTargetContext()
-        assertEquals("org.gnvo.climbing.tracking.climbingtracker", appContext.packageName)
+        assertEquals("org.gnvo.climb.tracking.climbtracker", appContext.packageName)
     }
 }

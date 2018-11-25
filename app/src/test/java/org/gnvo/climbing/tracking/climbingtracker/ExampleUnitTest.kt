@@ -1,4 +1,4 @@
-package org.gnvo.climbing.tracking.climbingtracker
+package org.gnvo.climb.tracking.climbtracker
 
 import org.junit.Test
 
