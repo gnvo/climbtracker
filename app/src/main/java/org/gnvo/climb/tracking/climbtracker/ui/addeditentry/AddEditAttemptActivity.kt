@@ -60,6 +60,15 @@ class AddEditAttemptActivity : AppCompatActivity() {
                 return "${item.french}"
             }
         })
+        routeGradeAdapter.setScroller(object : GenericAdapter.Scroller {
+            override fun scroll(selectedPosition: Int) {
+                val position = when (selectedPosition) {
+                    RecyclerView.NO_POSITION -> 9 //if nothing is selected scroll down a bit
+                    else -> selectedPosition
+                }
+                (recycler_view_route_grade.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(position, 0)
+            }
+        })
         setAdapterToRecyclerView(recycler_view_route_grade, routeGradeAdapter, viewModel.getAllRouteGrades())
         setAdapterToRecyclerView(recycler_view_route_type, GenericAdapter(), viewModel.getAllRouteTypes())
     }
@@ -72,9 +81,6 @@ class AddEditAttemptActivity : AppCompatActivity() {
 
         liveData.observe(this, Observer {
             genericAdapter.setItems(it!!)
-            if (recycler_view == recycler_view_route_grade) {
-                (recycler_view_route_grade.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(9, 0)
-            }
         })
     }
 

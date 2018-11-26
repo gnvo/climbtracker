@@ -10,27 +10,30 @@ import org.gnvo.climb.tracking.climbtracker.R
 
 class GenericAdapter<T> : RecyclerView.Adapter<GenericAdapter<T>.ViewHolder>() {
 
-    private var selected: Int? = null
+    private var selectedPos: Int = RecyclerView.NO_POSITION
     private var selectedItem: T? = null
     private var items = ArrayList<T>()
     private var formatter: CustomFormatter<T>? = null
+    private var scroller: Scroller? = null
 
     fun setItems(items: List<T>) {
         this.items = ArrayList(items)
-        selected = items.indexOf(selectedItem)
+        selectedPos = items.indexOf(selectedItem)
+        scroller?.scroll(selectedPos)
         notifyDataSetChanged()
     }
 
     fun getSelected(): T? {
-        return if (selected == null || selected == RecyclerView.NO_POSITION || items.isEmpty()) null
-            else { selected?.let {items[it]} }
+        return if (selectedPos == RecyclerView.NO_POSITION || items.isEmpty()) null
+            else { items[selectedPos] }
     }
 
     fun setSelected(item: T?) {
         selectedItem = item
         if (items.isNotEmpty()) {
             with (items.indexOf(selectedItem)) {
-                selected = this
+                selectedPos = this
+                scroller?.scroll(this)
                 notifyItemChanged(this)
             }
         }
@@ -56,15 +59,15 @@ class GenericAdapter<T> : RecyclerView.Adapter<GenericAdapter<T>.ViewHolder>() {
                 else -> itemView.text_view_1.text = formatter?.format(item)
             }
             when (position){
-                selected -> itemView.text_view_1.setBackgroundColor(Color.LTGRAY)
+                selectedPos -> itemView.text_view_1.setBackgroundColor(Color.LTGRAY)
                 else -> itemView.text_view_1.setBackgroundColor(Color.TRANSPARENT)//TODO: this is a hack, better color handling
             }
 
-            itemView.setOnClickListener {view ->
+            itemView.setOnClickListener {
                 if (adapterPosition != RecyclerView.NO_POSITION) {
-                    selected?.let{ notifyItemChanged(it) } //Uncheck old selection
-                    selected = position
-                    selected?.let{ notifyItemChanged(it) } //check new selection
+                    notifyItemChanged(selectedPos) //Uncheck old selection
+                    selectedPos = position
+                    notifyItemChanged(selectedPos) //check new selection
                 }
             }
         }
@@ -76,6 +79,14 @@ class GenericAdapter<T> : RecyclerView.Adapter<GenericAdapter<T>.ViewHolder>() {
 
     fun setCustomFormatter(formatter: CustomFormatter<T>){
         this.formatter = formatter
+    }
+
+    interface Scroller {
+        fun scroll(selectedPosition: Int)
+    }
+
+    fun setScroller(scroller: Scroller){
+        this.scroller = scroller
     }
 
 }
