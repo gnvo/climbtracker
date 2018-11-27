@@ -32,8 +32,7 @@ data class AttemptWithDetails(
         result = 31 * result + outcome.hashCode()
         result = 31 * result + routeGrade.hashCode()
         result = 31 * result + routeType.hashCode()
-        result = 31 * result + routeCharacteristics.hashCode()
+        result = 31 * result + (routeCharacteristics?.hashCode() ?: 0)
         return result
     }
-
 }
