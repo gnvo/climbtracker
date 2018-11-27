@@ -71,6 +71,7 @@ class AddEditAttemptActivity : AppCompatActivity() {
         })
         setAdapterToRecyclerView(recycler_view_route_grade, routeGradeAdapter, viewModel.getAllRouteGrades())
         setAdapterToRecyclerView(recycler_view_route_type, GenericAdapter(), viewModel.getAllRouteTypes())
+        setAdapterToRecyclerView(recycler_view_route_characteristics, GenericAdapter(), viewModel.getAllRouteCharacteristics())
     }
 
     private fun <T>setAdapterToRecyclerView(recycler_view: RecyclerView, genericAdapter: GenericAdapter<T>, liveData: LiveData<List<T>>) {
