@@ -10,4 +10,5 @@
     <string name="add_attempt">Add attempt</string>
 
     <string name="max_message">(%1$s)</string>
+    <string name="length">Length in meters</string>
 </resources>

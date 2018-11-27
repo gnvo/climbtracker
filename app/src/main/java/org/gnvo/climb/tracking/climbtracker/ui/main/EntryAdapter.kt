@@ -41,6 +41,7 @@ class EntryAdapter : ListAdapter<AttemptWithDetails, EntryAdapter.ViewHolder>(
             listOfDetails.add(attemptWithDetails.attempt.datetime.format(formatter))
             listOfDetails.add(attemptWithDetails.routeType.routeTypeName)
             listOfDetails.add(attemptWithDetails.attempt.routeName)
+            attemptWithDetails.attempt.length?.let { listOfDetails.add(it.toString() + "mts") }
             listOfDetails.add(attemptWithDetails.attempt.location?.area)
             listOfDetails.add(attemptWithDetails.attempt.location?.sector)
             attemptWithDetails.attempt.rating?.let {listOfDetails.add("rating:" + it.toString() + "/5") }

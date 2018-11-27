@@ -128,6 +128,7 @@ class AddEditAttemptActivity : AppCompatActivity() {
                 (recycler_view_route_type.adapter as GenericAdapter<RouteType>).setSelected(attemptWithDetails.routeType)
 
                 edit_text_route_name.setText(attemptWithDetails.attempt.routeName)
+                edit_text_length.setText(attemptWithDetails.attempt.length?.toString())
                 edit_text_area.setText(attemptWithDetails.attempt.location?.area)
                 edit_text_sector.setText(attemptWithDetails.attempt.location?.sector)
                 edit_text_comment.setText(attemptWithDetails.attempt.comment)
@@ -190,6 +191,7 @@ class AddEditAttemptActivity : AppCompatActivity() {
         )
 
         attempt.routeName = getStringOrNull(edit_text_route_name.text)
+        attempt.length = getStringOrNull(edit_text_length.text)?.toInt()
         attempt.location!!.area = getStringOrNull(edit_text_area.text)
         attempt.location!!.sector = getStringOrNull(edit_text_sector.text)
         attempt.comment = getStringOrNull(edit_text_comment.text)
