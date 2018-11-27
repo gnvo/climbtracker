@@ -24,7 +24,6 @@ data class Attempt(
     var comment: String? = null,
     var rating: Int? = null,
 
-    @ColumnInfo(name = "route_style") var routeStyle: List<String>? = null,//Todo
     var length: Int? = null,//Todo
     //todo rock type, per sector?
 
@@ -41,7 +40,6 @@ data class Attempt(
                 outcome == other.outcome &&
                 routeType == other.routeType &&
                 climbStyle == other.climbStyle &&
-                routeStyle == other.routeStyle &&
                 length == other.length
     }
 }
