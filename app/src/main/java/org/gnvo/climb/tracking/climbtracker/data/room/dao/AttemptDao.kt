@@ -8,12 +8,20 @@ import org.gnvo.climb.tracking.climbtracker.data.room.pojo.AttemptWithDetails
 @Dao
 interface AttemptDao {
     @Query(
-        "SELECT attempt.*, climb_style.*, outcome.*, route_grade.*, route_type.* " +
+        "SELECT " +
+                    "attempt.*, " +
+                    "climb_style.*, " +
+                    "outcome.*, " +
+                    "route_grade.*, " +
+                    "route_type.*, " +
+                    "group_concat(route_characteristic || \"/\" || route_characteristic_name,\",\") as route_characteristics " +
                 "FROM attempt " +
                 "INNER JOIN climb_style on climb_style.climb_style_id = attempt.climb_style " +
                 "INNER JOIN outcome on outcome.outcome_id = attempt.outcome " +
                 "INNER JOIN route_grade on route_grade.route_grade_id = attempt.route_grade " +
                 "INNER JOIN route_type on route_type.route_type_id = attempt.route_type " +
+                "LEFT JOIN attempt_route_characteristic on attempt_route_characteristic.attempt = attempt.id " +
+                "LEFT JOIN route_characteristic on route_characteristic.route_characteristic_id = attempt_route_characteristic.route_characteristic " +
                 "ORDER BY datetime DESC"
     )
     fun getAllWithDetails(): LiveData<List<AttemptWithDetails>>
