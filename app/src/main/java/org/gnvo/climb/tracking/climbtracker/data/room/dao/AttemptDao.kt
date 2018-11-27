@@ -14,7 +14,7 @@ interface AttemptDao {
                     "outcome.*, " +
                     "route_grade.*, " +
                     "route_type.*, " +
-                    "group_concat(route_characteristic || \"/\" || route_characteristic_name,\",\") as route_characteristics " +
+                    "group_concat(route_characteristic || \"@@\" || route_characteristic_name, \"^^\") as route_characteristics " +
                 "FROM attempt " +
                 "INNER JOIN climb_style on climb_style.climb_style_id = attempt.climb_style " +
                 "INNER JOIN outcome on outcome.outcome_id = attempt.outcome " +
