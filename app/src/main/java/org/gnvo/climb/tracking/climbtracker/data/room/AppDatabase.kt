@@ -12,13 +12,14 @@ import org.gnvo.climb.tracking.climbtracker.data.room.dao.*
 import org.gnvo.climb.tracking.climbtracker.data.room.pojo.*
 import org.jetbrains.anko.doAsync
 
-@Database(entities = [Attempt::class, ClimbStyle::class, Outcome::class, RouteGrade::class, RouteType::class], version = 1)
+@Database(entities = [Attempt::class, ClimbStyle::class, Outcome::class, RouteGrade::class, RouteType::class, RouteCharacteristic::class], version = 1)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun attemptDao(): AttemptDao
     abstract fun routeGradeDao(): RouteGradeDao
     abstract fun climbStyleDao(): ClimbStyleDao
     abstract fun outcomeDao(): OutcomeDao
+    abstract fun routeCharacteristicDao(): RouteCharacteristicDao
     abstract fun routeTypeDao(): RouteTypeDao
 
     companion object {
@@ -51,6 +52,7 @@ abstract class AppDatabase : RoomDatabase() {
                             INSTANCE?.outcomeDao()?.init(Outcome.initialData())
                             INSTANCE?.routeGradeDao()?.init(RouteGrade.initialData())
                             INSTANCE?.routeTypeDao()?.init(RouteType.initialData())
+                            INSTANCE?.routeCharacteristicDao()?.init(RouteCharacteristic.initialData())
                         }
                     }
                 })

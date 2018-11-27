@@ -12,6 +12,7 @@ class AddEditViewModel(application: Application) : AndroidViewModel(application)
     private val repositoryOutcome: OutcomeRepository = OutcomeRepository(application)
     private val repositoryRouteGrade: RouteGradeRepository = RouteGradeRepository(application)
     private val repositoryRouteType: RouteTypeRepository = RouteTypeRepository(application)
+    private val repositoryRouteCharacteristic: RouteCharacteristicRepository = RouteCharacteristicRepository(application)
 
     fun insertAttempt(attempt: Attempt) {
         repositoryAttempt.insert(attempt)
@@ -28,6 +29,11 @@ class AddEditViewModel(application: Application) : AndroidViewModel(application)
     fun getAllRouteGrades(): LiveData<List<RouteGrade>> {
         return repositoryRouteGrade.getAll()
     }
+
+    fun getAllRouteCharacteristics(): LiveData<List<RouteCharacteristic>> {
+        return repositoryRouteCharacteristic.getAll()
+    }
+
     fun getAllRouteTypes(): LiveData<List<RouteType>> {
         return repositoryRouteType.getAll()
     }
