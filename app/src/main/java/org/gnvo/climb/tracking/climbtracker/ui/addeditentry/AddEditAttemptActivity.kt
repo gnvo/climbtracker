@@ -17,6 +17,7 @@ import kotlinx.android.synthetic.main.activity_add_update_attempt.*
 import org.gnvo.climb.tracking.climbtracker.R
 import org.gnvo.climb.tracking.climbtracker.data.room.pojo.*
 import org.gnvo.climb.tracking.climbtracker.ui.addeditentry.adapters.GenericAdapter
+import org.gnvo.climb.tracking.climbtracker.ui.addeditentry.adapters.GenericAdapterSingleSelection
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -52,15 +53,15 @@ class AddEditAttemptActivity : AppCompatActivity() {
             button_time.text = now.format(formatterTime)
         }
         setDateTimeDialogs()
-        setAdapterToRecyclerView(recycler_view_climb_style, GenericAdapter(), viewModel.getAllClimbStyles())
-        setAdapterToRecyclerView(recycler_view_outcome, GenericAdapter(), viewModel.getAllOutcomes())
-        val routeGradeAdapter = GenericAdapter<RouteGrade>()
+        setAdapterToRecyclerView(recycler_view_climb_style, GenericAdapterSingleSelection(), viewModel.getAllClimbStyles())
+        setAdapterToRecyclerView(recycler_view_outcome, GenericAdapterSingleSelection(), viewModel.getAllOutcomes())
+        val routeGradeAdapter = GenericAdapterSingleSelection<RouteGrade>()
         routeGradeAdapter.setCustomFormatter(object : GenericAdapter.CustomFormatter<RouteGrade> {
             override fun format(item: RouteGrade): String {
                 return "${item.french}"
             }
         })
-        routeGradeAdapter.setScroller(object : GenericAdapter.Scroller {
+        routeGradeAdapter.setScroller(object : GenericAdapterSingleSelection.Scroller {
             override fun scroll(selectedPosition: Int) {
                 val position = when (selectedPosition) {
                     RecyclerView.NO_POSITION -> 9 //if nothing is selected scroll down a bit
@@ -70,11 +71,11 @@ class AddEditAttemptActivity : AppCompatActivity() {
             }
         })
         setAdapterToRecyclerView(recycler_view_route_grade, routeGradeAdapter, viewModel.getAllRouteGrades())
-        setAdapterToRecyclerView(recycler_view_route_type, GenericAdapter(), viewModel.getAllRouteTypes())
-        setAdapterToRecyclerView(recycler_view_route_characteristics, GenericAdapter(), viewModel.getAllRouteCharacteristics())
+        setAdapterToRecyclerView(recycler_view_route_type, GenericAdapterSingleSelection(), viewModel.getAllRouteTypes())
+        setAdapterToRecyclerView(recycler_view_route_characteristics, GenericAdapterSingleSelection(), viewModel.getAllRouteCharacteristics())
     }
 
-    private fun <T>setAdapterToRecyclerView(recycler_view: RecyclerView, genericAdapter: GenericAdapter<T>, liveData: LiveData<List<T>>) {
+    private fun <T>setAdapterToRecyclerView(recycler_view: RecyclerView, genericAdapter: GenericAdapterSingleSelection<T>, liveData: LiveData<List<T>>) {
         recycler_view.layoutManager = LinearLayoutManager(this)
         recycler_view.setHasFixedSize(true)
 
@@ -123,10 +124,10 @@ class AddEditAttemptActivity : AppCompatActivity() {
                 button_date.text = attemptWithDetails?.attempt?.datetime!!.format(formatterDate)
                 button_time.text = attemptWithDetails.attempt.datetime.format(formatterTime)
 
-                (recycler_view_climb_style.adapter as GenericAdapter<ClimbStyle>).setSelected(attemptWithDetails.climbStyle)
-                (recycler_view_outcome.adapter as GenericAdapter<Outcome>).setSelected(attemptWithDetails.outcome)
-                (recycler_view_route_grade.adapter as GenericAdapter<RouteGrade>).setSelected(attemptWithDetails.routeGrade)
-                (recycler_view_route_type.adapter as GenericAdapter<RouteType>).setSelected(attemptWithDetails.routeType)
+                (recycler_view_climb_style.adapter as GenericAdapterSingleSelection<ClimbStyle>).setSelected(attemptWithDetails.climbStyle)
+                (recycler_view_outcome.adapter as GenericAdapterSingleSelection<Outcome>).setSelected(attemptWithDetails.outcome)
+                (recycler_view_route_grade.adapter as GenericAdapterSingleSelection<RouteGrade>).setSelected(attemptWithDetails.routeGrade)
+                (recycler_view_route_type.adapter as GenericAdapterSingleSelection<RouteType>).setSelected(attemptWithDetails.routeType)
 
                 edit_text_route_name.setText(attemptWithDetails.attempt.routeName)
                 edit_text_length.setText(attemptWithDetails.attempt.length?.toString())
@@ -140,7 +141,7 @@ class AddEditAttemptActivity : AppCompatActivity() {
 
     private fun saveAttempt() {
         val attempt = generateAttemptWithDetails() ?: return
-        val routeCharacteristic = (recycler_view_route_characteristics.adapter as GenericAdapter<RouteCharacteristic>).getSelected()?.routeCharacteristicId
+        val routeCharacteristic = (recycler_view_route_characteristics.adapter as GenericAdapterSingleSelection<RouteCharacteristic>).getSelected()?.routeCharacteristicId
         val routeCharacteristics= routeCharacteristic?.let{listOf(routeCharacteristic)}
         when (attemptIdFromIntentExtra) {
             INVALID_ID -> {
@@ -161,10 +162,10 @@ class AddEditAttemptActivity : AppCompatActivity() {
         val time = LocalTime.parse(button_time.text, formatterTime)
         val datetime = date.atTime(time)
 
-        val climbStyleId= (recycler_view_climb_style.adapter as GenericAdapter<ClimbStyle>).getSelected()?.climbStyleId ?: INVALID_ID
-        val outcomeId= (recycler_view_outcome.adapter as GenericAdapter<Outcome>).getSelected()?.outcomeId ?: INVALID_ID
-        val routeGradeId= (recycler_view_route_grade.adapter as GenericAdapter<RouteGrade>).getSelected()?.routeGradeId ?: INVALID_ID
-        val routeTypeId= (recycler_view_route_type.adapter as GenericAdapter<RouteType>).getSelected()?.routeTypeId ?: INVALID_ID
+        val climbStyleId= (recycler_view_climb_style.adapter as GenericAdapterSingleSelection<ClimbStyle>).getSelected()?.climbStyleId ?: INVALID_ID
+        val outcomeId= (recycler_view_outcome.adapter as GenericAdapterSingleSelection<Outcome>).getSelected()?.outcomeId ?: INVALID_ID
+        val routeGradeId= (recycler_view_route_grade.adapter as GenericAdapterSingleSelection<RouteGrade>).getSelected()?.routeGradeId ?: INVALID_ID
+        val routeTypeId= (recycler_view_route_type.adapter as GenericAdapterSingleSelection<RouteType>).getSelected()?.routeTypeId ?: INVALID_ID
 
         //Todo: create tests to validate validations
         if (routeTypeId == INVALID_ID){
