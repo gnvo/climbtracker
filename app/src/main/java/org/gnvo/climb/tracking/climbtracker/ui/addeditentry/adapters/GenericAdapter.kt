@@ -36,7 +36,7 @@ abstract class GenericAdapter<T> : RecyclerView.Adapter<GenericAdapter<T>.ViewHo
                 null -> itemView.text_view_1.text = item.toString()
                 else -> itemView.text_view_1.text = formatter?.format(item)
             }
-            customBind(itemView, position, adapterPosition)
+            customBind(itemView, position)
         }
     }
 
@@ -48,6 +48,6 @@ abstract class GenericAdapter<T> : RecyclerView.Adapter<GenericAdapter<T>.ViewHo
         this.formatter = formatter
     }
 
-    abstract fun customBind(itemView: View, position: Int, adapterPosition: Int)
+    abstract fun customBind(itemView: View, position: Int)
 }
 
