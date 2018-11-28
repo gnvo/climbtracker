@@ -37,16 +37,20 @@ class EntryAdapter : ListAdapter<AttemptWithDetails, EntryAdapter.ViewHolder>(
             itemView.text_view_outcome.text = attemptWithDetails.outcome.outcomeName
             itemView.text_view_route_grade.text = attemptWithDetails.routeGrade.french
 
-            val listOfDetails = LinkedList<String?>()
-            listOfDetails.add(attemptWithDetails.attempt.datetime.format(formatter))
-            listOfDetails.add(attemptWithDetails.routeType.routeTypeName)
-            listOfDetails.add(attemptWithDetails.attempt.routeName)
-            attemptWithDetails.attempt.length?.let { listOfDetails.add(it.toString() + "mts") }
-            listOfDetails.add(attemptWithDetails.attempt.location?.area)
-            listOfDetails.add(attemptWithDetails.attempt.location?.sector)
-            attemptWithDetails.attempt.rating?.let {listOfDetails.add("rating:" + it.toString() + "/5") }
+            val attempt = attemptWithDetails.attempt
+            val listOfDetails = LinkedList<String>()
 
-            itemView.text_view_details.text = listOfDetails.filter{!it.isNullOrEmpty()}.joinToString()
+            listOfDetails.add(attempt.datetime.format(formatter))
+            listOfDetails.add(attemptWithDetails.routeType.routeTypeName!!)
+
+            attempt.routeName?.let { listOfDetails.add(it) }
+            attempt.length?.let { listOfDetails.add(it.toString() + "mts") }
+            attempt.location?.area?.let { listOfDetails.add(it) }
+            attempt.location?.sector?.let { listOfDetails.add(it) }
+            attemptWithDetails.routeCharacteristics?.joinToString("/ ")?.let { listOfDetails.add(it) }
+            attempt.rating?.let { listOfDetails.add("rating:" + it.toString() + "/5") }
+
+            itemView.text_view_details.text = listOfDetails.joinToString()
             
             itemView.setOnClickListener {
                 val position = adapterPosition
