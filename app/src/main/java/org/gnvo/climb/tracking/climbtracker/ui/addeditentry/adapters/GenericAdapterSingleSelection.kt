@@ -6,28 +6,28 @@ import android.view.View
 import kotlinx.android.synthetic.main.simple_recycler_view_item_1.view.*
 
 class GenericAdapterSingleSelection<T> : GenericAdapter<T>() {
-    private var selectedPos: Int = RecyclerView.NO_POSITION
+    private var selectedPosition: Int = RecyclerView.NO_POSITION
     private var selectedItem: T? = null
     private var scroller: Scroller? = null
 
     override fun setItems(items: List<T>) {
         super.setItems(items)
-        selectedPos = items.indexOf(selectedItem)
-        scroller?.scroll(selectedPos)
+        selectedPosition = items.indexOf(selectedItem)
+        scroller?.scroll(selectedPosition)
     }
 
     fun getSelected(): T? {
-        return if (selectedPos == RecyclerView.NO_POSITION || items.isEmpty()) null
+        return if (selectedPosition == RecyclerView.NO_POSITION || items.isEmpty()) null
         else {
-            items[selectedPos]
+            items[selectedPosition]
         }
     }
 
-    fun setSelected(item: T?) {
-        selectedItem = item
+    fun setSelected(selectedItem: T?) {
+        this.selectedItem = selectedItem
         if (items.isNotEmpty()) {
-            with(items.indexOf(selectedItem)) {
-                selectedPos = this
+            with(items.indexOf(this.selectedItem)) {
+                selectedPosition = this
                 scroller?.scroll(this)
                 notifyItemChanged(this)
             }
@@ -42,17 +42,17 @@ class GenericAdapterSingleSelection<T> : GenericAdapter<T>() {
         this.scroller = scroller
     }
 
-    override fun customBind(itemView: View, position: Int, adapterPosition: Int) {
+    override fun customBind(itemView: View, position: Int) {
         when (position) {
-            selectedPos -> itemView.text_view_1.setBackgroundColor(Color.LTGRAY)
+            selectedPosition -> itemView.text_view_1.setBackgroundColor(Color.LTGRAY)
             else -> itemView.text_view_1.setBackgroundColor(Color.TRANSPARENT)//TODO: this is a hack, better color handling
         }
 
         itemView.setOnClickListener {
-            if (adapterPosition != RecyclerView.NO_POSITION) {
-                notifyItemChanged(selectedPos) //Uncheck old selection
-                selectedPos = position
-                notifyItemChanged(selectedPos) //check new selection
+            if (position != RecyclerView.NO_POSITION) {
+                notifyItemChanged(selectedPosition) //Uncheck old selection
+                selectedPosition = position
+                notifyItemChanged(selectedPosition) //check new selection
             }
         }
     }
