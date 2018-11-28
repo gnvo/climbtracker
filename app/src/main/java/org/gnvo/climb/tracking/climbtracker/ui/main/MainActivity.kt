@@ -48,7 +48,9 @@ class MainActivity : AppCompatActivity() {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
-                viewModel.deleteAttempt(adapter.getItemAt(position).attempt)
+                val attempt = adapter.getItemAt(position).attempt
+                viewModel.deleteAttempt(attempt)
+                Toast.makeText(this@MainActivity, "Deleted attempt", Toast.LENGTH_LONG).show()
             }
         }
         val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallback)

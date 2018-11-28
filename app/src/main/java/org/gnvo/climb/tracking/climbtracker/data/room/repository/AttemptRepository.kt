@@ -2,14 +2,12 @@ package org.gnvo.climb.tracking.climbtracker.data.room.repository
 
 import android.app.Application
 import android.arch.lifecycle.LiveData
-import android.util.Log
 import org.gnvo.climb.tracking.climbtracker.data.room.AppDatabase
 import org.gnvo.climb.tracking.climbtracker.data.room.dao.AttemptDao
 import org.gnvo.climb.tracking.climbtracker.data.room.dao.AttemptRouteCharacteristicDao
 import org.gnvo.climb.tracking.climbtracker.data.room.pojo.Attempt
 import org.gnvo.climb.tracking.climbtracker.data.room.pojo.AttemptRouteCharacteristic
 import org.gnvo.climb.tracking.climbtracker.data.room.pojo.AttemptWithDetails
-import org.gnvo.climb.tracking.climbtracker.data.room.pojo.RouteCharacteristic
 import org.jetbrains.anko.doAsync
 
 class AttemptRepository(application: Application) {
@@ -30,7 +28,6 @@ class AttemptRepository(application: Application) {
                     AttemptRouteCharacteristic(routeCharacteristic = it, attempt = attemptId!!)
                 }
                 attemptRouteCharacteristicDao?.insert(routeCharacteristics)
-                Log.d("gnvog", "$routeCharacteristics")
             }
         }
     }
@@ -47,6 +44,7 @@ class AttemptRepository(application: Application) {
 
     fun delete(attempt: Attempt) {
         doAsync {
+            attemptRouteCharacteristicDao?.deleteByAttemptId(attempt.id)
             attemptDao?.delete(attempt)
         }
     }
