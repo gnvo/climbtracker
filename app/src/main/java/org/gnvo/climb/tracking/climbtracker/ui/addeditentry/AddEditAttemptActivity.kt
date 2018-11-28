@@ -17,6 +17,7 @@ import kotlinx.android.synthetic.main.activity_add_update_attempt.*
 import org.gnvo.climb.tracking.climbtracker.R
 import org.gnvo.climb.tracking.climbtracker.data.room.pojo.*
 import org.gnvo.climb.tracking.climbtracker.ui.addeditentry.adapters.GenericAdapter
+import org.gnvo.climb.tracking.climbtracker.ui.addeditentry.adapters.GenericAdapterMultipleSelection
 import org.gnvo.climb.tracking.climbtracker.ui.addeditentry.adapters.GenericAdapterSingleSelection
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -53,8 +54,8 @@ class AddEditAttemptActivity : AppCompatActivity() {
             button_time.text = now.format(formatterTime)
         }
         setDateTimeDialogs()
-        setAdapterToRecyclerView(recycler_view_climb_style, GenericAdapterSingleSelection(), viewModel.getAllClimbStyles())
-        setAdapterToRecyclerView(recycler_view_outcome, GenericAdapterSingleSelection(), viewModel.getAllOutcomes())
+        setAdapterToRecyclerViewSingleSelection(recycler_view_climb_style, GenericAdapterSingleSelection(), viewModel.getAllClimbStyles())
+        setAdapterToRecyclerViewSingleSelection(recycler_view_outcome, GenericAdapterSingleSelection(), viewModel.getAllOutcomes())
         val routeGradeAdapter = GenericAdapterSingleSelection<RouteGrade>()
         routeGradeAdapter.setCustomFormatter(object : GenericAdapter.CustomFormatter<RouteGrade> {
             override fun format(item: RouteGrade): String {
@@ -70,12 +71,23 @@ class AddEditAttemptActivity : AppCompatActivity() {
                 (recycler_view_route_grade.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(position, 0)
             }
         })
-        setAdapterToRecyclerView(recycler_view_route_grade, routeGradeAdapter, viewModel.getAllRouteGrades())
-        setAdapterToRecyclerView(recycler_view_route_type, GenericAdapterSingleSelection(), viewModel.getAllRouteTypes())
-        setAdapterToRecyclerView(recycler_view_route_characteristics, GenericAdapterSingleSelection(), viewModel.getAllRouteCharacteristics())
+        setAdapterToRecyclerViewSingleSelection(recycler_view_route_grade, routeGradeAdapter, viewModel.getAllRouteGrades())
+        setAdapterToRecyclerViewSingleSelection(recycler_view_route_type, GenericAdapterSingleSelection(), viewModel.getAllRouteTypes())
+        setAdapterToRecyclerViewMultipleSelection(recycler_view_route_characteristics, GenericAdapterMultipleSelection(), viewModel.getAllRouteCharacteristics())
     }
 
-    private fun <T>setAdapterToRecyclerView(recycler_view: RecyclerView, genericAdapter: GenericAdapterSingleSelection<T>, liveData: LiveData<List<T>>) {
+    private fun <T>setAdapterToRecyclerViewSingleSelection(recycler_view: RecyclerView, genericAdapter: GenericAdapterSingleSelection<T>, liveData: LiveData<List<T>>) {
+        recycler_view.layoutManager = LinearLayoutManager(this)
+        recycler_view.setHasFixedSize(true)
+
+        recycler_view.adapter = genericAdapter
+
+        liveData.observe(this, Observer {
+            genericAdapter.setItems(it!!)
+        })
+    }
+
+    private fun <T>setAdapterToRecyclerViewMultipleSelection(recycler_view: RecyclerView, genericAdapter: GenericAdapterMultipleSelection<T>, liveData: LiveData<List<T>>) {
         recycler_view.layoutManager = LinearLayoutManager(this)
         recycler_view.setHasFixedSize(true)
 
@@ -141,8 +153,7 @@ class AddEditAttemptActivity : AppCompatActivity() {
 
     private fun saveAttempt() {
         val attempt = generateAttemptWithDetails() ?: return
-        val routeCharacteristic = (recycler_view_route_characteristics.adapter as GenericAdapterSingleSelection<RouteCharacteristic>).getSelected()?.routeCharacteristicId
-        val routeCharacteristics= routeCharacteristic?.let{listOf(routeCharacteristic)}
+        val routeCharacteristics = (recycler_view_route_characteristics.adapter as GenericAdapterMultipleSelection<RouteCharacteristic>).getSelected()?.map {it.routeCharacteristicId!!}
         when (attemptIdFromIntentExtra) {
             INVALID_ID -> {
                 viewModel.insertAttempt(attempt, routeCharacteristics)
