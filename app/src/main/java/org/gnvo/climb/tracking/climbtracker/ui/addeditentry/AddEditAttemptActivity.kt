@@ -140,9 +140,11 @@ class AddEditAttemptActivity : AppCompatActivity() {
 
     private fun saveAttempt() {
         val attempt = generateAttemptWithDetails() ?: return
+        val routeCharacteristic = (recycler_view_route_characteristics.adapter as GenericAdapter<RouteCharacteristic>).getSelected()?.routeCharacteristicId
+        val routeCharacteristics= routeCharacteristic?.let{listOf(routeCharacteristic)}
         when (attemptIdFromIntentExtra) {
             INVALID_ID -> {
-                viewModel.insertAttempt(attempt)
+                viewModel.insertAttempt(attempt, routeCharacteristics)
                 Toast.makeText(this, "Climb attempt created", Toast.LENGTH_LONG).show()
             }
             else -> {

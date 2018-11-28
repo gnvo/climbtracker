@@ -16,6 +16,7 @@ import org.jetbrains.anko.doAsync
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun attemptDao(): AttemptDao
+    abstract fun attemptRouteCharacteristicDao(): AttemptRouteCharacteristicDao
     abstract fun routeGradeDao(): RouteGradeDao
     abstract fun climbStyleDao(): ClimbStyleDao
     abstract fun outcomeDao(): OutcomeDao

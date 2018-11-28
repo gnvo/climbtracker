@@ -14,8 +14,8 @@ class AddEditViewModel(application: Application) : AndroidViewModel(application)
     private val repositoryRouteType: RouteTypeRepository = RouteTypeRepository(application)
     private val repositoryRouteCharacteristic: RouteCharacteristicRepository = RouteCharacteristicRepository(application)
 
-    fun insertAttempt(attempt: Attempt) {
-        repositoryAttempt.insert(attempt)
+    fun insertAttempt(attempt: Attempt, routeCharacteristicsId: List<Long>?) {
+        repositoryAttempt.insert(attempt, routeCharacteristicsId)
     }
 
     fun getAllClimbStyles(): LiveData<List<ClimbStyle>> {

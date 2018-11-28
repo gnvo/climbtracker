@@ -40,7 +40,7 @@ interface AttemptDao {
     fun deleteAll()
 
     @Insert
-    fun insert(attempt: Attempt?)
+    fun insert(attempt: Attempt?): Long
 
     @Update
     fun update(attempt: Attempt)
