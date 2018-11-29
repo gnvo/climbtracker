@@ -33,7 +33,7 @@ class AddEditAttemptActivity : AppCompatActivity() {
 
     private lateinit var viewModel: AddEditViewModel
     private var formatterDate = DateTimeFormatter.ofPattern("EEEE, d MMM yyyy")
-    private var formatterTime = DateTimeFormatter.ofPattern("HH:mm")
+    private var formatterTime = DateTimeFormatter.ofPattern("HH:mm:ss")
 
     private var attemptIdFromIntentExtra: Long = INVALID_ID
 
