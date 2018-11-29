@@ -11,4 +11,34 @@
 
     <string name="max_message">(%1$s)</string>
     <string name="length">Length in meters</string>
+
+    <string-array name="route_type">
+        <item>Trad</item>
+        <item>Sport</item>
+        <item>Indoors</item>
+    </string-array>
+
+    <string-array name="climb_styles">
+        <item>Lead</item>
+        <item>Follow</item>
+        <item>Top rope</item>
+        <item>Solo</item>
+    </string-array>
+
+    <string-array name="outcome">
+        <item>Onsight</item>
+        <item>Flash</item>
+        <item>Redpoint</item>
+        <item>Fell/Hung</item>
+    </string-array>
+
+    <string-array name="route_characteristic">
+        <item>Crimps</item>
+        <item>Overhang</item>
+        <item>Pockets</item>
+        <item>Slab</item>
+        <item>Sloper</item>
+        <item>Face</item>
+        <item>Tufa</item>
+    </string-array>
 </resources>

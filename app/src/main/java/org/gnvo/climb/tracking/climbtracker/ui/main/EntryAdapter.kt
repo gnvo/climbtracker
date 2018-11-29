@@ -7,11 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.attempt_item.view.*
 import org.gnvo.climb.tracking.climbtracker.R
-import org.gnvo.climb.tracking.climbtracker.data.room.pojo.AttemptWithDetails
+import org.gnvo.climb.tracking.climbtracker.data.room.pojo.AttemptWithGrades
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-class EntryAdapter : ListAdapter<AttemptWithDetails, EntryAdapter.ViewHolder>(
+class EntryAdapter : ListAdapter<AttemptWithGrades, EntryAdapter.ViewHolder>(
     EntryDiffCallback()
 ) {
 
@@ -27,27 +27,27 @@ class EntryAdapter : ListAdapter<AttemptWithDetails, EntryAdapter.ViewHolder>(
         holder.bind(getItem(position))
     }
 
-    fun getItemAt(position: Int): AttemptWithDetails {
+    fun getItemAt(position: Int): AttemptWithGrades {
         return getItem(position)
     }
 
     open inner class ViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(attemptWithDetails: AttemptWithDetails) {
-            itemView.text_view_climb_style.text = attemptWithDetails.climbStyle.climbStyleName
-            itemView.text_view_outcome.text = attemptWithDetails.outcome.outcomeName
-            itemView.text_view_route_grade.text = attemptWithDetails.routeGrade.french
+        fun bind(attemptWithGrades: AttemptWithGrades) {
+            itemView.text_view_climb_style.text = attemptWithGrades.attempt.climbStyle
+            itemView.text_view_outcome.text = attemptWithGrades.attempt.outcome
+            itemView.text_view_route_grade.text = attemptWithGrades.routeGrade.french
 
-            val attempt = attemptWithDetails.attempt
+            val attempt = attemptWithGrades.attempt
             val listOfDetails = LinkedList<String>()
 
             listOfDetails.add(attempt.datetime.format(formatter))
-            listOfDetails.add(attemptWithDetails.routeType.routeTypeName!!)
+            listOfDetails.add(attemptWithGrades.attempt.routeType)
 
             attempt.routeName?.let { listOfDetails.add(it) }
             attempt.length?.let { listOfDetails.add(it.toString() + "mts") }
             attempt.location?.area?.let { listOfDetails.add(it) }
             attempt.location?.sector?.let { listOfDetails.add(it) }
-            attemptWithDetails.routeCharacteristics?.joinToString("/")?.let { listOfDetails.add(it) }
+            attemptWithGrades.attempt.routeCharacteristics?.let{ listOfDetails.add(it.joinToString("/")) }
             attempt.rating?.let { listOfDetails.add("rating:" + it.toString() + "/5") }
 
             itemView.text_view_details.text = listOfDetails.joinToString()
@@ -61,7 +61,7 @@ class EntryAdapter : ListAdapter<AttemptWithDetails, EntryAdapter.ViewHolder>(
     }
 
     interface OnItemClickListener {
-        fun onItemClick(attemptWithDetails: AttemptWithDetails)
+        fun onItemClick(attemptWithGrades: AttemptWithGrades)
     }
 
     fun setOnItemClickListener(listener: OnItemClickListener){

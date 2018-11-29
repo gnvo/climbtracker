@@ -12,8 +12,8 @@ abstract class GenericAdapter<T> : RecyclerView.Adapter<GenericAdapter<T>.ViewHo
     internal var items = ArrayList<T>()
     private var formatter: CustomFormatter<T>? = null
 
-    open fun setItems(items: List<T>) {
-        this.items = ArrayList(items)
+    open fun setItems(items: ArrayList<T>) {
+        this.items = items
         notifyDataSetChanged()
     }
 

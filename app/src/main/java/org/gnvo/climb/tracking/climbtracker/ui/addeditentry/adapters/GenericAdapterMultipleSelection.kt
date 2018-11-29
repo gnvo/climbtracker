@@ -10,7 +10,7 @@ class GenericAdapterMultipleSelection<T> : GenericAdapter<T>() {
     private var selectedPositions: MutableList<Long> = mutableListOf()
     private var selectedItems: MutableList<T> = mutableListOf()
 
-    override fun setItems(items: List<T>) {
+    override fun setItems(items: ArrayList<T>) {
         super.setItems(items)
         selectedPositions = selectedItems.map {
             items.indexOf(it).toLong()
@@ -18,8 +18,11 @@ class GenericAdapterMultipleSelection<T> : GenericAdapter<T>() {
     }
 
     fun getSelected(): List<T>? {
-        return selectedPositions.map {
-            items[it.toInt()]
+        return if (selectedPositions.isEmpty()) null
+        else {
+            selectedPositions.map {
+                items[it.toInt()]
+            }
         }
     }
 

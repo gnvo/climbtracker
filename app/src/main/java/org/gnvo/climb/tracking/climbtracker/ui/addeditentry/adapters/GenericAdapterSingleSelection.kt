@@ -10,7 +10,7 @@ class GenericAdapterSingleSelection<T> : GenericAdapter<T>() {
     private var selectedItem: T? = null
     private var scroller: Scroller? = null
 
-    override fun setItems(items: List<T>) {
+    override fun setItems(items: ArrayList<T>) {
         super.setItems(items)
         selectedPosition = items.indexOf(selectedItem)
         scroller?.scroll(selectedPosition)

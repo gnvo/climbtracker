@@ -4,15 +4,15 @@ import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.LiveData
 import org.gnvo.climb.tracking.climbtracker.data.room.pojo.Attempt
-import org.gnvo.climb.tracking.climbtracker.data.room.pojo.AttemptWithDetails
+import org.gnvo.climb.tracking.climbtracker.data.room.pojo.AttemptWithGrades
 import org.gnvo.climb.tracking.climbtracker.data.room.repository.AttemptRepository
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val repositoryAttempt: AttemptRepository = AttemptRepository(application)
-    private val attemptsWithDetails: LiveData<List<AttemptWithDetails>> = repositoryAttempt.getAllWithDetails()
+    private val attemptsWithGrades: LiveData<List<AttemptWithGrades>> = repositoryAttempt.getAllWithGrades()
 
-    fun getAllAttemptsWithDetails(): LiveData<List<AttemptWithDetails>> {
-        return attemptsWithDetails
+    fun getAllAttemptsWithGrades(): LiveData<List<AttemptWithGrades>> {
+        return attemptsWithGrades
     }
 
     fun deleteAttempt(attempt: Attempt) {

@@ -13,7 +13,7 @@ import android.view.MenuItem
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 import org.gnvo.climb.tracking.climbtracker.R
-import org.gnvo.climb.tracking.climbtracker.data.room.pojo.AttemptWithDetails
+import org.gnvo.climb.tracking.climbtracker.data.room.pojo.AttemptWithGrades
 import org.gnvo.climb.tracking.climbtracker.ui.addeditentry.AddEditAttemptActivity
 
 class MainActivity : AppCompatActivity() {
@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
         recycler_view.adapter = adapter
 
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
-        viewModel.getAllAttemptsWithDetails().observe(this, Observer {
+        viewModel.getAllAttemptsWithGrades().observe(this, Observer {
             adapter.submitList(it!!)
         })
 
@@ -57,9 +57,9 @@ class MainActivity : AppCompatActivity() {
         itemTouchHelper.attachToRecyclerView(recycler_view)
 
         adapter.setOnItemClickListener(object : EntryAdapter.OnItemClickListener {
-            override fun onItemClick(attemptWithDetails: AttemptWithDetails) {
+            override fun onItemClick(attemptWithGrades: AttemptWithGrades) {
                 val intent = Intent(this@MainActivity, AddEditAttemptActivity::class.java)
-                intent.putExtra(AddEditAttemptActivity.EXTRA_ID, attemptWithDetails.attempt.id)
+                intent.putExtra(AddEditAttemptActivity.EXTRA_ID, attemptWithGrades.attempt.id)
                 startActivity(intent)
             }
         })
