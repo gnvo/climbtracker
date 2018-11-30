@@ -30,15 +30,16 @@
         <item>Flash</item>
         <item>Redpoint</item>
         <item>Fell/Hung</item>
+        <item>Unfinished</item>
     </string-array>
 
     <string-array name="route_characteristic">
         <item>Crimps</item>
+        <item>Face</item>
         <item>Overhang</item>
         <item>Pockets</item>
         <item>Slab</item>
         <item>Sloper</item>
-        <item>Face</item>
         <item>Tufa</item>
     </string-array>
 </resources>
