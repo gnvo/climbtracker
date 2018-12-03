@@ -29,11 +29,19 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        recycler_view.layoutManager = LinearLayoutManager(this)
+        val layoutManager = LinearLayoutManager(this)
+        recycler_view.layoutManager = layoutManager
         recycler_view.setHasFixedSize(true)
 
         val adapter = EntryAdapter()
         recycler_view.adapter = adapter
+
+        adapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                super.onItemRangeInserted(positionStart, itemCount)
+                layoutManager.scrollToPositionWithOffset(positionStart, 0)
+            }
+        })
 
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
         viewModel.getAllAttemptsWithGrades().observe(this, Observer {
