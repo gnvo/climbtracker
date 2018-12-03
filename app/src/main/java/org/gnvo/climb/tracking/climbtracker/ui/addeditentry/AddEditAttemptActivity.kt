@@ -2,7 +2,6 @@ package org.gnvo.climb.tracking.climbtracker.ui.addeditentry
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
-import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
@@ -10,7 +9,6 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.Editable
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -53,6 +51,7 @@ class AddEditAttemptActivity : AppCompatActivity() {
             val now = LocalDateTime.now()
             button_date.text = now.format(formatterDate)
             button_time.text = now.format(formatterTime)
+            partiallyRestoreAttemptDataFromLastAttemptEntry()
         }
 
         setDateTimeDialogs()
@@ -187,7 +186,22 @@ class AddEditAttemptActivity : AppCompatActivity() {
                 edit_text_comment.setText(attemptWithGrades.attempt.comment)
 
                 rating_bar_rating.rating = attemptWithGrades.attempt.rating?.toFloat() ?: 0f
-            })
+            }
+        )
+    }
+
+    private fun partiallyRestoreAttemptDataFromLastAttemptEntry() {
+        viewModel.getLastAttemptWithGrades()
+            .observe(this, Observer { attemptWithGrades: AttemptWithGrades? ->
+                (recycler_view_climb_style.adapter as GenericAdapterSingleSelection<String>).setSelected(attemptWithGrades?.attempt?.climbStyle)
+                (recycler_view_outcome.adapter as GenericAdapterSingleSelection<String>).setSelected(attemptWithGrades?.attempt?.outcome)
+                (recycler_view_route_grade.adapter as GenericAdapterSingleSelection<RouteGrade>).setSelected(attemptWithGrades?.routeGrade)
+                (recycler_view_route_type.adapter as GenericAdapterSingleSelection<String>).setSelected(attemptWithGrades?.attempt?.routeType)
+
+                edit_text_area.setText(attemptWithGrades?.attempt?.location?.area)
+                edit_text_sector.setText(attemptWithGrades?.attempt?.location?.sector)
+            }
+        )
     }
 
     private fun saveAttempt() {

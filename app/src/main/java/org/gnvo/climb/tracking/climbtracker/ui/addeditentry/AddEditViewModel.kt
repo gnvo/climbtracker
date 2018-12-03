@@ -22,6 +22,10 @@ class AddEditViewModel(application: Application) : AndroidViewModel(application)
         return repositoryAttempt.getByIdWithGrades(attemptId)
     }
 
+    fun getLastAttemptWithGrades(): LiveData<AttemptWithGrades> {
+        return repositoryAttempt.getLastAttemptWithGrades()
+    }
+
     fun updateAttempt(attempt: Attempt) {
         repositoryAttempt.update(attempt)
     }

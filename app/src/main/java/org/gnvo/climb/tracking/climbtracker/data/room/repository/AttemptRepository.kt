@@ -27,6 +27,10 @@ class AttemptRepository(application: Application) {
         return attemptDao?.getByIdWithGrades(attemptId)!!
     }
 
+    fun getLastAttemptWithGrades(): LiveData<AttemptWithGrades> {
+        return attemptDao?.getLastWithGrades()!!
+    }
+
     fun update(attempt: Attempt) {
         doAsync {
             attemptDao?.update(attempt)

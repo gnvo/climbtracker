@@ -23,6 +23,14 @@ interface AttemptDao {
     )
     fun getByIdWithGrades(attemptId: Long): LiveData<AttemptWithGrades>
 
+    @Query(
+        "SELECT attempt.*, route_grade.* " +
+                "FROM attempt " +
+                "INNER JOIN route_grade on route_grade.route_grade_id = attempt.route_grade " +
+                "WHERE attempt.id = (SELECT max(id) FROM attempt)"
+    )
+    fun getLastWithGrades(): LiveData<AttemptWithGrades>
+
     @Insert
     fun insert(attempt: Attempt?)
 
