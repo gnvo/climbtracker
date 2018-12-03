@@ -15,6 +15,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import org.gnvo.climb.tracking.climbtracker.R
 import org.gnvo.climb.tracking.climbtracker.data.room.pojo.AttemptWithGrades
 import org.gnvo.climb.tracking.climbtracker.ui.addeditentry.AddEditAttemptActivity
+import org.gnvo.climb.tracking.climbtracker.ui.main.views.adapter.EntryAdapter
 
 class MainActivity : AppCompatActivity() {
 

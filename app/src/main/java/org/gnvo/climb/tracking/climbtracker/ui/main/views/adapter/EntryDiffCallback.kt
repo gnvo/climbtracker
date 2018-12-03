@@ -1,4 +1,4 @@
-package org.gnvo.climb.tracking.climbtracker.ui.main
+package org.gnvo.climb.tracking.climbtracker.ui.main.views.adapter
 
 import android.support.v7.util.DiffUtil
 import org.gnvo.climb.tracking.climbtracker.data.room.pojo.AttemptWithGrades

@@ -1,4 +1,4 @@
-package org.gnvo.climb.tracking.climbtracker.ui.main
+package org.gnvo.climb.tracking.climbtracker.ui.main.views.adapter
 
 import android.support.v7.recyclerview.extensions.ListAdapter
 import android.support.v7.widget.RecyclerView
