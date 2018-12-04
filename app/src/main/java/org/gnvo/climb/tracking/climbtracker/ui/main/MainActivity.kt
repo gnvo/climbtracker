@@ -16,10 +16,15 @@ import org.gnvo.climb.tracking.climbtracker.R
 import org.gnvo.climb.tracking.climbtracker.data.room.pojo.AttemptWithGrades
 import org.gnvo.climb.tracking.climbtracker.ui.addeditentry.AddEditAttemptActivity
 import org.gnvo.climb.tracking.climbtracker.ui.main.views.adapter.EntryAdapter
+import org.gnvo.climb.tracking.climbtracker.ui.main.views.adapter.RecyclerSectionItemDecoration
+import java.time.format.DateTimeFormatter
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var viewModel: MainViewModel
+
+    private var dateFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd")
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,7 +51,14 @@ class MainActivity : AppCompatActivity() {
 
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
         viewModel.getAllAttemptsWithGrades().observe(this, Observer {
-            adapter.submitList(it!!)
+            val sectionItemDecoration = RecyclerSectionItemDecoration(
+                resources.getDimensionPixelSize(R.dimen.recycler_section_header_height),
+                true,
+                getSectionCallback(it!!)
+            )
+            recycler_view.addItemDecoration(sectionItemDecoration)
+
+            adapter.submitList(it)
         })
 
         val simpleItemTouchCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
@@ -87,6 +99,23 @@ class MainActivity : AppCompatActivity() {
                 true
             }
             else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun getSectionCallback(attemptWithGrades: List<AttemptWithGrades>): RecyclerSectionItemDecoration.SectionCallback {
+        return object : RecyclerSectionItemDecoration.SectionCallback {
+            override fun isSection(position: Int): Boolean {
+                val adapter = recycler_view.adapter as EntryAdapter
+                return position == 0 ||
+                        adapter.getItemAt(position).attempt.datetime.format(dateFormatter) != adapter.getItemAt(position - 1).attempt.datetime.format(
+                    dateFormatter
+                )
+            }
+
+            override fun getSectionHeader(position: Int): CharSequence {
+                val adapter = recycler_view.adapter as EntryAdapter
+                return adapter.getItemAt(position).attempt.datetime.format(dateFormatter)
+            }
         }
     }
 }
