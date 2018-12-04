@@ -49,16 +49,21 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
+        var sectionItemDecoration: RecyclerSectionItemDecoration? = null
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
-        viewModel.getAllAttemptsWithGrades().observe(this, Observer {
-            val sectionItemDecoration = RecyclerSectionItemDecoration(
+        viewModel.getAllAttemptsWithGrades().observe(this, Observer { list ->
+
+            sectionItemDecoration?.let{recycler_view.removeItemDecoration(it)}
+
+            sectionItemDecoration = RecyclerSectionItemDecoration(
                 resources.getDimensionPixelSize(R.dimen.recycler_section_header_height),
                 true,
-                getSectionCallback(it!!)
+                getSectionCallback(list!!)
             )
-            recycler_view.addItemDecoration(sectionItemDecoration)
 
-            adapter.submitList(it)
+            recycler_view.addItemDecoration(sectionItemDecoration!!)
+
+            adapter.submitList(list)
         })
 
         val simpleItemTouchCallback =
@@ -110,16 +115,18 @@ class MainActivity : AppCompatActivity() {
     private fun getSectionCallback(attemptWithGrades: List<AttemptWithGrades>): RecyclerSectionItemDecoration.SectionCallback {
         return object : RecyclerSectionItemDecoration.SectionCallback {
             override fun isSection(position: Int): Boolean {
-                val adapter = recycler_view.adapter as EntryAdapter
-                return position == 0 ||
-                        adapter.getItemAt(position).attempt.datetime.format(dateFormatter) != adapter.getItemAt(position - 1).attempt.datetime.format(
-                    dateFormatter
+                return position != RecyclerView.NO_POSITION && (position == 0 ||
+                        attemptWithGrades[position].attempt.datetime.format(dateFormatter) != attemptWithGrades[position - 1].attempt.datetime.format(
+                    dateFormatter)
                 )
             }
 
             override fun getSectionHeader(position: Int): CharSequence {
-                val adapter = recycler_view.adapter as EntryAdapter
-                return adapter.getItemAt(position).attempt.datetime.format(dateFormatter)
+                return if (position == RecyclerView.NO_POSITION) {
+                    ""
+                } else {
+                    attemptWithGrades[position].attempt.datetime.format(dateFormatter)
+                }
             }
         }
     }
