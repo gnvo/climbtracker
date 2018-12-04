@@ -1,0 +1,37 @@
+package org.gnvo.climb.tracking.climbtracker.ui.main.views
+
+import android.view.View
+import kotlinx.android.synthetic.main.attempt_item.view.*
+import org.gnvo.climb.tracking.climbtracker.data.room.pojo.AttemptWithGrades
+import org.gnvo.climb.tracking.climbtracker.ui.main.views.adapter.EntryAdapter
+import java.time.format.DateTimeFormatter
+import java.util.*
+
+class ViewHolderAttempt(itemView: View) : ViewHolder(itemView) {
+    private var formatter = DateTimeFormatter.ofPattern("EEE, yyyy/MM/dd")
+
+    override fun bind(attemptWithGrades: AttemptWithGrades, listener: EntryAdapter.OnItemClickListener?) {
+        itemView.text_view_climb_style.text = attemptWithGrades.attempt.climbStyle
+        itemView.text_view_outcome.text = attemptWithGrades.attempt.outcome
+        itemView.text_view_route_grade.text = attemptWithGrades.routeGrade.french
+
+        val attempt = attemptWithGrades.attempt
+        val listOfDetails = LinkedList<String>()
+
+        listOfDetails.add(attempt.datetime.format(formatter))
+        listOfDetails.add(attemptWithGrades.attempt.routeType)
+
+        attempt.routeName?.let { listOfDetails.add(it) }
+        attempt.length?.let { listOfDetails.add(it.toString() + "mts") }
+        attempt.location?.area?.let { listOfDetails.add(it) }
+        attempt.location?.sector?.let { listOfDetails.add(it) }
+        attemptWithGrades.attempt.routeCharacteristics?.let { listOfDetails.add(it.joinToString("/")) }
+        attempt.rating?.let { listOfDetails.add("rating:" + it.toString() + "/5") }
+
+        itemView.text_view_details.text = listOfDetails.joinToString()
+
+        itemView.setOnClickListener {
+            listener?.onItemClick(attemptWithGrades)
+        }
+    }
+}
