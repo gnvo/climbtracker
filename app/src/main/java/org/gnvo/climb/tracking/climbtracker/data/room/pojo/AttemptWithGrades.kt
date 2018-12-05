@@ -5,7 +5,7 @@ import android.arch.persistence.room.Embedded
 data class AttemptWithGrades(
     @Embedded val attempt: Attempt,
     @Embedded val routeGrade: RouteGrade
-) {
+) : AttemptListItem() {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -22,5 +22,16 @@ data class AttemptWithGrades(
         var result = attempt.hashCode()
         result = 31 * result + routeGrade.hashCode()
         return result
+    }
+
+    override fun areItemsTheSame(other: AttemptListItem?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as AttemptWithGrades
+
+        if (attempt.id != other.attempt.id) return false
+
+        return true
     }
 }

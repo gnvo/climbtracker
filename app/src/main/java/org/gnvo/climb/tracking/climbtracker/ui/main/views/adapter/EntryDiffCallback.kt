@@ -1,14 +1,14 @@
 package org.gnvo.climb.tracking.climbtracker.ui.main.views.adapter
 
 import android.support.v7.util.DiffUtil
-import org.gnvo.climb.tracking.climbtracker.data.room.pojo.AttemptWithGrades
+import org.gnvo.climb.tracking.climbtracker.data.room.pojo.AttemptListItem
 
-class EntryDiffCallback : DiffUtil.ItemCallback<AttemptWithGrades>() {
-    override fun areItemsTheSame(oldItem: AttemptWithGrades, newItem: AttemptWithGrades): Boolean {
-        return oldItem.attempt.id == newItem.attempt.id
+class EntryDiffCallback : DiffUtil.ItemCallback<AttemptListItem>() {
+    override fun areItemsTheSame(oldItem: AttemptListItem, newItem: AttemptListItem): Boolean {
+        return oldItem.areItemsTheSame(newItem)
     }
 
-    override fun areContentsTheSame(oldItem: AttemptWithGrades, newItem: AttemptWithGrades): Boolean {
+    override fun areContentsTheSame(oldItem: AttemptListItem, newItem: AttemptListItem): Boolean {
         return oldItem == newItem
     }
 }
