@@ -323,7 +323,6 @@ class AddEditAttemptActivity : AppCompatActivity() {
                 edit_text_coordinates.setText("${it.latitude}, ${it.longitude} (${it.accuracy}m)")
             }
         }
-
     }
 
     private fun getStringOrNull(text: Editable?): String? {
