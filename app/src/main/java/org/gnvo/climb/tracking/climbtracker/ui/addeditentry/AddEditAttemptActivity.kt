@@ -177,7 +177,6 @@ class AddEditAttemptActivity : AppCompatActivity() {
             )
             datePickerDialog.show()
         }
-
     }
 
     private fun restoreAttemptData() {
@@ -186,11 +185,21 @@ class AddEditAttemptActivity : AppCompatActivity() {
                 button_date.text = attemptWithGrades?.attempt?.datetime!!.format(formatterDate)
                 button_time.text = attemptWithGrades.attempt.datetime.format(formatterTime)
 
-                (recycler_view_climb_style.adapter as GenericAdapterSingleSelection<String>).setSelected(attemptWithGrades.attempt.climbStyle)
+                (recycler_view_climb_style.adapter as GenericAdapterSingleSelection<String>).setSelected(
+                    attemptWithGrades.attempt.climbStyle
+                )
                 (recycler_view_outcome.adapter as GenericAdapterSingleSelection<String>).setSelected(attemptWithGrades.attempt.outcome)
-                (recycler_view_route_grade.adapter as GenericAdapterSingleSelection<RouteGrade>).setSelected(attemptWithGrades.routeGrade)
-                (recycler_view_route_type.adapter as GenericAdapterSingleSelection<String>).setSelected(attemptWithGrades.attempt.routeType)
-                attemptWithGrades.attempt.routeCharacteristics?.let {(recycler_view_route_characteristics.adapter as GenericAdapterMultipleSelection<String>).setSelected(it)}
+                (recycler_view_route_grade.adapter as GenericAdapterSingleSelection<RouteGrade>).setSelected(
+                    attemptWithGrades.routeGrade
+                )
+                (recycler_view_route_type.adapter as GenericAdapterSingleSelection<String>).setSelected(
+                    attemptWithGrades.attempt.routeType
+                )
+                attemptWithGrades.attempt.routeCharacteristics?.let {
+                    (recycler_view_route_characteristics.adapter as GenericAdapterMultipleSelection<String>).setSelected(
+                        it
+                    )
+                }
 
                 edit_text_route_name.setText(attemptWithGrades.attempt.routeName)
                 edit_text_length.setText(attemptWithGrades.attempt.length?.toString())
@@ -199,22 +208,27 @@ class AddEditAttemptActivity : AppCompatActivity() {
                 edit_text_comment.setText(attemptWithGrades.attempt.comment)
 
                 rating_bar_rating.rating = attemptWithGrades.attempt.rating?.toFloat() ?: 0f
-            }
-        )
+            })
     }
 
     private fun partiallyRestoreAttemptDataFromLastAttemptEntry() {
         viewModel.getLastAttemptWithGrades()
             .observe(this, Observer { attemptWithGrades: AttemptWithGrades? ->
-                (recycler_view_climb_style.adapter as GenericAdapterSingleSelection<String>).setSelected(attemptWithGrades?.attempt?.climbStyle)
+                (recycler_view_climb_style.adapter as GenericAdapterSingleSelection<String>).setSelected(
+                    attemptWithGrades?.attempt?.climbStyle
+                )
                 (recycler_view_outcome.adapter as GenericAdapterSingleSelection<String>).setSelected(attemptWithGrades?.attempt?.outcome)
-                (recycler_view_route_grade.adapter as GenericAdapterSingleSelection<RouteGrade>).setSelected(attemptWithGrades?.routeGrade)
-                (recycler_view_route_type.adapter as GenericAdapterSingleSelection<String>).setSelected(attemptWithGrades?.attempt?.routeType)
+                (recycler_view_route_grade.adapter as GenericAdapterSingleSelection<RouteGrade>).setSelected(
+                    attemptWithGrades?.routeGrade
+                )
+                (recycler_view_route_type.adapter as GenericAdapterSingleSelection<String>).setSelected(
+                    attemptWithGrades?.attempt?.routeType
+                )
 
                 edit_text_area.setText(attemptWithGrades?.attempt?.location?.area)
                 edit_text_sector.setText(attemptWithGrades?.attempt?.location?.sector)
             }
-        )
+            )
     }
 
     private fun saveAttempt() {
@@ -280,7 +294,8 @@ class AddEditAttemptActivity : AppCompatActivity() {
         attempt.location!!.area = getStringOrNull(edit_text_area.text)
         attempt.location!!.sector = getStringOrNull(edit_text_sector.text)
         attempt.comment = getStringOrNull(edit_text_comment.text)
-        attempt.routeCharacteristics = (recycler_view_route_characteristics.adapter as GenericAdapterMultipleSelection<String>).getSelected()
+        attempt.routeCharacteristics =
+                (recycler_view_route_characteristics.adapter as GenericAdapterMultipleSelection<String>).getSelected()
 
         if (rating_bar_rating.rating > 0)
             attempt.rating = rating_bar_rating.rating.toInt()
@@ -288,7 +303,7 @@ class AddEditAttemptActivity : AppCompatActivity() {
         return attempt
     }
 
-    private fun checkGeoPermission(){
+    private fun checkGeoPermission() {
         if (ActivityCompat.checkSelfPermission(
                 this,
                 android.Manifest.permission.ACCESS_FINE_LOCATION
@@ -301,7 +316,7 @@ class AddEditAttemptActivity : AppCompatActivity() {
         }
     }
 
-    private fun getCoordinates(){
+    private fun getCoordinates() {
         checkGeoPermission()
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         fusedLocationClient.lastLocation.addOnSuccessListener(this) { location ->
