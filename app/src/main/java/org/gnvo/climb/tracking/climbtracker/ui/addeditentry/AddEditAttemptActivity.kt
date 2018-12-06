@@ -120,7 +120,6 @@ class AddEditAttemptActivity : AppCompatActivity() {
         viewModel.getAllRouteGrades().observe(this, Observer {
             routeGradeAdapter.setItems(ArrayList(it!!))
         })
-
     }
 
     private fun <T> setAdapterToRecyclerViewSingleSelection(
