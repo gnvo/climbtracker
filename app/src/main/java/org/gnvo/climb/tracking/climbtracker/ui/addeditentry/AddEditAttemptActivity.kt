@@ -262,7 +262,6 @@ class AddEditAttemptActivity : AppCompatActivity() {
         val routeType =
             (recycler_view_route_type.adapter as GenericAdapterSingleSelection<String>).getSelected()
 
-//        Todo: create tests to validate validations
         if (routeType == null) {
             Toast.makeText(this, "Set route type. Eg. Sport", Toast.LENGTH_LONG).show()
             return null

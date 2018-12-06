@@ -22,10 +22,9 @@ data class Attempt(
     var rating: Int? = null,
     var routeCharacteristics: List<String>? = null,
 
-    var length: Int? = null,//Todo
-    //todo rock type, per sector?
+    var length: Int? = null,
 
-    @Embedded var location: Location? = null//todo
+    @Embedded var location: Location? = null
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
