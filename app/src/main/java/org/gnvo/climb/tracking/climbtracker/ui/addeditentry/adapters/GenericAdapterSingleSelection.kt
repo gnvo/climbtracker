@@ -45,7 +45,7 @@ class GenericAdapterSingleSelection<T> : GenericAdapter<T>() {
     override fun customBind(itemView: View, position: Int) {
         when (position) {
             selectedPosition -> itemView.text_view_1.setBackgroundColor(Color.LTGRAY)
-            else -> itemView.text_view_1.setBackgroundColor(Color.TRANSPARENT)//TODO: this is a hack, better color handling
+            else -> itemView.text_view_1.setBackgroundColor(Color.TRANSPARENT)
         }
 
         itemView.setOnClickListener {

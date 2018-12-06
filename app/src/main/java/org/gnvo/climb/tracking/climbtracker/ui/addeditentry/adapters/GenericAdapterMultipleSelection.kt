@@ -43,7 +43,7 @@ class GenericAdapterMultipleSelection<T> : GenericAdapter<T>() {
         if (isSelected) {
             itemView.text_view_1.setBackgroundColor(Color.LTGRAY)
         } else {
-            itemView.text_view_1.setBackgroundColor(Color.TRANSPARENT)//TODO: this is a hack, better color handling
+            itemView.text_view_1.setBackgroundColor(Color.TRANSPARENT)
         }
 
         itemView.setOnClickListener {
