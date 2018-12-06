@@ -35,6 +35,7 @@ class AddEditAttemptActivity : AppCompatActivity() {
         const val EXTRA_ID: String = "org.gnvo.climb.tracking.climbtracker.ui.addeditentry.EXTRA_ID"
         const val INVALID_ID: Long = -1
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1
+        val regexLocationExtractor = """([+-]?(?:[0-9]*[.])?[0-9]+)\s*,\s*([+-]?(?:[0-9]*[.])?[0-9]+)""".toRegex()
     }
 
     private lateinit var viewModel: AddEditViewModel
@@ -205,6 +206,8 @@ class AddEditAttemptActivity : AppCompatActivity() {
                 edit_text_length.setText(attemptWithGrades.attempt.length?.toString())
                 edit_text_area.setText(attemptWithGrades.attempt.location?.area)
                 edit_text_sector.setText(attemptWithGrades.attempt.location?.sector)
+                if (attemptWithGrades.attempt.location?.latitude != null && attemptWithGrades.attempt.location?.longitude != null)
+                    edit_text_coordinates.setText(getString(R.string.coordinates_format, attemptWithGrades.attempt.location?.latitude, attemptWithGrades.attempt.location?.longitude))
                 edit_text_comment.setText(attemptWithGrades.attempt.comment)
 
                 rating_bar_rating.rating = attemptWithGrades.attempt.rating?.toFloat() ?: 0f
@@ -279,6 +282,8 @@ class AddEditAttemptActivity : AppCompatActivity() {
             return null
         }
 
+        val (latitude, longitude) = extractCoordinates()
+
         val attempt = Attempt(
             datetime = datetime,
             routeType = routeType,
@@ -292,6 +297,8 @@ class AddEditAttemptActivity : AppCompatActivity() {
         attempt.length = getStringOrNull(edit_text_length.text)?.toInt()
         attempt.location!!.area = getStringOrNull(edit_text_area.text)
         attempt.location!!.sector = getStringOrNull(edit_text_sector.text)
+        attempt.location!!.latitude = latitude?.value?.toDouble()
+        attempt.location!!.longitude = longitude?.value?.toDouble()
         attempt.comment = getStringOrNull(edit_text_comment.text)
         attempt.routeCharacteristics =
                 (recycler_view_route_characteristics.adapter as GenericAdapterMultipleSelection<String>).getSelected()
@@ -300,6 +307,11 @@ class AddEditAttemptActivity : AppCompatActivity() {
             attempt.rating = rating_bar_rating.rating.toInt()
 
         return attempt
+    }
+
+    private fun extractCoordinates(): Pair<MatchGroup?, MatchGroup?> {
+        val matchResult = regexLocationExtractor.find(edit_text_coordinates.text.toString())
+        return Pair(matchResult?.groups?.get(1), matchResult?.groups?.get(2))
     }
 
     private fun checkGeoPermission() {
@@ -320,7 +332,8 @@ class AddEditAttemptActivity : AppCompatActivity() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         fusedLocationClient.lastLocation.addOnSuccessListener(this) { location ->
             location?.let {
-                edit_text_coordinates.setText("${it.latitude}, ${it.longitude} (${it.accuracy}m)")
+                edit_text_coordinates.setText(getString(R.string.coordinates_format, it.latitude, it.longitude))
+                Toast.makeText(this, "Coordinates accuracy: ${it.accuracy}mts.", Toast.LENGTH_LONG).show()
             }
         }
     }

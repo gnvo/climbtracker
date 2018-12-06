@@ -10,6 +10,7 @@
     <string name="add_attempt">Add attempt</string>
 
     <string name="max_message">(%1$s)</string>
+    <string name="coordinates_format">%1$f, %2$f</string>
     <string name="length">Length in meters</string>
 
     <string-array name="route_type">
