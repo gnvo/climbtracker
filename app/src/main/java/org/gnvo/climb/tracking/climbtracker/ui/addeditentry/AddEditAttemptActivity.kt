@@ -4,7 +4,9 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.support.v4.app.ActivityCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -12,9 +14,14 @@ import android.text.Editable
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import kotlinx.android.synthetic.main.activity_add_update_attempt.*
 import org.gnvo.climb.tracking.climbtracker.R
-import org.gnvo.climb.tracking.climbtracker.data.room.pojo.*
+import org.gnvo.climb.tracking.climbtracker.data.room.pojo.Attempt
+import org.gnvo.climb.tracking.climbtracker.data.room.pojo.AttemptWithGrades
+import org.gnvo.climb.tracking.climbtracker.data.room.pojo.Location
+import org.gnvo.climb.tracking.climbtracker.data.room.pojo.RouteGrade
 import org.gnvo.climb.tracking.climbtracker.ui.addeditentry.adapters.GenericAdapter
 import org.gnvo.climb.tracking.climbtracker.ui.addeditentry.adapters.GenericAdapterMultipleSelection
 import org.gnvo.climb.tracking.climbtracker.ui.addeditentry.adapters.GenericAdapterSingleSelection
@@ -27,11 +34,13 @@ class AddEditAttemptActivity : AppCompatActivity() {
     companion object {
         const val EXTRA_ID: String = "org.gnvo.climb.tracking.climbtracker.ui.addeditentry.EXTRA_ID"
         const val INVALID_ID: Long = -1
+        private const val LOCATION_PERMISSION_REQUEST_CODE = 1
     }
 
     private lateinit var viewModel: AddEditViewModel
     private var formatterDate = DateTimeFormatter.ofPattern("EEEE, d MMM yyyy")
     private var formatterTime = DateTimeFormatter.ofPattern("HH:mm:ss")
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     private var attemptIdFromIntentExtra: Long = INVALID_ID
 
@@ -80,6 +89,10 @@ class AddEditAttemptActivity : AppCompatActivity() {
             GenericAdapterMultipleSelection<String>(),
             resources.getStringArray(R.array.route_characteristic).toCollection(ArrayList())
         )
+
+        image_button_look_for_coordinates.setOnClickListener {
+            getCoordinates()
+        }
     }
 
     private fun setRouteGrades() {
@@ -273,6 +286,30 @@ class AddEditAttemptActivity : AppCompatActivity() {
             attempt.rating = rating_bar_rating.rating.toInt()
 
         return attempt
+    }
+
+    private fun checkGeoPermission(){
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST_CODE
+            )
+        }
+    }
+
+    private fun getCoordinates(){
+        checkGeoPermission()
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        fusedLocationClient.lastLocation.addOnSuccessListener(this) { location ->
+            location?.let {
+                edit_text_coordinates.setText("${it.latitude}, ${it.longitude} (${it.accuracy}m)")
+            }
+        }
+
     }
 
     private fun getStringOrNull(text: Editable?): String? {
