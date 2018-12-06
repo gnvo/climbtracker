@@ -196,7 +196,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginStart="8dp"
-                app:layout_constraintEnd_toStartOf="@+id/image_button_look_for_coordinates"
+                app:layout_constraintEnd_toStartOf="@+id/location_button_container"
                 android:layout_marginEnd="8dp">
 
             <android.support.design.widget.TextInputEditText
@@ -209,15 +209,29 @@
                     android:inputType="number|numberSigned|numberDecimal"/>
         </android.support.design.widget.TextInputLayout>
 
-        <ImageButton
-                android:src="@drawable/ic_location_searching"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/image_button_look_for_coordinates"
+        <LinearLayout
+                android:id="@+id/location_button_container"
                 android:layout_marginEnd="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/til_coordinates"
-                app:layout_constraintBottom_toBottomOf="@+id/til_coordinates"/>
+                app:layout_constraintBottom_toBottomOf="@+id/til_coordinates"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            <ImageButton
+                    android:src="@drawable/ic_location_searching"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/image_button_look_for_coordinates"/>
+
+            <ProgressBar
+                    android:id="@+id/progress_bar_location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:layout_centerInParent="true"/>
+
+        </LinearLayout>
 
 
         <android.support.design.widget.TextInputLayout

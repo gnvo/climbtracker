@@ -13,9 +13,9 @@ import android.support.v7.widget.RecyclerView
 import android.text.Editable
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.*
 import kotlinx.android.synthetic.main.activity_add_update_attempt.*
 import org.gnvo.climb.tracking.climbtracker.R
 import org.gnvo.climb.tracking.climbtracker.data.room.pojo.Attempt
@@ -41,7 +41,11 @@ class AddEditAttemptActivity : AppCompatActivity() {
     private lateinit var viewModel: AddEditViewModel
     private var formatterDate = DateTimeFormatter.ofPattern("EEEE, d MMM yyyy")
     private var formatterTime = DateTimeFormatter.ofPattern("HH:mm:ss")
+
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var locationCallback: LocationCallback
+    private var locationRequest: LocationRequest? = null
+    private var locationUpdateState = false
 
     private var attemptIdFromIntentExtra: Long = INVALID_ID
 
@@ -91,8 +95,9 @@ class AddEditAttemptActivity : AppCompatActivity() {
             resources.getStringArray(R.array.route_characteristic).toCollection(ArrayList())
         )
 
+        prepareGeo()
         image_button_look_for_coordinates.setOnClickListener {
-            getCoordinates()
+            createLocationRequest()
         }
     }
 
@@ -313,27 +318,82 @@ class AddEditAttemptActivity : AppCompatActivity() {
         return Pair(matchResult?.groups?.get(1), matchResult?.groups?.get(2))
     }
 
-    private fun checkGeoPermission() {
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                android.Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST_CODE
-            )
+    private fun prepareGeo() {
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
+        locationCallback = object : LocationCallback() {
+            override fun onLocationResult(p0: LocationResult) {
+                super.onLocationResult(p0)
+
+                if (p0.lastLocation.accuracy < 15) { //accuracy < 10mts
+                    edit_text_coordinates.setText(
+                        getString(
+                            R.string.coordinates_format,
+                            p0.lastLocation.latitude,
+                            p0.lastLocation.longitude
+                        )
+                    )
+                    Toast.makeText(
+                        this@AddEditAttemptActivity,
+                        "Coordinates accuracy: ${p0.lastLocation.accuracy}mts.",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    stopLocationUpdates()
+                    locationUpdateState = false
+                }
+            }
         }
     }
 
-    private fun getCoordinates() {
-        checkGeoPermission()
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        fusedLocationClient.lastLocation.addOnSuccessListener(this) { location ->
-            location?.let {
-                edit_text_coordinates.setText(getString(R.string.coordinates_format, it.latitude, it.longitude))
-                Toast.makeText(this, "Coordinates accuracy: ${it.accuracy}mts.", Toast.LENGTH_LONG).show()
-            }
+    private fun createLocationRequest() {
+        locationRequest = LocationRequest()
+        locationRequest!!.interval = 10000
+        locationRequest!!.fastestInterval = 5000
+        locationRequest!!.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+
+        val builder = LocationSettingsRequest.Builder()
+            .addLocationRequest(locationRequest!!)
+        val client = LocationServices.getSettingsClient(this)
+        val task = client.checkLocationSettings(builder.build())
+
+        task.addOnSuccessListener {
+            locationUpdateState = true
+            startLocationUpdates()
+        }
+        task.addOnFailureListener { e ->
+            Toast.makeText(this, "Could not get location from GPS on device. Make sure GPS and mobile network are enabled, also to improve precision move the phone some meters to improve the accuracy", Toast.LENGTH_LONG).show()
+        }
+    }
+
+    private fun startLocationUpdates() {
+        image_button_look_for_coordinates.visibility = View.GONE
+        progress_bar_location.visibility = View.VISIBLE
+
+        if (ActivityCompat.checkSelfPermission(this,
+                android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
+                LOCATION_PERMISSION_REQUEST_CODE)
+            return
+        }
+        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null /* Looper */)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        stopLocationUpdates()
+    }
+
+    private fun stopLocationUpdates() {
+        fusedLocationClient.removeLocationUpdates(locationCallback)
+        image_button_look_for_coordinates.visibility = View.VISIBLE
+        progress_bar_location.visibility = View.GONE
+    }
+
+    public override fun onResume() {
+        super.onResume()
+        if (locationUpdateState) {
+            startLocationUpdates()
         }
     }
 
