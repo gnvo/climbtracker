@@ -295,14 +295,18 @@ class AddEditAttemptActivity : AppCompatActivity() {
             routeGrade = routeGradeId,
             outcome = outcome
         )
-//        val location = Location()
+        val area = edit_text_area.text
+        if (!area.isNullOrEmpty()) {
+            val location = Location(area = edit_text_area.text.toString())
+            location.sector = getStringOrNull(edit_text_sector.text)
+            location.latitude = latitude?.value?.toDouble()
+            location.longitude = longitude?.value?.toDouble()
+            Log.d("gnvog", "location: $location")
+        }
 
         attempt.routeName = getStringOrNull(edit_text_route_name.text)
         attempt.length = getStringOrNull(edit_text_length.text)?.toInt()
-//        location!!.area = getStringOrNull(edit_text_area.text)
-//        location!!.sector = getStringOrNull(edit_text_sector.text)
-//        location!!.latitude = latitude?.value?.toDouble()
-//        location!!.longitude = longitude?.value?.toDouble()
+
         attempt.comment = getStringOrNull(edit_text_comment.text)
         attempt.routeCharacteristics =
                 (recycler_view_route_characteristics.adapter as GenericAdapterMultipleSelection<String>).getSelected()
