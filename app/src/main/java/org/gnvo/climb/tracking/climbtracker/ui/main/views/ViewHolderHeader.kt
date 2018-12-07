@@ -5,7 +5,7 @@ import kotlinx.android.synthetic.main.attempt_header.view.*
 import org.gnvo.climb.tracking.climbtracker.data.room.pojo.AttemptHeader
 import org.gnvo.climb.tracking.climbtracker.data.room.pojo.AttemptListItem
 import org.gnvo.climb.tracking.climbtracker.ui.main.views.adapter.EntryAdapter
-import java.time.format.DateTimeFormatter
+import org.threeten.bp.format.DateTimeFormatter
 
 class ViewHolderHeader(itemView: View) : ViewHolder(itemView) {
     private var formatter = DateTimeFormatter.ofPattern("EEEE, yyyy/MM/dd")

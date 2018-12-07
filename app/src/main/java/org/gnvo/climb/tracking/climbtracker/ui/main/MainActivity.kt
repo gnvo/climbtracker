@@ -20,7 +20,7 @@ import org.gnvo.climb.tracking.climbtracker.ui.addeditentry.AddEditAttemptActivi
 import org.gnvo.climb.tracking.climbtracker.ui.main.views.ViewHolderHeader
 import org.gnvo.climb.tracking.climbtracker.ui.main.views.adapter.EntryAdapter
 import org.jetbrains.anko.doAsync
-import java.time.LocalDate
+import org.threeten.bp.LocalDate
 
 class MainActivity : AppCompatActivity() {
 

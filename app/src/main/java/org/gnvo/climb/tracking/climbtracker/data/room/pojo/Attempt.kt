@@ -1,7 +1,7 @@
 package org.gnvo.climb.tracking.climbtracker.data.room.pojo
 
 import android.arch.persistence.room.*
-import java.time.LocalDateTime
+import org.threeten.bp.LocalDateTime
 
 @Entity(
     tableName = "attempt",

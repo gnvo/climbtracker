@@ -5,7 +5,7 @@ import kotlinx.android.synthetic.main.attempt_item.view.*
 import org.gnvo.climb.tracking.climbtracker.data.room.pojo.AttemptListItem
 import org.gnvo.climb.tracking.climbtracker.data.room.pojo.AttemptWithGrades
 import org.gnvo.climb.tracking.climbtracker.ui.main.views.adapter.EntryAdapter
-import java.time.format.DateTimeFormatter
+import org.threeten.bp.format.DateTimeFormatter
 import java.util.*
 
 class ViewHolderAttempt(itemView: View) : ViewHolder(itemView) {

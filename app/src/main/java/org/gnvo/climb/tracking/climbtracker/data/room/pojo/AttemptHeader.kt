@@ -1,6 +1,6 @@
 package org.gnvo.climb.tracking.climbtracker.data.room.pojo
 
-import java.time.LocalDate
+import org.threeten.bp.LocalDate
 
 class AttemptHeader (
     val date: LocalDate

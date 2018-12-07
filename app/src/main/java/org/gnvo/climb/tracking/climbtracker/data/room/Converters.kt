@@ -3,9 +3,9 @@ package org.gnvo.climb.tracking.climbtracker.data.room
 import android.arch.persistence.room.TypeConverter
 import com.google.gson.reflect.TypeToken
 import com.google.gson.Gson
-import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneOffset
+import org.threeten.bp.Instant
+import org.threeten.bp.LocalDateTime
+import org.threeten.bp.ZoneOffset
 
 class Converters {
     @TypeConverter
