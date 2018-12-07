@@ -7,7 +7,8 @@ import java.time.LocalDateTime
     tableName = "attempt",
     foreignKeys = [
         ForeignKey(entity = RouteGrade::class, parentColumns = ["route_grade_id"], childColumns = ["route_grade"])
-    ]
+    ],
+    indices = [Index(value = ["route_grade"])]
 )
 data class Attempt(
     @PrimaryKey(autoGenerate = true) var id: Long? = null,
