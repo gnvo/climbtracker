@@ -2,9 +2,10 @@ package org.gnvo.climb.tracking.climbtracker.data.room.pojo
 
 import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
+import android.arch.persistence.room.Index
 import android.arch.persistence.room.PrimaryKey
 
-@Entity(tableName = "location")
+@Entity(tableName = "location", indices = [Index(value = ["area", "sector"], unique = true)])
 class Location (
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "location_id") var locationId: Long? = null,
     var area: String,
