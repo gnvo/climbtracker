@@ -6,7 +6,8 @@ import java.time.LocalDateTime
 @Entity(
     tableName = "attempt",
     foreignKeys = [
-        ForeignKey(entity = RouteGrade::class, parentColumns = ["route_grade_id"], childColumns = ["route_grade"])
+        ForeignKey(entity = RouteGrade::class, parentColumns = ["route_grade_id"], childColumns = ["route_grade"]),
+        ForeignKey(entity = Location::class, parentColumns = ["location_id"], childColumns = ["location"])
     ],
     indices = [Index(value = ["route_grade"])]
 )
