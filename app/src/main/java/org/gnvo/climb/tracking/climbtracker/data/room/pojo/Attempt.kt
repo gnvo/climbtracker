@@ -25,7 +25,7 @@ data class Attempt(
 
     var length: Int? = null,
 
-    @Embedded var location: Location? = null
+    var location: Long? = null
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

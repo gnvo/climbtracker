@@ -208,10 +208,10 @@ class AddEditAttemptActivity : AppCompatActivity() {
 
                 edit_text_route_name.setText(attemptWithGrades.attempt.routeName)
                 edit_text_length.setText(attemptWithGrades.attempt.length?.toString())
-                edit_text_area.setText(attemptWithGrades.attempt.location?.area)
-                edit_text_sector.setText(attemptWithGrades.attempt.location?.sector)
-                if (attemptWithGrades.attempt.location?.latitude != null && attemptWithGrades.attempt.location?.longitude != null)
-                    edit_text_coordinates.setText(getString(R.string.coordinates_format, attemptWithGrades.attempt.location?.latitude, attemptWithGrades.attempt.location?.longitude))
+                edit_text_area.setText(attemptWithGrades.location?.area)
+                edit_text_sector.setText(attemptWithGrades.location?.sector)
+                if (attemptWithGrades.location?.latitude != null && attemptWithGrades.location.longitude != null)
+                    edit_text_coordinates.setText(getString(R.string.coordinates_format, attemptWithGrades.location.latitude, attemptWithGrades.location.longitude))
                 edit_text_comment.setText(attemptWithGrades.attempt.comment)
 
                 rating_bar_rating.rating = attemptWithGrades.attempt.rating?.toFloat() ?: 0f
@@ -232,8 +232,8 @@ class AddEditAttemptActivity : AppCompatActivity() {
                     attemptWithGrades?.attempt?.routeType
                 )
 
-                edit_text_area.setText(attemptWithGrades?.attempt?.location?.area)
-                edit_text_sector.setText(attemptWithGrades?.attempt?.location?.sector)
+                edit_text_area.setText(attemptWithGrades?.location?.area)
+                edit_text_sector.setText(attemptWithGrades?.location?.sector)
             }
             )
     }
@@ -293,16 +293,16 @@ class AddEditAttemptActivity : AppCompatActivity() {
             routeType = routeType,
             climbStyle = climbStyle,
             routeGrade = routeGradeId,
-            outcome = outcome,
-            location = Location()
+            outcome = outcome
         )
+//        val location = Location()
 
         attempt.routeName = getStringOrNull(edit_text_route_name.text)
         attempt.length = getStringOrNull(edit_text_length.text)?.toInt()
-        attempt.location!!.area = getStringOrNull(edit_text_area.text)
-        attempt.location!!.sector = getStringOrNull(edit_text_sector.text)
-        attempt.location!!.latitude = latitude?.value?.toDouble()
-        attempt.location!!.longitude = longitude?.value?.toDouble()
+//        location!!.area = getStringOrNull(edit_text_area.text)
+//        location!!.sector = getStringOrNull(edit_text_sector.text)
+//        location!!.latitude = latitude?.value?.toDouble()
+//        location!!.longitude = longitude?.value?.toDouble()
         attempt.comment = getStringOrNull(edit_text_comment.text)
         attempt.routeCharacteristics =
                 (recycler_view_route_characteristics.adapter as GenericAdapterMultipleSelection<String>).getSelected()
@@ -361,7 +361,7 @@ class AddEditAttemptActivity : AppCompatActivity() {
             startLocationUpdates()
         }
         task.addOnFailureListener { e ->
-            Toast.makeText(this, "Could not get location from GPS on device. Make sure GPS and mobile network are enabled, also to improve precision move the phone some meters to improve the accuracy", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Could not get location from GPS on device. Make sure GPS and mobile network are enabled, also to improve precision move the phone some meters to improve the accuracy. Error: $e", Toast.LENGTH_LONG).show()
         }
     }
 

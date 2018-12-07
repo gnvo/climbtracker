@@ -25,8 +25,8 @@ class ViewHolderAttempt(itemView: View) : ViewHolder(itemView) {
 
             attempt.routeName?.let { listOfDetails.add(it) }
             attempt.length?.let { listOfDetails.add(it.toString() + "mts") }
-            attempt.location?.area?.let { listOfDetails.add(it) }
-            attempt.location?.sector?.let { listOfDetails.add(it) }
+            item.location?.area?.let { listOfDetails.add(it) }
+            item.location?.sector?.let { listOfDetails.add(it) }
             item.attempt.routeCharacteristics?.let { listOfDetails.add(it.joinToString("/")) }
             attempt.rating?.let { listOfDetails.add("rating:" + it.toString() + "/5") }
 
