@@ -19,17 +19,13 @@ import android.widget.Toast
 import com.google.android.gms.location.*
 import kotlinx.android.synthetic.main.activity_add_update_attempt.*
 import org.gnvo.climb.tracking.climbtracker.R
-import org.gnvo.climb.tracking.climbtracker.data.room.pojo.Attempt
-import org.gnvo.climb.tracking.climbtracker.data.room.pojo.AttemptWithGrades
-import org.gnvo.climb.tracking.climbtracker.data.room.pojo.Location
-import org.gnvo.climb.tracking.climbtracker.data.room.pojo.RouteGrade
+import org.gnvo.climb.tracking.climbtracker.data.room.pojo.*
 import org.gnvo.climb.tracking.climbtracker.ui.addeditentry.adapters.GenericAdapter
 import org.gnvo.climb.tracking.climbtracker.ui.addeditentry.adapters.GenericAdapterMultipleSelection
 import org.gnvo.climb.tracking.climbtracker.ui.addeditentry.adapters.GenericAdapterSingleSelection
-import org.threeten.bp.LocalDate
-import org.threeten.bp.LocalDateTime
-import org.threeten.bp.LocalTime
+import org.threeten.bp.*
 import org.threeten.bp.format.DateTimeFormatter
+import java.util.*
 
 class AddEditAttemptActivity : AppCompatActivity() {
     companion object {
@@ -40,8 +36,8 @@ class AddEditAttemptActivity : AppCompatActivity() {
     }
 
     private lateinit var viewModel: AddEditViewModel
-    private var formatterDate = DateTimeFormatter.ofPattern("EEEE, d MMM yyyy")
-    private var formatterTime = DateTimeFormatter.ofPattern("HH:mm:ss")
+    private var formatterDateTime = DateTimeFormatter.ofPattern("EEEE, d MMM yyyy, HH:mm:ss VV")
+
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationCallback: LocationCallback
@@ -63,9 +59,10 @@ class AddEditAttemptActivity : AppCompatActivity() {
             restoreAttemptData()
         } else {
             title = getString(R.string.add_attempt)
-            val now = LocalDateTime.now()
-            button_date.text = now.format(formatterDate)
-            button_time.text = now.format(formatterTime)
+
+            val currentDateTime = ZonedDateTime.now()
+
+            button_date_time.text = formatterDateTime.format(currentDateTime)
             partiallyRestoreAttemptDataFromLastAttemptEntry()
         }
 
@@ -155,41 +152,37 @@ class AddEditAttemptActivity : AppCompatActivity() {
     }
 
     private fun setDateTimeDialogs() {
-        button_time.setOnClickListener {
-            val time = LocalTime.parse(button_time.text, formatterTime)
-            val timePickerDialog = TimePickerDialog(
+        button_date_time.setOnClickListener {
+            var zonedDateTime = ZonedDateTime.parse(button_date_time.text, formatterDateTime)
+            TimePickerDialog(
                 this,
                 TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
                     run {
-                        button_time.text = LocalTime.of(hourOfDay, minute).format(formatterTime)
+                        zonedDateTime = zonedDateTime.with(LocalTime.of(hourOfDay, minute))
+                        DatePickerDialog(
+                            this,
+                            DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
+                                zonedDateTime = zonedDateTime.with(LocalDate.of(year, monthOfYear + 1, dayOfMonth))
+                                button_date_time.text = formatterDateTime.format(zonedDateTime)
+                            },
+                            zonedDateTime.year,
+                            zonedDateTime.monthValue - 1,
+                            zonedDateTime.dayOfMonth
+                        ).show()
                     }
                 },
-                time.hour,
-                time.minute,
+                zonedDateTime.hour,
+                zonedDateTime.minute,
                 false
-            )
-            timePickerDialog.show()
-        }
-        button_date.setOnClickListener {
-            val date = LocalDate.parse(button_date.text, formatterDate)
-            val datePickerDialog = DatePickerDialog(
-                this,
-                DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
-                    button_date.text = LocalDate.of(year, monthOfYear + 1, dayOfMonth).format(formatterDate)
-                },
-                date.year,
-                date.monthValue - 1,
-                date.dayOfMonth
-            )
-            datePickerDialog.show()
+            ).show()
         }
     }
 
     private fun restoreAttemptData() {
         viewModel.getAttemptWithGradesById(attemptIdFromIntentExtra)
             .observe(this, Observer { attemptWithGrades: AttemptWithGrades? ->
-                button_date.text = attemptWithGrades?.attempt?.datetime!!.format(formatterDate)
-                button_time.text = attemptWithGrades.attempt.datetime.format(formatterTime)
+                val storedZonedDateTime = attemptWithGrades!!.attempt.instantAndZoneId.instant.atZone(attemptWithGrades.attempt.instantAndZoneId.zoneId)
+                button_date_time.text = formatterDateTime.format(storedZonedDateTime)
 
                 (recycler_view_climb_style.adapter as GenericAdapterSingleSelection<String>).setSelected(
                     attemptWithGrades.attempt.climbStyle
@@ -256,9 +249,7 @@ class AddEditAttemptActivity : AppCompatActivity() {
     }
 
     private fun generateAttempt(): Attempt? {
-        val date = LocalDate.parse(button_date.text, formatterDate)
-        val time = LocalTime.parse(button_time.text, formatterTime)
-        val datetime = date.atTime(time)
+        val zonedDateTime = ZonedDateTime.parse(button_date_time.text, formatterDateTime)
 
         val climbStyle =
             (recycler_view_climb_style.adapter as GenericAdapterSingleSelection<String>).getSelected()
@@ -290,7 +281,7 @@ class AddEditAttemptActivity : AppCompatActivity() {
         val (latitude, longitude) = extractCoordinates()
 
         val attempt = Attempt(
-            datetime = datetime,
+            instantAndZoneId = InstantAndZoneId(zonedDateTime.toInstant(), zonedDateTime.zone),
             routeType = routeType,
             climbStyle = climbStyle,
             routeGrade = routeGradeId,
@@ -366,7 +357,11 @@ class AddEditAttemptActivity : AppCompatActivity() {
             startLocationUpdates()
         }
         task.addOnFailureListener { e ->
-            Toast.makeText(this, "Could not get location from GPS on device. Make sure GPS and mobile network are enabled, also to improve precision move the phone some meters to improve the accuracy. Error: $e", Toast.LENGTH_LONG).show()
+            Toast.makeText(
+                this,
+                "Could not get location from GPS on device. Make sure GPS and mobile network are enabled, also to improve precision move the phone some meters to improve the accuracy",
+                Toast.LENGTH_LONG
+            ).show()
         }
     }
 
@@ -374,11 +369,16 @@ class AddEditAttemptActivity : AppCompatActivity() {
         image_button_look_for_coordinates.visibility = View.GONE
         progress_bar_location.visibility = View.VISIBLE
 
-        if (ActivityCompat.checkSelfPermission(this,
-                android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
                 arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
-                LOCATION_PERMISSION_REQUEST_CODE)
+                LOCATION_PERMISSION_REQUEST_CODE
+            )
             return
         }
         fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null /* Looper */)

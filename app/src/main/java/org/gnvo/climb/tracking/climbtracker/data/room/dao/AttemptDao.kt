@@ -12,7 +12,7 @@ interface AttemptDao {
                 "FROM attempt " +
                 "INNER JOIN route_grade on route_grade.route_grade_id = attempt.route_grade " +
                 "LEFT JOIN location on location.location_id = attempt.location " +
-                "ORDER BY datetime DESC"
+                "ORDER BY attempt.instant DESC"
     )
     fun getAllWithGrades(): LiveData<List<AttemptWithGrades>>
 

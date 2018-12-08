@@ -20,11 +20,12 @@ import org.gnvo.climb.tracking.climbtracker.ui.addeditentry.AddEditAttemptActivi
 import org.gnvo.climb.tracking.climbtracker.ui.main.views.ViewHolderHeader
 import org.gnvo.climb.tracking.climbtracker.ui.main.views.adapter.EntryAdapter
 import org.jetbrains.anko.doAsync
-import org.threeten.bp.LocalDate
+import org.threeten.bp.format.DateTimeFormatter
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var viewModel: MainViewModel
+    private var formatterDate = DateTimeFormatter.ofPattern("EEEE, d MMM yyyy")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,9 +55,10 @@ class MainActivity : AppCompatActivity() {
             doAsync {
                 val list: MutableList<AttemptListItem> = mutableListOf()
                 if (it?.isNotEmpty()!!){
-                    var currentDate: LocalDate? = null
+                    var currentDate: String? = null
                     for (attemptWithGrades in it){
-                        val attemptDate = attemptWithGrades.attempt.datetime.toLocalDate()
+                        val zonedDateTime = attemptWithGrades.attempt.instantAndZoneId.instant.atZone(attemptWithGrades.attempt.instantAndZoneId.zoneId)
+                        val attemptDate = zonedDateTime.format(formatterDate)
                         if (attemptDate != currentDate)
                             list.add(AttemptHeader(date = attemptDate))
                         list.add(attemptWithGrades)

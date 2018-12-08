@@ -9,7 +9,8 @@ import org.threeten.bp.format.DateTimeFormatter
 import java.util.*
 
 class ViewHolderAttempt(itemView: View) : ViewHolder(itemView) {
-    private var formatter = DateTimeFormatter.ofPattern("EEE, yyyy/MM/dd")
+    private var formatterTime = DateTimeFormatter.ofPattern("HH:mm:ss VV")
+
 
     override fun bind(item: AttemptListItem, listener: EntryAdapter.OnItemClickListener?) {
         if (item is AttemptWithGrades) {
@@ -20,7 +21,8 @@ class ViewHolderAttempt(itemView: View) : ViewHolder(itemView) {
             val attempt = item.attempt
             val listOfDetails = LinkedList<String>()
 
-            listOfDetails.add(attempt.datetime.format(formatter))
+            val zonedDateTime = attempt.instantAndZoneId.instant.atZone(attempt.instantAndZoneId.zoneId)
+            listOfDetails.add(zonedDateTime.format(formatterTime))
             listOfDetails.add(item.attempt.routeType)
 
             attempt.routeName?.let { listOfDetails.add(it) }

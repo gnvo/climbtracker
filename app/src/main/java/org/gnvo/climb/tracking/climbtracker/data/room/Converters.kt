@@ -4,18 +4,27 @@ import android.arch.persistence.room.TypeConverter
 import com.google.gson.reflect.TypeToken
 import com.google.gson.Gson
 import org.threeten.bp.Instant
-import org.threeten.bp.LocalDateTime
-import org.threeten.bp.ZoneOffset
+import org.threeten.bp.ZoneId
 
 class Converters {
     @TypeConverter
-    fun fromTimestamp(value: Long?): LocalDateTime? {
-        return value?.let { LocalDateTime.ofInstant(Instant.ofEpochMilli(value), ZoneOffset.UTC) }
+    fun fromTimestamp(timestamp: Long?): Instant? {
+        return timestamp?.let { Instant.ofEpochMilli(timestamp) }
     }
 
     @TypeConverter
-    fun dateToTimestamp(date: LocalDateTime?): Long? {
-        return date?.atZone(ZoneOffset.UTC)?.toInstant()?.toEpochMilli()
+    fun instantToTimestamp(instant: Instant?): Long? {
+        return instant?.toEpochMilli()
+    }
+
+    @TypeConverter
+    fun fromZoneId(zoneId: String?): ZoneId? {
+        return zoneId?.let { ZoneId.of(it) }
+    }
+
+    @TypeConverter
+    fun toZoneId(zoneId: ZoneId?): String? {
+        return zoneId?.toString()
     }
 
     @TypeConverter
