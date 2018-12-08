@@ -197,9 +197,9 @@ class AddEditAttemptActivity : AppCompatActivity() {
                     )
                 }
 
-                attemptWithGrades?.location?.let {
+                attemptWithGrades.location?.let {
                     location = it
-                    button_location.text = it?.toString()
+                    button_location.text = it.toString()
                 }
 
                 edit_text_route_name.setText(attemptWithGrades.attempt.routeName)
@@ -225,7 +225,7 @@ class AddEditAttemptActivity : AppCompatActivity() {
                 )
                 attemptWithGrades?.location?.let {
                     location = it
-                    button_location.text = it?.toString()
+                    button_location.text = it.toString()
                 }
             }
             )
