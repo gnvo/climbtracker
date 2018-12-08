@@ -352,7 +352,11 @@ class AddEditAttemptActivity : AppCompatActivity() {
             startLocationUpdates()
         }
         task.addOnFailureListener { e ->
-            Toast.makeText(this, "Could not get location from GPS on device. Make sure GPS and mobile network are enabled, also to improve precision move the phone some meters to improve the accuracy", Toast.LENGTH_LONG).show()
+            Toast.makeText(
+                this,
+                "Could not get location from GPS on device. Make sure GPS and mobile network are enabled, also to improve precision move the phone some meters to improve the accuracy",
+                Toast.LENGTH_LONG
+            ).show()
         }
     }
 
@@ -360,11 +364,16 @@ class AddEditAttemptActivity : AppCompatActivity() {
         image_button_look_for_coordinates.visibility = View.GONE
         progress_bar_location.visibility = View.VISIBLE
 
-        if (ActivityCompat.checkSelfPermission(this,
-                android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
                 arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
-                LOCATION_PERMISSION_REQUEST_CODE)
+                LOCATION_PERMISSION_REQUEST_CODE
+            )
             return
         }
         fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null /* Looper */)
