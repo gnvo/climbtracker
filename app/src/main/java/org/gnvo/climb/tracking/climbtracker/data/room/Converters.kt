@@ -28,22 +28,22 @@ class Converters {
     }
 
     @TypeConverter
-    fun fromRouteCharacteristics(routeCharacteristics: List<String>?): String? {
-        if (routeCharacteristics == null) {
+    fun fromStringList(listOfStrings: List<String>?): String? {
+        if (listOfStrings == null) {
             return null
         }
         val gson = Gson()
         val type = object : TypeToken<List<String>>() {}.type
-        return gson.toJson(routeCharacteristics, type)
+        return gson.toJson(listOfStrings, type)
     }
 
     @TypeConverter
-    fun toRouteCharacteristics(routeCharacteristicsString: String?): List<String>? {
-        if (routeCharacteristicsString == null) {
+    fun toStringList(listOfStringsAsJson: String?): List<String>? {
+        if (listOfStringsAsJson == null) {
             return null
         }
         val gson = Gson()
         val type = object : TypeToken<List<String>>() {}.type
-        return gson.fromJson(routeCharacteristicsString, type)
+        return gson.fromJson(listOfStringsAsJson, type)
     }
 }
