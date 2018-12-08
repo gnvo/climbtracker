@@ -1,7 +1,6 @@
 package org.gnvo.climb.tracking.climbtracker.data.room.pojo
 
 import android.arch.persistence.room.*
-import org.threeten.bp.LocalDateTime
 
 @Entity(
     tableName = "attempt",
@@ -17,7 +16,7 @@ data class Attempt(
     @ColumnInfo(name = "route_grade") var routeGrade: Long,
     @ColumnInfo(name = "route_type") var routeType: String,
 
-    var datetime: LocalDateTime,
+    @Embedded var instantAndZoneId: InstantAndZoneId,
     @ColumnInfo(name = "route_name") var routeName: String? = null,
     var comment: String? = null,
     var rating: Int? = null,
@@ -37,7 +36,7 @@ data class Attempt(
         if (outcome != other.outcome) return false
         if (routeGrade != other.routeGrade) return false
         if (routeType != other.routeType) return false
-        if (datetime != other.datetime) return false
+        if (instantAndZoneId != other.instantAndZoneId) return false
         if (routeName != other.routeName) return false
         if (comment != other.comment) return false
         if (rating != other.rating) return false
@@ -53,7 +52,7 @@ data class Attempt(
         result = 31 * result + outcome.hashCode()
         result = 31 * result + routeGrade.hashCode()
         result = 31 * result + routeType.hashCode()
-        result = 31 * result + datetime.hashCode()
+        result = 31 * result + instantAndZoneId.hashCode()
         result = 31 * result + (routeName?.hashCode() ?: 0)
         result = 31 * result + (comment?.hashCode() ?: 0)
         result = 31 * result + (rating ?: 0)

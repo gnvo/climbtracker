@@ -1,9 +1,7 @@
 package org.gnvo.climb.tracking.climbtracker.data.room.pojo
 
-import org.threeten.bp.LocalDate
-
 class AttemptHeader (
-    val date: LocalDate
+    val date: String
 ) : AttemptListItem() {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

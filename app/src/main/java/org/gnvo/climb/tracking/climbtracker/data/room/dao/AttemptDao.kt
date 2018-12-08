@@ -11,7 +11,7 @@ interface AttemptDao {
         "SELECT * " +
                 "FROM attempt " +
                 "INNER JOIN route_grade on route_grade.route_grade_id = attempt.route_grade " +
-                "ORDER BY datetime DESC"
+                "ORDER BY attempt.instant DESC"
     )
     fun getAllWithGrades(): LiveData<List<AttemptWithGrades>>
 
