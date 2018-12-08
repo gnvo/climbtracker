@@ -181,7 +181,8 @@ class AddEditAttemptActivity : AppCompatActivity() {
     private fun restoreAttemptData() {
         viewModel.getAttemptWithGradesById(attemptIdFromIntentExtra)
             .observe(this, Observer { attemptWithGrades: AttemptWithGrades? ->
-                val storedZonedDateTime = attemptWithGrades!!.attempt.instantAndZoneId.instant.atZone(attemptWithGrades.attempt.instantAndZoneId.zoneId)
+                val storedZonedDateTime =
+                    attemptWithGrades!!.attempt.instantAndZoneId.instant.atZone(attemptWithGrades.attempt.instantAndZoneId.zoneId)
                 button_date_time.text = formatterDateTime.format(storedZonedDateTime)
 
                 (recycler_view_climb_style.adapter as GenericAdapterSingleSelection<String>).setSelected(
@@ -205,7 +206,13 @@ class AddEditAttemptActivity : AppCompatActivity() {
                 edit_text_area.setText(attemptWithGrades.location?.area)
                 edit_text_sector.setText(attemptWithGrades.location?.sector)
                 if (attemptWithGrades.location?.latitude != null && attemptWithGrades.location.longitude != null)
-                    edit_text_coordinates.setText(getString(R.string.coordinates_format, attemptWithGrades.location.latitude, attemptWithGrades.location.longitude))
+                    edit_text_coordinates.setText(
+                        getString(
+                            R.string.coordinates_format,
+                            attemptWithGrades.location.latitude,
+                            attemptWithGrades.location.longitude
+                        )
+                    )
                 edit_text_comment.setText(attemptWithGrades.attempt.comment)
 
                 rating_bar_rating.rating = attemptWithGrades.attempt.rating?.toFloat() ?: 0f
