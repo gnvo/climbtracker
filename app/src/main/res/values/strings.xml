@@ -12,6 +12,10 @@
     <string name="max_message">(%1$s)</string>
     <string name="coordinates_format">%1$f, %2$f</string>
     <string name="length">Length in meters</string>
+    <string name="location">Location</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="create">Create</string>
 
     <string-array name="route_type">
         <item>Trad</item>

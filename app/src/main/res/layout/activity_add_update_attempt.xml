@@ -141,94 +141,21 @@
                     android:id="@+id/edit_text_length"/>
         </android.support.design.widget.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
-                android:id="@+id/til_area"
+        <Button
+                android:id="@+id/button_location"
                 app:layout_constraintTop_toBottomOf="@+id/til_length"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                android:text="@string/location"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp">
-
-            <android.support.design.widget.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="text"
-                    android:hint="@string/area"
-                    android:ems="10"
-                    android:id="@+id/edit_text_area"/>
-        </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
-                android:id="@+id/til_sector"
-                app:layout_constraintTop_toBottomOf="@+id/til_area"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp">
-            <android.support.design.widget.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="text"
-                    android:hint="@string/sector"
-                    android:ems="10"
-                    android:id="@+id/edit_text_sector"/>
-        </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
-                android:id="@+id/til_coordinates"
-                app:layout_constraintTop_toBottomOf="@+id/til_sector"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginStart="8dp"
-                app:layout_constraintEnd_toStartOf="@+id/location_button_container"
-                android:layout_marginEnd="8dp">
-
-            <android.support.design.widget.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:digits=",.1234567890"
-                    android:hint="@string/coordinates"
-                    android:ems="10"
-                    android:id="@+id/edit_text_coordinates"
-                    android:inputType="number|numberSigned|numberDecimal"/>
-        </android.support.design.widget.TextInputLayout>
-
-        <LinearLayout
-                android:id="@+id/location_button_container"
-                android:layout_marginEnd="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/til_coordinates"
-                app:layout_constraintBottom_toBottomOf="@+id/til_coordinates"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-            <ImageButton
-                    android:src="@drawable/ic_location_searching"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/image_button_look_for_coordinates"/>
-
-            <ProgressBar
-                    android:id="@+id/progress_bar_location"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:visibility="gone"
-                    android:layout_centerInParent="true"/>
-
-        </LinearLayout>
-
+                android:layout_marginEnd="8dp"/>
 
         <android.support.design.widget.TextInputLayout
                 android:id="@+id/til_comment"
-                app:layout_constraintTop_toBottomOf="@+id/til_coordinates"
+                app:layout_constraintTop_toBottomOf="@+id/button_location"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_width="0dp"

@@ -6,14 +6,14 @@ import android.arch.persistence.room.Index
 import android.arch.persistence.room.PrimaryKey
 
 @Entity(tableName = "location", indices = [Index(value = ["area", "sector"], unique = true)])
-class Location (
+class Location(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "location_id") var locationId: Long? = null,
     var area: String,
     var latitude: Double? = null,
     var longitude: Double? = null,
-    @ColumnInfo(name = "rock_type") var rockType: String? = null,
+    @ColumnInfo(name = "rock_type") var rockType: List<String>? = null,
     var sector: String? = null
-){
+) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -36,5 +36,15 @@ class Location (
         result = 31 * result + (rockType?.hashCode() ?: 0)
         result = 31 * result + (sector?.hashCode() ?: 0)
         return result
+    }
+
+    override fun toString(): String {
+        val sb = StringBuilder()
+        sb.append(area)
+        sector?.let { sb.append("/$it") }
+        if (latitude != null && longitude != null) {
+            sb.append(" $latitude, $longitude")
+        }
+        return sb.toString()
     }
 }

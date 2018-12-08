@@ -4,26 +4,22 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
-import android.content.pm.PackageManager
 import android.os.Bundle
-import android.support.v4.app.ActivityCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.text.Editable
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.Toast
-import com.google.android.gms.location.*
 import kotlinx.android.synthetic.main.activity_add_update_attempt.*
 import org.gnvo.climb.tracking.climbtracker.R
 import org.gnvo.climb.tracking.climbtracker.data.room.pojo.*
 import org.gnvo.climb.tracking.climbtracker.ui.addeditentry.adapters.GenericAdapter
 import org.gnvo.climb.tracking.climbtracker.ui.addeditentry.adapters.GenericAdapterMultipleSelection
 import org.gnvo.climb.tracking.climbtracker.ui.addeditentry.adapters.GenericAdapterSingleSelection
-import org.threeten.bp.*
+import org.threeten.bp.LocalDate
+import org.threeten.bp.LocalTime
+import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import java.util.*
 
@@ -31,20 +27,14 @@ class AddEditAttemptActivity : AppCompatActivity() {
     companion object {
         const val EXTRA_ID: String = "org.gnvo.climb.tracking.climbtracker.ui.addeditentry.EXTRA_ID"
         const val INVALID_ID: Long = -1
-        private const val LOCATION_PERMISSION_REQUEST_CODE = 1
-        val regexLocationExtractor = """([+-]?(?:[0-9]*[.])?[0-9]+)\s*,\s*([+-]?(?:[0-9]*[.])?[0-9]+)""".toRegex()
     }
 
     private lateinit var viewModel: AddEditViewModel
     private var formatterDateTime = DateTimeFormatter.ofPattern("EEEE, d MMM yyyy, HH:mm:ss VV")
 
-
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private lateinit var locationCallback: LocationCallback
-    private var locationRequest: LocationRequest? = null
-    private var locationUpdateState = false
-
     private var attemptIdFromIntentExtra: Long = INVALID_ID
+
+    private var location: Location? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -93,9 +83,15 @@ class AddEditAttemptActivity : AppCompatActivity() {
             resources.getStringArray(R.array.route_characteristic).toCollection(ArrayList())
         )
 
-        prepareGeo()
-        image_button_look_for_coordinates.setOnClickListener {
-            createLocationRequest()
+        button_location.setOnClickListener {
+            val dialog = DialogLocationFragment()
+            dialog.show(supportFragmentManager, "DialogLocation")
+            dialog.setDialogLocationListener(object : DialogLocationFragment.DialogLocationListener {
+                override fun onDialogPositiveClick(location: Location?) {
+                    this@AddEditAttemptActivity.location = location
+                    button_location.text = location.toString()
+                }
+            })
         }
     }
 
@@ -203,16 +199,6 @@ class AddEditAttemptActivity : AppCompatActivity() {
 
                 edit_text_route_name.setText(attemptWithGrades.attempt.routeName)
                 edit_text_length.setText(attemptWithGrades.attempt.length?.toString())
-                edit_text_area.setText(attemptWithGrades.location?.area)
-                edit_text_sector.setText(attemptWithGrades.location?.sector)
-                if (attemptWithGrades.location?.latitude != null && attemptWithGrades.location.longitude != null)
-                    edit_text_coordinates.setText(
-                        getString(
-                            R.string.coordinates_format,
-                            attemptWithGrades.location.latitude,
-                            attemptWithGrades.location.longitude
-                        )
-                    )
                 edit_text_comment.setText(attemptWithGrades.attempt.comment)
 
                 rating_bar_rating.rating = attemptWithGrades.attempt.rating?.toFloat() ?: 0f
@@ -233,8 +219,8 @@ class AddEditAttemptActivity : AppCompatActivity() {
                     attemptWithGrades?.attempt?.routeType
                 )
 
-                edit_text_area.setText(attemptWithGrades?.location?.area)
-                edit_text_sector.setText(attemptWithGrades?.location?.sector)
+//                edit_text_area.setText(attemptWithGrades?.location?.area)
+//                edit_text_sector.setText(attemptWithGrades?.location?.sector)
             }
             )
     }
@@ -285,8 +271,6 @@ class AddEditAttemptActivity : AppCompatActivity() {
             return null
         }
 
-        val (latitude, longitude) = extractCoordinates()
-
         val attempt = Attempt(
             instantAndZoneId = InstantAndZoneId(zonedDateTime.toInstant(), zonedDateTime.zone),
             routeType = routeType,
@@ -294,19 +278,11 @@ class AddEditAttemptActivity : AppCompatActivity() {
             routeGrade = routeGradeId,
             outcome = outcome
         )
-        val area = edit_text_area.text
-        if (!area.isNullOrEmpty()) {
-            val location = Location(area = edit_text_area.text.toString())
-            location.sector = getStringOrNull(edit_text_sector.text)
-            location.latitude = latitude?.value?.toDouble()
-            location.longitude = longitude?.value?.toDouble()
-            Log.d("gnvog", "location: $location")
-        }
 
-        attempt.routeName = getStringOrNull(edit_text_route_name.text)
-        attempt.length = getStringOrNull(edit_text_length.text)?.toInt()
+        attempt.routeName = Utils.getStringOrNull(edit_text_route_name.text)
+        attempt.length = Utils.getStringOrNull(edit_text_length.text)?.toInt()
 
-        attempt.comment = getStringOrNull(edit_text_comment.text)
+        attempt.comment = Utils.getStringOrNull(edit_text_comment.text)
         attempt.routeCharacteristics =
                 (recycler_view_route_characteristics.adapter as GenericAdapterMultipleSelection<String>).getSelected()
 
@@ -314,106 +290,6 @@ class AddEditAttemptActivity : AppCompatActivity() {
             attempt.rating = rating_bar_rating.rating.toInt()
 
         return attempt
-    }
-
-    private fun extractCoordinates(): Pair<MatchGroup?, MatchGroup?> {
-        val matchResult = regexLocationExtractor.find(edit_text_coordinates.text.toString())
-        return Pair(matchResult?.groups?.get(1), matchResult?.groups?.get(2))
-    }
-
-    private fun prepareGeo() {
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-
-        locationCallback = object : LocationCallback() {
-            override fun onLocationResult(p0: LocationResult) {
-                super.onLocationResult(p0)
-
-                if (p0.lastLocation.accuracy < 15) { //accuracy < 10mts
-                    edit_text_coordinates.setText(
-                        getString(
-                            R.string.coordinates_format,
-                            p0.lastLocation.latitude,
-                            p0.lastLocation.longitude
-                        )
-                    )
-                    Toast.makeText(
-                        this@AddEditAttemptActivity,
-                        "Coordinates accuracy: ${p0.lastLocation.accuracy}mts.",
-                        Toast.LENGTH_LONG
-                    ).show()
-                    stopLocationUpdates()
-                    locationUpdateState = false
-                }
-            }
-        }
-    }
-
-    private fun createLocationRequest() {
-        locationRequest = LocationRequest()
-        locationRequest!!.interval = 10000
-        locationRequest!!.fastestInterval = 5000
-        locationRequest!!.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-
-        val builder = LocationSettingsRequest.Builder()
-            .addLocationRequest(locationRequest!!)
-        val client = LocationServices.getSettingsClient(this)
-        val task = client.checkLocationSettings(builder.build())
-
-        task.addOnSuccessListener {
-            locationUpdateState = true
-            startLocationUpdates()
-        }
-        task.addOnFailureListener { e ->
-            Toast.makeText(
-                this,
-                "Could not get location from GPS on device. Make sure GPS and mobile network are enabled, also to improve precision move the phone some meters to improve the accuracy",
-                Toast.LENGTH_LONG
-            ).show()
-        }
-    }
-
-    private fun startLocationUpdates() {
-        image_button_look_for_coordinates.visibility = View.GONE
-        progress_bar_location.visibility = View.VISIBLE
-
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                android.Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
-                LOCATION_PERMISSION_REQUEST_CODE
-            )
-            return
-        }
-        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null /* Looper */)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        stopLocationUpdates()
-    }
-
-    private fun stopLocationUpdates() {
-        fusedLocationClient.removeLocationUpdates(locationCallback)
-        image_button_look_for_coordinates.visibility = View.VISIBLE
-        progress_bar_location.visibility = View.GONE
-    }
-
-    public override fun onResume() {
-        super.onResume()
-        if (locationUpdateState) {
-            startLocationUpdates()
-        }
-    }
-
-    private fun getStringOrNull(text: Editable?): String? {
-        return when {
-            text.isNullOrEmpty() -> null
-            else -> return text.toString()
-        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
