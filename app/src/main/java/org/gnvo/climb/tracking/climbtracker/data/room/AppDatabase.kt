@@ -17,6 +17,7 @@ import org.jetbrains.anko.doAsync
 abstract class AppDatabase : RoomDatabase() {
     abstract fun attemptDao(): AttemptDao
     abstract fun routeGradeDao(): RouteGradeDao
+    abstract fun locationDao(): LocationDao
 
     companion object {
         var INSTANCE: AppDatabase? = null

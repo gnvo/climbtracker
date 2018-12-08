@@ -197,6 +197,11 @@ class AddEditAttemptActivity : AppCompatActivity() {
                     )
                 }
 
+                attemptWithGrades?.location?.let {
+                    location = it
+                    button_location.text = it?.toString()
+                }
+
                 edit_text_route_name.setText(attemptWithGrades.attempt.routeName)
                 edit_text_length.setText(attemptWithGrades.attempt.length?.toString())
                 edit_text_comment.setText(attemptWithGrades.attempt.comment)
@@ -218,9 +223,10 @@ class AddEditAttemptActivity : AppCompatActivity() {
                 (recycler_view_route_type.adapter as GenericAdapterSingleSelection<String>).setSelected(
                     attemptWithGrades?.attempt?.routeType
                 )
-
-//                edit_text_area.setText(attemptWithGrades?.location?.area)
-//                edit_text_sector.setText(attemptWithGrades?.location?.sector)
+                attemptWithGrades?.location?.let {
+                    location = it
+                    button_location.text = it?.toString()
+                }
             }
             )
     }
@@ -229,12 +235,12 @@ class AddEditAttemptActivity : AppCompatActivity() {
         val attempt = generateAttempt() ?: return
         when (attemptIdFromIntentExtra) {
             INVALID_ID -> {
-                viewModel.insertAttempt(attempt)
+                viewModel.insertAttemptAndLocation(attempt, location)
                 Toast.makeText(this, "Climb attempt created", Toast.LENGTH_LONG).show()
             }
             else -> {
                 attempt.id = attemptIdFromIntentExtra
-                viewModel.updateAttempt(attempt)
+                viewModel.updateAttemptAndLocation(attempt, location)
                 Toast.makeText(this, "Climb attempt updated", Toast.LENGTH_LONG).show()
             }
         }

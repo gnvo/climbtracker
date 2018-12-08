@@ -4,21 +4,28 @@ import android.app.Application
 import android.arch.lifecycle.LiveData
 import org.gnvo.climb.tracking.climbtracker.data.room.AppDatabase
 import org.gnvo.climb.tracking.climbtracker.data.room.dao.AttemptDao
+import org.gnvo.climb.tracking.climbtracker.data.room.dao.LocationDao
 import org.gnvo.climb.tracking.climbtracker.data.room.pojo.Attempt
 import org.gnvo.climb.tracking.climbtracker.data.room.pojo.AttemptWithGrades
+import org.gnvo.climb.tracking.climbtracker.data.room.pojo.Location
 import org.jetbrains.anko.doAsync
 
 class AttemptRepository(application: Application) {
     private val db: AppDatabase? = AppDatabase.getInstance(application = application)
     private val attemptDao: AttemptDao? = db?.attemptDao()
+    private val locationDao: LocationDao? = db?.locationDao()
     private val attemptsWithGrades: LiveData<List<AttemptWithGrades>> = attemptDao?.getAllWithGrades()!!
 
     fun getAllWithGrades(): LiveData<List<AttemptWithGrades>> {
         return attemptsWithGrades
     }
 
-    fun insert(attempt: Attempt) {
+    fun insertAttemptAndLocation(attempt: Attempt, location: Location?) {
         doAsync {
+            if (location?.locationId == null){
+                location?.locationId = locationDao?.insert(location!!)
+            }
+            attempt.location = location?.locationId
             attemptDao?.insert(attempt)
         }
     }
@@ -31,8 +38,12 @@ class AttemptRepository(application: Application) {
         return attemptDao?.getLastWithGrades()!!
     }
 
-    fun update(attempt: Attempt) {
+    fun updateAttemptAndLocation(attempt: Attempt, location: Location?) {
         doAsync {
+            if (location?.locationId == null){
+                location?.locationId = locationDao?.insert(location!!)
+            }
+            attempt.location = location?.locationId
             attemptDao?.update(attempt)
         }
     }

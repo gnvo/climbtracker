@@ -10,8 +10,8 @@ class AddEditViewModel(application: Application) : AndroidViewModel(application)
     private val repositoryAttempt: AttemptRepository = AttemptRepository(application)
     private val repositoryRouteGrade: RouteGradeRepository = RouteGradeRepository(application)
 
-    fun insertAttempt(attempt: Attempt) {
-        repositoryAttempt.insert(attempt)
+    fun insertAttemptAndLocation(attempt: Attempt, location: Location?) {
+        repositoryAttempt.insertAttemptAndLocation(attempt, location)
     }
 
     fun getAllRouteGrades(): LiveData<List<RouteGrade>> {
@@ -26,7 +26,7 @@ class AddEditViewModel(application: Application) : AndroidViewModel(application)
         return repositoryAttempt.getLastAttemptWithGrades()
     }
 
-    fun updateAttempt(attempt: Attempt) {
-        repositoryAttempt.update(attempt)
+    fun updateAttemptAndLocation(attempt: Attempt, location: Location?) {
+        repositoryAttempt.updateAttemptAndLocation(attempt, location)
     }
 }

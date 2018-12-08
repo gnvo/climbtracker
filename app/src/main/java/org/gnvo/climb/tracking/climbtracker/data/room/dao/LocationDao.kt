@@ -13,7 +13,7 @@ interface LocationDao {
     fun getAll(): LiveData<List<Location>>
 
     @Insert
-    fun insert(location: Location)
+    fun insert(location: Location): Long
 
     @Update
     fun update(location: Location)
