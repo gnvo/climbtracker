@@ -135,7 +135,7 @@ class DialogLocationFragment : DialogFragment() {
         task.addOnFailureListener { e ->
             Toast.makeText(
                 activity,
-                "Could not get location from GPS on device. Make sure GPS and mobile network are enabled, also to improve precision move the phone some meters to improve the accuracy",
+                "Could not get location from GPS on device. Make sure GPS and mobile network are enabled, also to improve precision move the phone some meters to improve the accuracy. Error: $e",
                 Toast.LENGTH_LONG
             ).show()
         }
