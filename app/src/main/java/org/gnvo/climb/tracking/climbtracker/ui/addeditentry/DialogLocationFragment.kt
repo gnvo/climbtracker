@@ -46,6 +46,10 @@ class DialogLocationFragment : DialogFragment() {
             // Pass null as the parent view because its going in the dialog layout
             val dialogView = it.layoutInflater.inflate(R.layout.dialog_location, null)
 
+            imageButtonLookForCoordinates = dialogView.image_button_look_for_coordinates
+            progressBarLocation = dialogView.progress_bar_location
+            editTextCoordinates = dialogView.edit_text_coordinates
+
             builder.setView(dialogView)
                 .setTitle("Title")
                 .setPositiveButton(
@@ -55,7 +59,7 @@ class DialogLocationFragment : DialogFragment() {
                     val area = dialogView.edit_text_area.text
                     val location = if (!area.isNullOrEmpty()) {
                         val location = Location(area = area.toString())
-                        val (latitude, longitude) = extractCoordinates(dialogView.edit_text_coordinates)
+                        val (latitude, longitude) = extractCoordinates()
                         location.sector = Utils.getStringOrNull(dialogView.edit_text_sector.text)
                         location.latitude = latitude?.value?.toDouble()
                         location.longitude = longitude?.value?.toDouble()
@@ -67,10 +71,6 @@ class DialogLocationFragment : DialogFragment() {
                     R.string.cancel
                     , null
                 )
-
-            imageButtonLookForCoordinates = dialogView.image_button_look_for_coordinates
-            progressBarLocation = dialogView.progress_bar_location
-            editTextCoordinates = dialogView.edit_text_coordinates
 
             prepareGeo()
             imageButtonLookForCoordinates.setOnClickListener {
@@ -84,7 +84,7 @@ class DialogLocationFragment : DialogFragment() {
         return dialog
     }
 
-    private fun extractCoordinates(editTextCoordinates: TextInputEditText): Pair<MatchGroup?, MatchGroup?> {
+    private fun extractCoordinates(): Pair<MatchGroup?, MatchGroup?> {
         val matchResult = regexLocationExtractor.find(editTextCoordinates.text.toString())
         return Pair(matchResult?.groups?.get(1), matchResult?.groups?.get(2))
     }
