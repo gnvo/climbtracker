@@ -29,4 +29,8 @@ class AddEditViewModel(application: Application) : AndroidViewModel(application)
     fun updateAttemptAndLocation(attempt: Attempt, location: Location?) {
         repositoryAttempt.updateAttemptAndLocation(attempt, location)
     }
+
+    fun getLocations(): LiveData<List<Location>> {
+        return repositoryAttempt.getLocations()
+    }
 }

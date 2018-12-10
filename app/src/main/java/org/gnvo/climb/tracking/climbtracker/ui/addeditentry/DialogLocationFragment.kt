@@ -2,16 +2,16 @@ package org.gnvo.climb.tracking.climbtracker.ui.addeditentry
 
 import android.app.Activity
 import android.app.Dialog
+import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.design.widget.TextInputEditText
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.DialogFragment
 import android.support.v7.app.AlertDialog
+import android.util.Log
 import android.view.View
-import android.widget.ImageButton
-import android.widget.ProgressBar
-import android.widget.Toast
+import android.widget.*
 import com.google.android.gms.location.*
 import kotlinx.android.synthetic.main.dialog_location.view.*
 import org.gnvo.climb.tracking.climbtracker.R
@@ -25,6 +25,10 @@ class DialogLocationFragment : DialogFragment() {
 
     private lateinit var location: Location
 
+    private var availableLocations: List<Location>? = null
+
+    private lateinit var mutableMapAvailableLocations: MutableMap<String, MutableMap<String, Long>>
+
     // Use this instance of the interface to deliver action events
     private lateinit var listener: DialogLocationListener
     private lateinit var dialog: AlertDialog
@@ -32,11 +36,13 @@ class DialogLocationFragment : DialogFragment() {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationCallback: LocationCallback
     private var locationRequest: LocationRequest? = null
-    private var locationUpdateState = false
+    private var locationUpdateState = false 
 
     private lateinit var imageButtonLookForCoordinates: ImageButton
     private lateinit var progressBarLocation: ProgressBar
     private lateinit var editTextCoordinates: TextInputEditText
+    private lateinit var autoCompleteTextViewArea: AutoCompleteTextView
+    private lateinit var autoCompleteTextViewSector: AutoCompleteTextView
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         dialog = activity?.let { it ->
@@ -49,6 +55,8 @@ class DialogLocationFragment : DialogFragment() {
             imageButtonLookForCoordinates = dialogView.image_button_look_for_coordinates
             progressBarLocation = dialogView.progress_bar_location
             editTextCoordinates = dialogView.edit_text_coordinates
+            autoCompleteTextViewArea = dialogView.auto_complete_text_view_area
+            autoCompleteTextViewSector = dialogView.auto_complete_text_view_sector
 
             builder.setView(dialogView)
                 .setTitle("Title")
@@ -56,13 +64,14 @@ class DialogLocationFragment : DialogFragment() {
                     R.string.create
                 ) { _, _ ->
                     // Send the positive button event back to the host activity
-                    val area = dialogView.edit_text_area.text
+                    val area = autoCompleteTextViewArea.text
                     val location = if (!area.isNullOrEmpty()) {
                         val location = Location(area = area.toString())
                         val (latitude, longitude) = extractCoordinates()
-                        location.sector = Utils.getStringOrNull(dialogView.edit_text_sector.text)
+                        location.sector = Utils.getStringOrNull(autoCompleteTextViewSector.text)
                         location.latitude = latitude?.value?.toDouble()
                         location.longitude = longitude?.value?.toDouble()
+                        location.locationId = mutableMapAvailableLocations[location.area]?.get(location.sector)
                         location
                     } else {null}
                     listener.onDialogPositiveClick(location)
@@ -82,6 +91,56 @@ class DialogLocationFragment : DialogFragment() {
 
 
         return dialog
+    }
+
+    //Todo this method is being called when exiting the add/edit attempt activity, because the LiveData of this data is being updated. For now checking if the context is null
+    private fun populateAreaAndSectors() {
+        context?.let {context ->
+            mutableMapAvailableLocations =
+                availableLocations?.map { it.area to mutableMapOf<String, Long>() }!!.toMap().toMutableMap()
+
+            availableLocations?.let {
+                for (availableLocation in it) {
+                    val sector = availableLocation.sector ?: ""
+                    mutableMapAvailableLocations[availableLocation.area]!![sector] = availableLocation.locationId!!
+                }
+            }
+
+            val adapterAreas = ArrayAdapter<String>(
+                context, // Context
+                android.R.layout.simple_dropdown_item_1line, // Layout
+                mutableMapAvailableLocations.keys.toTypedArray() // Array
+            )
+
+            autoCompleteTextViewArea.setAdapter(adapterAreas)
+            autoCompleteTextViewArea.threshold = 1
+            autoCompleteTextViewArea.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
+                if (hasFocus) autoCompleteTextViewArea.showDropDown()
+            }
+
+            autoCompleteTextViewArea.setOnDismissListener {
+                autoCompleteTextViewSector.setText("")
+                setSectorAdapter(mutableMapAvailableLocations[autoCompleteTextViewArea.text.toString()])
+            }
+
+            autoCompleteTextViewSector.threshold = 1
+            autoCompleteTextViewSector.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
+                if (hasFocus) {
+                    autoCompleteTextViewSector.showDropDown()
+                }
+            }
+        }
+    }
+
+    private fun setSectorAdapter(mutableMapAvailableLocationSectors: MutableMap<String, Long>?) {
+        mutableMapAvailableLocationSectors?.let {
+            val adapterSector = ArrayAdapter<String>(
+                context as Context,
+                android.R.layout.simple_dropdown_item_1line,
+                it.keys.toTypedArray()
+            )
+            autoCompleteTextViewSector.setAdapter(adapterSector)
+        }
     }
 
     private fun extractCoordinates(): Pair<MatchGroup?, MatchGroup?> {
@@ -172,5 +231,10 @@ class DialogLocationFragment : DialogFragment() {
 
     fun setDialogLocationListener(listener: DialogLocationListener) {
         this.listener = listener
+    }
+
+    fun setLocations(locations: List<Location>?) {
+        this.availableLocations = locations
+        populateAreaAndSectors()
     }
 }

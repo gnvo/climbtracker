@@ -53,4 +53,8 @@ class AttemptRepository(application: Application) {
             attemptDao?.delete(attempt)
         }
     }
+
+    fun getLocations(): LiveData<List<Location>> {
+        return locationDao?.getAll()!!
+    }
 }

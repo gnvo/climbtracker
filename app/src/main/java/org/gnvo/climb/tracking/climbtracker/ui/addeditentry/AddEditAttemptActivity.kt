@@ -92,6 +92,9 @@ class AddEditAttemptActivity : AppCompatActivity() {
                     button_location.text = location.toString()
                 }
             })
+            viewModel.getLocations().observe(this, Observer { locations: List<Location>? ->
+                dialog.setLocations(locations)
+            })
         }
     }
 
