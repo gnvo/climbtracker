@@ -4,6 +4,7 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
+import android.support.annotation.UiThread
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -19,6 +20,7 @@ import org.gnvo.climb.tracking.climbtracker.data.room.pojo.AttemptWithGrades
 import org.gnvo.climb.tracking.climbtracker.ui.addeditentry.AddEditAttemptActivity
 import org.gnvo.climb.tracking.climbtracker.ui.main.views.ViewHolderHeader
 import org.gnvo.climb.tracking.climbtracker.ui.main.views.adapter.EntryAdapter
+import org.jetbrains.anko.custom.onUiThread
 import org.jetbrains.anko.doAsync
 import org.threeten.bp.format.DateTimeFormatter
 
@@ -65,7 +67,9 @@ class MainActivity : AppCompatActivity() {
                         currentDate = attemptDate
                     }
                 }
-                adapter.submitList(list)
+                runOnUiThread{
+                    adapter.submitList(list)
+                }
             }
         })
 
