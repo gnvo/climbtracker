@@ -15,6 +15,9 @@ import com.google.android.gms.location.*
 import kotlinx.android.synthetic.main.dialog_location.view.*
 import org.gnvo.climb.tracking.climbtracker.R
 import org.gnvo.climb.tracking.climbtracker.data.room.pojo.Location
+import android.view.ViewGroup
+
+
 
 class DialogLocationFragment : DialogFragment() {
     companion object {
@@ -58,7 +61,7 @@ class DialogLocationFragment : DialogFragment() {
             autoCompleteTextViewSector = dialogView.auto_complete_text_view_sector
 
             builder.setView(dialogView)
-                .setTitle("Title")
+                .setTitle(getString(R.string.location))
                 .setPositiveButton(
                     R.string.create
                 ) { _, _ ->
@@ -259,4 +262,15 @@ class DialogLocationFragment : DialogFragment() {
         this.availableLocations = locations
         populateAreaAndSectors()
     }
+
+    override fun onStart() {
+        super.onStart()
+        val dialog = getDialog()
+        if (dialog != null) {
+            val width = ViewGroup.LayoutParams.MATCH_PARENT
+            val height = ViewGroup.LayoutParams.MATCH_PARENT
+            dialog.window!!.setLayout(width, height)
+        }
+    }
+
 }
