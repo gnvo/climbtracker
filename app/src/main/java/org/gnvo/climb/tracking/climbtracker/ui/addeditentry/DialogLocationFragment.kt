@@ -9,7 +9,6 @@ import android.support.design.widget.TextInputEditText
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.DialogFragment
 import android.support.v7.app.AlertDialog
-import android.util.Log
 import android.view.View
 import android.widget.*
 import com.google.android.gms.location.*
@@ -27,20 +26,20 @@ class DialogLocationFragment : DialogFragment() {
 
     private var availableLocations: List<Location>? = null
 
-    private lateinit var mutableMapAvailableLocations: MutableMap<String, MutableMap<String, Long>>
+    private lateinit var mutableMapAvailableLocations: MutableMap<String, MutableMap<String, Location>>
 
     // Use this instance of the interface to deliver action events
-    private lateinit var listener: DialogLocationListener
+    private var listener: DialogLocationListener? = null
     private lateinit var dialog: AlertDialog
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationCallback: LocationCallback
     private var locationRequest: LocationRequest? = null
-    private var locationUpdateState = false 
+    private var locationUpdateState = false
 
     private lateinit var imageButtonLookForCoordinates: ImageButton
     private lateinit var progressBarLocation: ProgressBar
-    private lateinit var editTextCoordinates: TextInputEditText
+    private lateinit var tietCoordinates: TextInputEditText
     private lateinit var autoCompleteTextViewArea: AutoCompleteTextView
     private lateinit var autoCompleteTextViewSector: AutoCompleteTextView
 
@@ -54,7 +53,7 @@ class DialogLocationFragment : DialogFragment() {
 
             imageButtonLookForCoordinates = dialogView.image_button_look_for_coordinates
             progressBarLocation = dialogView.progress_bar_location
-            editTextCoordinates = dialogView.edit_text_coordinates
+            tietCoordinates = dialogView.tiet_coordinates
             autoCompleteTextViewArea = dialogView.auto_complete_text_view_area
             autoCompleteTextViewSector = dialogView.auto_complete_text_view_sector
 
@@ -71,10 +70,12 @@ class DialogLocationFragment : DialogFragment() {
                         location.sector = Utils.getStringOrNull(autoCompleteTextViewSector.text)
                         location.latitude = latitude?.value?.toDouble()
                         location.longitude = longitude?.value?.toDouble()
-                        location.locationId = mutableMapAvailableLocations[location.area]?.get(location.sector)
+                        location.locationId = mutableMapAvailableLocations[location.area]?.get(location.sector)?.locationId
                         location
-                    } else {null}
-                    listener.onDialogPositiveClick(location)
+                    } else {
+                        null
+                    }
+                    listener?.onDialogPositiveClick(location)
                 }
                 .setNegativeButton(
                     R.string.cancel
@@ -86,7 +87,11 @@ class DialogLocationFragment : DialogFragment() {
                 createLocationRequest()
             }
 
-            builder.create()
+            val dialog = builder.create()
+
+            listener?.onDialogPopulate(dialogView)
+
+            dialog
         } ?: throw IllegalStateException("Activity cannot be null")
 
 
@@ -95,14 +100,14 @@ class DialogLocationFragment : DialogFragment() {
 
     //Todo this method is being called when exiting the add/edit attempt activity, because the LiveData of this data is being updated. For now checking if the context is null
     private fun populateAreaAndSectors() {
-        context?.let {context ->
+        context?.let { context ->
             mutableMapAvailableLocations =
-                availableLocations?.map { it.area to mutableMapOf<String, Long>() }!!.toMap().toMutableMap()
+                    availableLocations?.map { it.area to mutableMapOf<String, Location>() }!!.toMap().toMutableMap()
 
             availableLocations?.let {
                 for (availableLocation in it) {
                     val sector = availableLocation.sector ?: ""
-                    mutableMapAvailableLocations[availableLocation.area]!![sector] = availableLocation.locationId!!
+                    mutableMapAvailableLocations[availableLocation.area]!![sector] = availableLocation
                 }
             }
 
@@ -120,6 +125,7 @@ class DialogLocationFragment : DialogFragment() {
 
             autoCompleteTextViewArea.setOnDismissListener {
                 autoCompleteTextViewSector.setText("")
+                tietCoordinates.setText("")
                 setSectorAdapter(mutableMapAvailableLocations[autoCompleteTextViewArea.text.toString()])
             }
 
@@ -129,10 +135,25 @@ class DialogLocationFragment : DialogFragment() {
                     autoCompleteTextViewSector.showDropDown()
                 }
             }
+            autoCompleteTextViewSector.setOnDismissListener {
+                val l = mutableMapAvailableLocations[autoCompleteTextViewArea.text.toString()]?.get(
+                    autoCompleteTextViewSector.text.toString()
+                )
+
+                l?.let {
+                    tietCoordinates.setText(
+                        getString(
+                            R.string.coordinates_format,
+                            l.latitude,
+                            l.longitude
+                        )
+                    )
+                }
+            }
         }
     }
 
-    private fun setSectorAdapter(mutableMapAvailableLocationSectors: MutableMap<String, Long>?) {
+    private fun setSectorAdapter(mutableMapAvailableLocationSectors: MutableMap<String, Location>?) {
         mutableMapAvailableLocationSectors?.let {
             val adapterSector = ArrayAdapter<String>(
                 context as Context,
@@ -144,7 +165,7 @@ class DialogLocationFragment : DialogFragment() {
     }
 
     private fun extractCoordinates(): Pair<MatchGroup?, MatchGroup?> {
-        val matchResult = regexLocationExtractor.find(editTextCoordinates.text.toString())
+        val matchResult = regexLocationExtractor.find(tietCoordinates.text.toString())
         return Pair(matchResult?.groups?.get(1), matchResult?.groups?.get(2))
     }
 
@@ -162,7 +183,7 @@ class DialogLocationFragment : DialogFragment() {
                 ).show()
 
                 if (locationResult.lastLocation.accuracy < 15) { //accuracy < 10mts
-                    editTextCoordinates.setText(
+                    tietCoordinates.setText(
                         getString(
                             R.string.coordinates_format,
                             locationResult.lastLocation.latitude,
@@ -227,6 +248,7 @@ class DialogLocationFragment : DialogFragment() {
 
     interface DialogLocationListener {
         fun onDialogPositiveClick(location: Location?)
+        fun onDialogPopulate(dialog: View)
     }
 
     fun setDialogLocationListener(listener: DialogLocationListener) {

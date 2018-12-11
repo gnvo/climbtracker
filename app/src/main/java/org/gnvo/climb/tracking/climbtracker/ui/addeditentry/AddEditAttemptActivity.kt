@@ -10,8 +10,10 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_add_update_attempt.*
+import kotlinx.android.synthetic.main.dialog_location.view.*
 import org.gnvo.climb.tracking.climbtracker.R
 import org.gnvo.climb.tracking.climbtracker.data.room.pojo.*
 import org.gnvo.climb.tracking.climbtracker.ui.addeditentry.adapters.GenericAdapter
@@ -87,9 +89,19 @@ class AddEditAttemptActivity : AppCompatActivity() {
             val dialog = DialogLocationFragment()
             dialog.show(supportFragmentManager, "DialogLocation")
             dialog.setDialogLocationListener(object : DialogLocationFragment.DialogLocationListener {
+                override fun onDialogPopulate(dialog: View) {
+                    location?.let { l ->
+                        dialog.tiet_coordinates.setText( getString(R.string.coordinates_format, l.latitude, l.longitude))
+                        dialog.auto_complete_text_view_area.setText(l.area)
+                        dialog.auto_complete_text_view_sector.setText(l.sector)
+                    }
+                }
+
                 override fun onDialogPositiveClick(location: Location?) {
-                    this@AddEditAttemptActivity.location = location
-                    button_location.text = location.toString()
+                    location?.let{ l ->
+                        this@AddEditAttemptActivity.location = l
+                        button_location.text = l.toString()
+                    }
                 }
             })
             viewModel.getLocations().observe(this, Observer { locations: List<Location>? ->

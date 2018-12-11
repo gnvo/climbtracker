@@ -61,7 +61,7 @@
                 android:digits=",.1234567890"
                 android:hint="@string/coordinates"
                 android:ems="10"
-                android:id="@+id/edit_text_coordinates"
+                android:id="@+id/tiet_coordinates"
                 android:inputType="number|numberSigned|numberDecimal"/>
     </android.support.design.widget.TextInputLayout>
 
