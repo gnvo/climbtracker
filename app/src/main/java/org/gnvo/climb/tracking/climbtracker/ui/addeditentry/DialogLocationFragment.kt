@@ -61,7 +61,7 @@ class DialogLocationFragment : DialogFragment(), OnMapReadyCallback {
             autoCompleteTextViewSector = dialogView.auto_complete_text_view_sector
 
             builder.setView(dialogView)
-                .setTitle(getString(R.string.location))
+                .setTitle(getString(R.string.location_add_edit))
                 .setPositiveButton(
                     R.string.create
                 ) { _, _ ->
