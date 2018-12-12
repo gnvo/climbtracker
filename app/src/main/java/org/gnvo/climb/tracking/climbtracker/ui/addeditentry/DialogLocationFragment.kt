@@ -9,15 +9,14 @@ import android.support.design.widget.TextInputEditText
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.DialogFragment
 import android.support.v7.app.AlertDialog
-import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
@@ -30,6 +29,8 @@ class DialogLocationFragment : DialogFragment(), OnMapReadyCallback {
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1
     }
+
+    private var mMapView: MapView? = null
 
     private lateinit var map: GoogleMap
 
@@ -89,9 +90,9 @@ class DialogLocationFragment : DialogFragment(), OnMapReadyCallback {
 
             listener?.onDialogPopulate(dialogView)
 
-            val mapFragment = (activity as AppCompatActivity).supportFragmentManager
-                .findFragmentById(R.id.map) as SupportMapFragment
-            mapFragment.getMapAsync(this)
+            mMapView = dialogView.map_view_map
+            mMapView?.onCreate(savedInstanceState)
+            mMapView?.getMapAsync(this)
 
             dialog
         } ?: throw IllegalStateException("Activity cannot be null")
@@ -231,5 +232,30 @@ class DialogLocationFragment : DialogFragment(), OnMapReadyCallback {
                 )
             )
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mMapView?.onPause()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mMapView?.onDestroy()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        mMapView?.onSaveInstanceState(outState)
+    }
+
+    override fun onLowMemory() {
+        super.onLowMemory()
+        mMapView?.onLowMemory()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mMapView?.onResume()
     }
 }

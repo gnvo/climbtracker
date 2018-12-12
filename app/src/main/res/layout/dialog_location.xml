@@ -52,7 +52,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginStart="8dp"
-            app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp">
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="8dp">
 
         <android.support.design.widget.TextInputEditText
                 android:layout_width="match_parent"
@@ -64,16 +65,17 @@
                 android:inputType="number|numberSigned|numberDecimal"/>
     </android.support.design.widget.TextInputLayout>
 
-    <fragment
+    <com.google.android.gms.maps.MapView
             android:layout_width="0dp"
             android:layout_height="300dp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:id="@+id/map"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
-            android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/til_coordinates"
-            android:layout_marginBottom="8dp" app:layout_constraintBottom_toBottomOf="parent"/>
+            android:id="@+id/map_view_map"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/til_coordinates"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
 </android.support.constraint.ConstraintLayout>
