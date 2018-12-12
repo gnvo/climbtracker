@@ -52,8 +52,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginStart="8dp"
-            app:layout_constraintEnd_toStartOf="@+id/location_button_container"
-            android:layout_marginEnd="8dp">
+            app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp">
 
         <android.support.design.widget.TextInputEditText
                 android:layout_width="match_parent"
@@ -65,28 +64,16 @@
                 android:inputType="number|numberSigned|numberDecimal"/>
     </android.support.design.widget.TextInputLayout>
 
-    <LinearLayout
-            android:id="@+id/location_button_container"
+    <fragment
+            android:layout_width="0dp"
+            android:layout_height="300dp"
+            android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/til_coordinates"
-            app:layout_constraintBottom_toBottomOf="@+id/til_coordinates"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-        <ImageButton
-                android:src="@drawable/ic_location_searching"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/image_button_look_for_coordinates"/>
-
-        <ProgressBar
-                android:id="@+id/progress_bar_location"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:layout_centerInParent="true"/>
-    </LinearLayout>
-
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/til_coordinates"
+            android:layout_marginBottom="8dp" app:layout_constraintBottom_toBottomOf="parent"/>
 
 </android.support.constraint.ConstraintLayout>

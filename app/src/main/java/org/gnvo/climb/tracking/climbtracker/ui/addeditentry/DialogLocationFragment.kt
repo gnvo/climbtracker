@@ -9,23 +9,29 @@ import android.support.design.widget.TextInputEditText
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.DialogFragment
 import android.support.v7.app.AlertDialog
+import android.support.v7.app.AppCompatActivity
 import android.view.View
-import android.widget.*
-import com.google.android.gms.location.*
+import android.view.inputmethod.InputMethodManager
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.dialog_location.view.*
 import org.gnvo.climb.tracking.climbtracker.R
 import org.gnvo.climb.tracking.climbtracker.data.room.pojo.Location
-import android.view.ViewGroup
 
 
-
-class DialogLocationFragment : DialogFragment() {
+class DialogLocationFragment : DialogFragment(), OnMapReadyCallback {
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1
-        val regexLocationExtractor = """([+-]?(?:[0-9]*[.])?[0-9]+)\s*,\s*([+-]?(?:[0-9]*[.])?[0-9]+)""".toRegex()
     }
 
-    private lateinit var location: Location
+    private lateinit var map: GoogleMap
 
     private var availableLocations: List<Location>? = null
 
@@ -35,16 +41,11 @@ class DialogLocationFragment : DialogFragment() {
     private var listener: DialogLocationListener? = null
     private lateinit var dialog: AlertDialog
 
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private lateinit var locationCallback: LocationCallback
-    private var locationRequest: LocationRequest? = null
-    private var locationUpdateState = false
-
-    private lateinit var imageButtonLookForCoordinates: ImageButton
-    private lateinit var progressBarLocation: ProgressBar
     private lateinit var tietCoordinates: TextInputEditText
     private lateinit var autoCompleteTextViewArea: AutoCompleteTextView
     private lateinit var autoCompleteTextViewSector: AutoCompleteTextView
+
+    private var marker: Marker? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         dialog = activity?.let { it ->
@@ -54,8 +55,6 @@ class DialogLocationFragment : DialogFragment() {
             // Pass null as the parent view because its going in the dialog layout
             val dialogView = it.layoutInflater.inflate(R.layout.dialog_location, null)
 
-            imageButtonLookForCoordinates = dialogView.image_button_look_for_coordinates
-            progressBarLocation = dialogView.progress_bar_location
             tietCoordinates = dialogView.tiet_coordinates
             autoCompleteTextViewArea = dialogView.auto_complete_text_view_area
             autoCompleteTextViewSector = dialogView.auto_complete_text_view_sector
@@ -69,11 +68,12 @@ class DialogLocationFragment : DialogFragment() {
                     val area = autoCompleteTextViewArea.text
                     val location = if (!area.isNullOrEmpty()) {
                         val location = Location(area = area.toString())
-                        val (latitude, longitude) = extractCoordinates()
+                        val (latitude, longitude) = Utils.extractCoordinates(tietCoordinates.text.toString())
                         location.sector = Utils.getStringOrNull(autoCompleteTextViewSector.text)
                         location.latitude = latitude?.value?.toDouble()
                         location.longitude = longitude?.value?.toDouble()
-                        location.locationId = mutableMapAvailableLocations[location.area]?.get(location.sector)?.locationId
+                        location.locationId =
+                                mutableMapAvailableLocations[location.area]?.get(location.sector)?.locationId
                         location
                     } else {
                         null
@@ -85,14 +85,13 @@ class DialogLocationFragment : DialogFragment() {
                     , null
                 )
 
-            prepareGeo()
-            imageButtonLookForCoordinates.setOnClickListener {
-                createLocationRequest()
-            }
-
             val dialog = builder.create()
 
             listener?.onDialogPopulate(dialogView)
+
+            val mapFragment = (activity as AppCompatActivity).supportFragmentManager
+                .findFragmentById(R.id.map) as SupportMapFragment
+            mapFragment.getMapAsync(this)
 
             dialog
         } ?: throw IllegalStateException("Activity cannot be null")
@@ -126,10 +125,12 @@ class DialogLocationFragment : DialogFragment() {
                 if (hasFocus) autoCompleteTextViewArea.showDropDown()
             }
 
-            autoCompleteTextViewArea.setOnDismissListener {
+            val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
+
+            autoCompleteTextViewArea.setOnItemClickListener { _, view, _, _ ->
                 autoCompleteTextViewSector.setText("")
-                tietCoordinates.setText("")
                 setSectorAdapter(mutableMapAvailableLocations[autoCompleteTextViewArea.text.toString()])
+                imm!!.hideSoftInputFromWindow(view.applicationWindowToken, 0)
             }
 
             autoCompleteTextViewSector.threshold = 1
@@ -138,19 +139,29 @@ class DialogLocationFragment : DialogFragment() {
                     autoCompleteTextViewSector.showDropDown()
                 }
             }
-            autoCompleteTextViewSector.setOnDismissListener {
+            autoCompleteTextViewSector.setOnItemClickListener { _, view, _, _ ->
+                imm!!.hideSoftInputFromWindow(view.applicationWindowToken, 0)
                 val l = mutableMapAvailableLocations[autoCompleteTextViewArea.text.toString()]?.get(
                     autoCompleteTextViewSector.text.toString()
                 )
 
                 l?.let {
-                    tietCoordinates.setText(
-                        getString(
-                            R.string.coordinates_format,
-                            l.latitude,
-                            l.longitude
-                        )
-                    )
+                    l.latitude?.let { latitude ->
+                        l.longitude?.let { longitude ->
+                            tietCoordinates.setText(
+                                getString(
+                                    R.string.coordinates_format,
+                                    latitude,
+                                    longitude
+                                )
+                            )
+                            val position = LatLng(latitude, longitude)
+                            map.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 12f))
+                            marker?.let{ marker ->
+                                marker.position = position
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -167,88 +178,6 @@ class DialogLocationFragment : DialogFragment() {
         }
     }
 
-    private fun extractCoordinates(): Pair<MatchGroup?, MatchGroup?> {
-        val matchResult = regexLocationExtractor.find(tietCoordinates.text.toString())
-        return Pair(matchResult?.groups?.get(1), matchResult?.groups?.get(2))
-    }
-
-    private fun prepareGeo() {
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity as Activity)
-
-        locationCallback = object : LocationCallback() {
-            override fun onLocationResult(locationResult: LocationResult) {
-                super.onLocationResult(locationResult)
-
-                Toast.makeText(
-                    activity,
-                    "Coordinates accuracy: ${locationResult.lastLocation.accuracy}mts.",
-                    Toast.LENGTH_SHORT
-                ).show()
-
-                if (locationResult.lastLocation.accuracy < 15) { //accuracy < 10mts
-                    tietCoordinates.setText(
-                        getString(
-                            R.string.coordinates_format,
-                            locationResult.lastLocation.latitude,
-                            locationResult.lastLocation.longitude
-                        )
-                    )
-                    stopLocationUpdates()
-                    locationUpdateState = false
-                }
-            }
-        }
-    }
-
-    private fun createLocationRequest() {
-        locationRequest = LocationRequest()
-        locationRequest!!.interval = 10000
-        locationRequest!!.fastestInterval = 5000
-        locationRequest!!.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-
-        val builder = LocationSettingsRequest.Builder()
-            .addLocationRequest(locationRequest!!)
-        val client = LocationServices.getSettingsClient(activity as Activity)
-        val task = client.checkLocationSettings(builder.build())
-
-        task.addOnSuccessListener {
-            locationUpdateState = true
-            startLocationUpdates()
-        }
-        task.addOnFailureListener { e ->
-            Toast.makeText(
-                activity,
-                "Could not get location from GPS on device. Make sure GPS and mobile network are enabled, also to improve precision move the phone some meters to improve the accuracy. Error: $e",
-                Toast.LENGTH_LONG
-            ).show()
-        }
-    }
-
-    private fun startLocationUpdates() {
-        imageButtonLookForCoordinates.visibility = View.GONE
-        progressBarLocation.visibility = View.VISIBLE
-
-        if (ActivityCompat.checkSelfPermission(
-                activity as Activity,
-                android.Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                activity as Activity,
-                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
-                LOCATION_PERMISSION_REQUEST_CODE
-            )
-            return
-        }
-        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null /* Looper */)
-    }
-
-    private fun stopLocationUpdates() {
-        fusedLocationClient.removeLocationUpdates(locationCallback)
-        imageButtonLookForCoordinates.visibility = View.VISIBLE
-        progressBarLocation.visibility = View.GONE
-    }
-
     interface DialogLocationListener {
         fun onDialogPositiveClick(location: Location?)
         fun onDialogPopulate(dialog: View)
@@ -263,14 +192,44 @@ class DialogLocationFragment : DialogFragment() {
         populateAreaAndSectors()
     }
 
-    override fun onStart() {
-        super.onStart()
-        val dialog = getDialog()
-        if (dialog != null) {
-            val width = ViewGroup.LayoutParams.MATCH_PARENT
-            val height = ViewGroup.LayoutParams.MATCH_PARENT
-            dialog.window!!.setLayout(width, height)
+    override fun onMapReady(googleMap: GoogleMap) {
+        map = googleMap
+
+        map.mapType = GoogleMap.MAP_TYPE_SATELLITE
+
+        if (ActivityCompat.checkSelfPermission(
+                activity as Activity,
+                android.Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                activity as Activity,
+                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
+                LOCATION_PERMISSION_REQUEST_CODE
+            )
+            return
+        }
+        map.isMyLocationEnabled = true
+        map.uiSettings.isZoomControlsEnabled = true
+
+        val (latitude, longitude) = Utils.extractCoordinates(tietCoordinates.text.toString())
+        marker = if (latitude != null && longitude != null) {
+            val coordinates = LatLng(latitude.value.toDouble(), longitude.value.toDouble())
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(coordinates, 12f))
+            map.addMarker(MarkerOptions().position(coordinates))
+        } else {
+            map.addMarker(MarkerOptions().position(googleMap.cameraPosition.target))
+        }
+
+        map.setOnCameraMoveListener {
+            marker!!.position = googleMap.cameraPosition.target
+            tietCoordinates.setText(
+                getString(
+                    R.string.coordinates_format,
+                    marker!!.position.latitude,
+                    marker!!.position.longitude
+                )
+            )
         }
     }
-
 }
