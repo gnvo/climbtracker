@@ -1,7 +1,7 @@
 package org.gnvo.climb.tracking.climbtracker.ui.main.views
 
 import android.view.View
-import kotlinx.android.synthetic.main.attempt_header.view.*
+import kotlinx.android.synthetic.main.recycler_view_attempt_header.view.*
 import org.gnvo.climb.tracking.climbtracker.data.room.pojo.AttemptHeader
 import org.gnvo.climb.tracking.climbtracker.data.room.pojo.AttemptListItem
 import org.gnvo.climb.tracking.climbtracker.ui.main.views.adapter.EntryAdapter

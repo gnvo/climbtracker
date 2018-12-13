@@ -3,7 +3,7 @@ package org.gnvo.climb.tracking.climbtracker.ui.addeditentry.adapters
 import android.graphics.Color
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import kotlinx.android.synthetic.main.simple_recycler_view_item_1.view.*
+import kotlinx.android.synthetic.main.recycler_view_item_1.view.*
 
 class GenericAdapterSingleSelection<T> : GenericAdapter<T>() {
     private var selectedPosition: Int = RecyclerView.NO_POSITION

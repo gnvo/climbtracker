@@ -21,8 +21,8 @@ class EntryAdapter : ListAdapter<AttemptListItem, ViewHolder>(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return when (viewType){
-            TYPE_HEADER -> ViewHolderHeader(LayoutInflater.from(parent.context).inflate(R.layout.attempt_header, parent, false))
-            else -> ViewHolderAttempt(LayoutInflater.from(parent.context).inflate(R.layout.attempt_item, parent, false))
+            TYPE_HEADER -> ViewHolderHeader(LayoutInflater.from(parent.context).inflate(R.layout.recycler_view_attempt_header, parent, false))
+            else -> ViewHolderAttempt(LayoutInflater.from(parent.context).inflate(R.layout.recycler_view_attempt_item, parent, false))
         }
     }
 
