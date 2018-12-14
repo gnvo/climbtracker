@@ -104,7 +104,7 @@ class AddEditAttemptActivity : AppCompatActivity() {
                     }
                 }
             })
-            viewModel.getLocations().observe(this, Observer { locations: List<Location>? ->
+            viewModel.getAllLocations().observe(this, Observer { locations ->
                 dialog.setLocations(locations)
             })
         }
@@ -250,12 +250,12 @@ class AddEditAttemptActivity : AppCompatActivity() {
         val attempt = generateAttempt() ?: return
         when (attemptIdFromIntentExtra) {
             INVALID_ID -> {
-                viewModel.insertAttemptAndLocation(attempt, location)
+                viewModel.insertAttempt(attempt)
                 Toast.makeText(this, "Climb attempt created", Toast.LENGTH_LONG).show()
             }
             else -> {
                 attempt.id = attemptIdFromIntentExtra
-                viewModel.updateAttemptAndLocation(attempt, location)
+                viewModel.updateAttempt(attempt)
                 Toast.makeText(this, "Climb attempt updated", Toast.LENGTH_LONG).show()
             }
         }

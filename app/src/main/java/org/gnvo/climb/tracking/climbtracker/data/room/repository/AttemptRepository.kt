@@ -13,21 +13,10 @@ import org.jetbrains.anko.doAsync
 class AttemptRepository(application: Application) {
     private val db: AppDatabase? = AppDatabase.getInstance(application = application)
     private val attemptDao: AttemptDao? = db?.attemptDao()
-    private val locationDao: LocationDao? = db?.locationDao()
     private val attemptsWithGrades: LiveData<List<AttemptWithGrades>> = attemptDao?.getAllWithGrades()!!
 
     fun getAllWithGrades(): LiveData<List<AttemptWithGrades>> {
         return attemptsWithGrades
-    }
-
-    fun insertAttemptAndLocation(attempt: Attempt, location: Location?) {
-        doAsync {
-            if (location?.locationId == null){
-                location?.locationId = locationDao?.insert(location!!)
-            }
-            attempt.location = location?.locationId
-            attemptDao?.insert(attempt)
-        }
     }
 
     fun getByIdWithGrades(attemptId: Long): LiveData<AttemptWithGrades> {
@@ -38,13 +27,15 @@ class AttemptRepository(application: Application) {
         return attemptDao?.getLastWithGrades()!!
     }
 
-    fun updateAttemptAndLocation(attempt: Attempt, location: Location?) {
+    fun update(attempt: Attempt) {
         doAsync {
-            if (location?.locationId == null){
-                location?.locationId = locationDao?.insert(location!!)
-            }
-            attempt.location = location?.locationId
             attemptDao?.update(attempt)
+        }
+    }
+
+    fun insert(attempt: Attempt) {
+        doAsync {
+            attemptDao?.insert(attempt)
         }
     }
 
@@ -52,9 +43,5 @@ class AttemptRepository(application: Application) {
         doAsync {
             attemptDao?.delete(attempt)
         }
-    }
-
-    fun getLocations(): LiveData<List<Location>> {
-        return locationDao?.getAll()!!
     }
 }

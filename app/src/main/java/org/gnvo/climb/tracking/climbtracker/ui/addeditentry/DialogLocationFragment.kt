@@ -34,9 +34,7 @@ class DialogLocationFragment : DialogFragment(), OnMapReadyCallback {
 
     private lateinit var map: GoogleMap
 
-    private var availableLocations: List<Location>? = null
-
-    private lateinit var mutableMapAvailableLocations: MutableMap<String, MutableMap<String, Location>>
+    private var locationsHierarchical: Map<String, Map<String, Location>>? = null
 
     // Use this instance of the interface to deliver action events
     private var listener: DialogLocationListener? = null
@@ -74,7 +72,7 @@ class DialogLocationFragment : DialogFragment(), OnMapReadyCallback {
                         location.latitude = latitude?.value?.toDouble()
                         location.longitude = longitude?.value?.toDouble()
                         location.locationId =
-                                mutableMapAvailableLocations[location.area]?.get(location.sector)?.locationId
+                                locationsHierarchical?.get(location.area)?.get(location.sector)?.locationId
                         location
                     } else {
                         null
@@ -104,20 +102,12 @@ class DialogLocationFragment : DialogFragment(), OnMapReadyCallback {
     //Todo this method is being called when exiting the add/edit attempt activity, because the LiveData of this data is being updated. For now checking if the context is null
     private fun populateAreaAndSectors() {
         context?.let { context ->
-            mutableMapAvailableLocations =
-                    availableLocations?.map { it.area to mutableMapOf<String, Location>() }!!.toMap().toMutableMap()
-
-            availableLocations?.let {
-                for (availableLocation in it) {
-                    val sector = availableLocation.sector ?: ""
-                    mutableMapAvailableLocations[availableLocation.area]!![sector] = availableLocation
-                }
-            }
+            locationsHierarchical?.let { locations ->
 
             val adapterAreas = ArrayAdapter<String>(
                 context, // Context
                 android.R.layout.simple_dropdown_item_1line, // Layout
-                mutableMapAvailableLocations.keys.toTypedArray() // Array
+                locations.keys.toTypedArray() // Array
             )
 
             autoCompleteTextViewArea.setAdapter(adapterAreas)
@@ -130,7 +120,7 @@ class DialogLocationFragment : DialogFragment(), OnMapReadyCallback {
 
             autoCompleteTextViewArea.setOnItemClickListener { _, view, _, _ ->
                 autoCompleteTextViewSector.setText("")
-                setSectorAdapter(mutableMapAvailableLocations[autoCompleteTextViewArea.text.toString()])
+                setSectorAdapter(locations[autoCompleteTextViewArea.text.toString()])
                 imm!!.hideSoftInputFromWindow(view.applicationWindowToken, 0)
             }
 
@@ -142,7 +132,7 @@ class DialogLocationFragment : DialogFragment(), OnMapReadyCallback {
             }
             autoCompleteTextViewSector.setOnItemClickListener { _, view, _, _ ->
                 imm!!.hideSoftInputFromWindow(view.applicationWindowToken, 0)
-                val l = mutableMapAvailableLocations[autoCompleteTextViewArea.text.toString()]?.get(
+                val l = locations[autoCompleteTextViewArea.text.toString()]?.get(
                     autoCompleteTextViewSector.text.toString()
                 )
 
@@ -158,17 +148,18 @@ class DialogLocationFragment : DialogFragment(), OnMapReadyCallback {
                             )
                             val position = LatLng(latitude, longitude)
                             map.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 12f))
-                            marker?.let{ marker ->
+                            marker?.let { marker ->
                                 marker.position = position
                             }
                         }
                     }
                 }
             }
+            }
         }
     }
 
-    private fun setSectorAdapter(mutableMapAvailableLocationSectors: MutableMap<String, Location>?) {
+    private fun setSectorAdapter(mutableMapAvailableLocationSectors: Map<String, Location>?) {
         mutableMapAvailableLocationSectors?.let {
             val adapterSector = ArrayAdapter<String>(
                 context as Context,
@@ -188,8 +179,8 @@ class DialogLocationFragment : DialogFragment(), OnMapReadyCallback {
         this.listener = listener
     }
 
-    fun setLocations(locations: List<Location>?) {
-        this.availableLocations = locations
+    fun setLocations(locations: Map<String, Map<String, Location>>?) {
+        this.locationsHierarchical = locations
         populateAreaAndSectors()
     }
 

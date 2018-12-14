@@ -8,12 +8,12 @@ import org.gnvo.climb.tracking.climbtracker.data.room.repository.*
 
 class AddEditViewModel(application: Application) : AndroidViewModel(application) {
     private val repositoryAttempt: AttemptRepository = AttemptRepository(application)
+    private val repositoryLocation: LocationRepository = LocationRepository(application)
     private val repositoryRouteGrade: RouteGradeRepository = RouteGradeRepository(application)
 
-    fun insertAttemptAndLocation(attempt: Attempt, location: Location?) {
-        repositoryAttempt.insertAttemptAndLocation(attempt, location)
+    fun getAllLocations(): LiveData<Map<String, Map<String, Location>>> {
+        return repositoryLocation.getAll()
     }
-
     fun getAllRouteGrades(): LiveData<List<RouteGrade>> {
         return repositoryRouteGrade.getAll()
     }
@@ -26,11 +26,11 @@ class AddEditViewModel(application: Application) : AndroidViewModel(application)
         return repositoryAttempt.getLastAttemptWithGrades()
     }
 
-    fun updateAttemptAndLocation(attempt: Attempt, location: Location?) {
-        repositoryAttempt.updateAttemptAndLocation(attempt, location)
+    fun insertAttempt(attempt: Attempt) {
+        repositoryAttempt.insert(attempt)
     }
 
-    fun getLocations(): LiveData<List<Location>> {
-        return repositoryAttempt.getLocations()
+    fun updateAttempt(attempt: Attempt) {
+        repositoryAttempt.update(attempt)
     }
 }
