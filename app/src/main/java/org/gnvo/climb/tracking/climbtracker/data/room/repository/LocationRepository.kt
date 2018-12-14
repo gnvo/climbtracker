@@ -30,15 +30,13 @@ class LocationRepository(application: Application) {
     }
 
     private fun getAllHierarchical(locations: List<Location>): Map<String, Map<String, Location>> {
-        var mutableMapAvailableLocations =
-                locations?.map { it.area to mutableMapOf<String, Location>() }!!.toMap().toMutableMap()
+        val mutableMapAvailableLocations =
+                locations.map { it.area to mutableMapOf<String, Location>() }.toMap()
 
-        locations?.let {
-            for (availableLocation in it) {
+            for (availableLocation in locations) {
                 val sector = availableLocation.sector ?: ""
                 mutableMapAvailableLocations[availableLocation.area]!![sector] = availableLocation
             }
-        }
 
         return mutableMapAvailableLocations
     }
