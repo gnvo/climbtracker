@@ -17,6 +17,8 @@
     <string name="save">Save</string>
     <string name="create">Create</string>
     <string name="location_add_edit">Add/Edit Location</string>
+    <string name="edit_location">Edit location</string>
+    <string name="add_location">Add location</string>
 
     <string-array name="route_type">
         <item>Trad</item>
