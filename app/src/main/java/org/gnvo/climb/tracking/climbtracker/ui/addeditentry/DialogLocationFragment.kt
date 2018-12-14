@@ -104,57 +104,57 @@ class DialogLocationFragment : DialogFragment(), OnMapReadyCallback {
         context?.let { context ->
             locationsHierarchical?.let { locations ->
 
-            val adapterAreas = ArrayAdapter<String>(
-                context, // Context
-                android.R.layout.simple_dropdown_item_1line, // Layout
-                locations.keys.toTypedArray() // Array
-            )
-
-            autoCompleteTextViewArea.setAdapter(adapterAreas)
-            autoCompleteTextViewArea.threshold = 1
-            autoCompleteTextViewArea.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
-                if (hasFocus) autoCompleteTextViewArea.showDropDown()
-            }
-
-            val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
-
-            autoCompleteTextViewArea.setOnItemClickListener { _, view, _, _ ->
-                autoCompleteTextViewSector.setText("")
-                setSectorAdapter(locations[autoCompleteTextViewArea.text.toString()])
-                imm!!.hideSoftInputFromWindow(view.applicationWindowToken, 0)
-            }
-
-            autoCompleteTextViewSector.threshold = 1
-            autoCompleteTextViewSector.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
-                if (hasFocus) {
-                    autoCompleteTextViewSector.showDropDown()
-                }
-            }
-            autoCompleteTextViewSector.setOnItemClickListener { _, view, _, _ ->
-                imm!!.hideSoftInputFromWindow(view.applicationWindowToken, 0)
-                val l = locations[autoCompleteTextViewArea.text.toString()]?.get(
-                    autoCompleteTextViewSector.text.toString()
+                val adapterAreas = ArrayAdapter<String>(
+                    context, // Context
+                    android.R.layout.simple_dropdown_item_1line, // Layout
+                    locations.keys.toTypedArray() // Array
                 )
 
-                l?.let {
-                    l.latitude?.let { latitude ->
-                        l.longitude?.let { longitude ->
-                            tietCoordinates.setText(
-                                getString(
-                                    R.string.coordinates_format,
-                                    latitude,
-                                    longitude
+                autoCompleteTextViewArea.setAdapter(adapterAreas)
+                autoCompleteTextViewArea.threshold = 1
+                autoCompleteTextViewArea.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
+                    if (hasFocus) autoCompleteTextViewArea.showDropDown()
+                }
+
+                val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
+
+                autoCompleteTextViewArea.setOnItemClickListener { _, view, _, _ ->
+                    autoCompleteTextViewSector.setText("")
+                    setSectorAdapter(locations[autoCompleteTextViewArea.text.toString()])
+                    imm!!.hideSoftInputFromWindow(view.applicationWindowToken, 0)
+                }
+
+                autoCompleteTextViewSector.threshold = 1
+                autoCompleteTextViewSector.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
+                    if (hasFocus) {
+                        autoCompleteTextViewSector.showDropDown()
+                    }
+                }
+                autoCompleteTextViewSector.setOnItemClickListener { _, view, _, _ ->
+                    imm!!.hideSoftInputFromWindow(view.applicationWindowToken, 0)
+                    val l = locations[autoCompleteTextViewArea.text.toString()]?.get(
+                        autoCompleteTextViewSector.text.toString()
+                    )
+
+                    l?.let {
+                        l.latitude?.let { latitude ->
+                            l.longitude?.let { longitude ->
+                                tietCoordinates.setText(
+                                    getString(
+                                        R.string.coordinates_format,
+                                        latitude,
+                                        longitude
+                                    )
                                 )
-                            )
-                            val position = LatLng(latitude, longitude)
-                            map.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 12f))
-                            marker?.let { marker ->
-                                marker.position = position
+                                val position = LatLng(latitude, longitude)
+                                map.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 12f))
+                                marker?.let { marker ->
+                                    marker.position = position
+                                }
                             }
                         }
                     }
                 }
-            }
             }
         }
     }
