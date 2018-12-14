@@ -11,7 +11,8 @@ import org.jetbrains.anko.doAsync
 class LocationRepository(application: Application) {
     private val db: AppDatabase? = AppDatabase.getInstance(application = application)
     private val locationDao: LocationDao? = db?.locationDao()
-    private val allItems: LiveData<Map<String, Map<String, Location>>> = Transformations.map(locationDao?.getAll()!!, ::getAllHierarchical)
+    private val allItems: LiveData<Map<String, Map<String, Location>>> =
+        Transformations.map(locationDao?.getAll()!!, ::getAllHierarchical)
 
     fun insert(location: Location) {
         doAsync {
@@ -31,12 +32,12 @@ class LocationRepository(application: Application) {
 
     private fun getAllHierarchical(locations: List<Location>): Map<String, Map<String, Location>> {
         val mutableMapAvailableLocations =
-                locations.map { it.area to mutableMapOf<String, Location>() }.toMap()
+            locations.map { it.area to mutableMapOf<String, Location>() }.toMap()
 
-            for (availableLocation in locations) {
-                val sector = availableLocation.sector ?: ""
-                mutableMapAvailableLocations[availableLocation.area]!![sector] = availableLocation
-            }
+        for (availableLocation in locations) {
+            val sector = availableLocation.sector ?: ""
+            mutableMapAvailableLocations[availableLocation.area]!![sector] = availableLocation
+        }
 
         return mutableMapAvailableLocations
     }
