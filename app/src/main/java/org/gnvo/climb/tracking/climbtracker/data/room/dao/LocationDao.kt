@@ -9,7 +9,7 @@ import org.gnvo.climb.tracking.climbtracker.data.room.pojo.Location
 
 @Dao
 interface LocationDao {
-    @Query("SELECT * FROM location ORDER BY area, sector ASC")
+    @Query("SELECT * FROM location ORDER BY lower(area), lower(sector)")
     fun getAll(): LiveData<List<Location>>
 
     @Insert
