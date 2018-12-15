@@ -5,6 +5,7 @@ import android.app.TimePickerDialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -16,6 +17,7 @@ import kotlinx.android.synthetic.main.activity_add_update_attempt.*
 import kotlinx.android.synthetic.main.dialog_location.view.*
 import org.gnvo.climb.tracking.climbtracker.R
 import org.gnvo.climb.tracking.climbtracker.data.room.pojo.*
+import org.gnvo.climb.tracking.climbtracker.ui.addeditentry.Utils.Companion.extractCoordinates
 import org.gnvo.climb.tracking.climbtracker.ui.addeditentry.adapters.GenericAdapter
 import org.gnvo.climb.tracking.climbtracker.ui.addeditentry.adapters.GenericAdapterMultipleSelection
 import org.gnvo.climb.tracking.climbtracker.ui.addeditentry.adapters.GenericAdapterSingleSelection
@@ -36,7 +38,9 @@ class AddEditAttemptActivity : AppCompatActivity() {
 
     private var attemptIdFromIntentExtra: Long = INVALID_ID
 
-    private var location: Location? = null
+    private var locations: Map<String, Map<String, Location>>? = null
+
+    private var isRestored = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -85,28 +89,66 @@ class AddEditAttemptActivity : AppCompatActivity() {
             resources.getStringArray(R.array.route_characteristic).toCollection(ArrayList())
         )
 
-        button_location.setOnClickListener {
+        locationPreparation()
+    }
+
+    private fun locationPreparation() {
+        button_add_location.setOnClickListener {
             val dialog = DialogLocationFragment()
-            dialog.show(supportFragmentManager, "DialogLocation")
             dialog.setDialogLocationListener(object : DialogLocationFragment.DialogLocationListener {
-                override fun onDialogPopulate(dialog: View) {
-                    location?.let { l ->
-                        dialog.tiet_coordinates.setText( getString(R.string.coordinates_format, l.latitude, l.longitude))
-                        dialog.auto_complete_text_view_area.setText(l.area)
-                        dialog.auto_complete_text_view_sector.setText(l.sector)
-                    }
+                override fun setTitle(): String {
+                    return getString(R.string.add_location)
                 }
 
-                override fun onDialogPositiveClick(location: Location?) {
-                    location?.let{ l ->
-                        this@AddEditAttemptActivity.location = l
-                        button_location.text = l.toString()
-                    }
+                override fun populate(view: View) {
+                    view.d_tiet_area.text = tiet_area.text
+                }
+
+                override fun onDialogPositiveClick(area: String, sector: String?, coordinates: String?) {
+                    val location = Location(area = area)
+                    location.sector = sector
+                    val (latitude, longitude) = extractCoordinates(coordinates ?: "")
+                    location.sector = sector
+                    location.latitude = latitude?.value?.toDouble()
+                    location.longitude = longitude?.value?.toDouble()
+
+                    tiet_area.setText(area)
+                    tiet_sector.setText(sector)
+
+                    viewModel.insertLocation(location)
                 }
             })
-            viewModel.getAllLocations().observe(this, Observer { locations ->
-                dialog.setLocations(locations)
-            })
+            dialog.show(supportFragmentManager, "DialogLocation")
+        }
+
+        viewModel.getAllLocations().observe(this, Observer { locations ->
+            this.locations = locations
+        })
+
+        tiet_area.setOnClickListener {
+            val areas = locations?.keys?.toTypedArray() ?: arrayOf()
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle(R.string.area)
+                .setItems(areas) { _, which ->
+                    tiet_area.setText(areas[which])
+                    val sector = locations?.get(areas[which])?.keys?.toList()?.first()
+                    tiet_sector.setText(sector)
+                }
+            builder.create()
+            builder.show()
+        }
+
+        tiet_sector.setOnClickListener {
+            val area = tiet_area.text.toString()
+            val sectors =
+                locations?.get(area)?.keys?.filter { sector -> sector.isNotEmpty() }?.toTypedArray() ?: arrayOf()
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle(R.string.sector)
+                .setItems(sectors) { _, which ->
+                    tiet_sector.setText(sectors[which])
+                }
+            builder.create()
+            builder.show()
         }
     }
 
@@ -192,58 +234,67 @@ class AddEditAttemptActivity : AppCompatActivity() {
     private fun restoreAttemptData() {
         viewModel.getAttemptWithGradesById(attemptIdFromIntentExtra)
             .observe(this, Observer { attemptWithGrades: AttemptWithGrades? ->
-                val storedZonedDateTime =
-                    attemptWithGrades!!.attempt.instantAndZoneId.instant.atZone(attemptWithGrades.attempt.instantAndZoneId.zoneId)
-                button_date_time.text = formatterDateTime.format(storedZonedDateTime)
+                if (!isRestored) {
+                    isRestored = true
+                    val storedZonedDateTime =
+                        attemptWithGrades!!.attempt.instantAndZoneId.instant.atZone(attemptWithGrades.attempt.instantAndZoneId.zoneId)
+                    button_date_time.text = formatterDateTime.format(storedZonedDateTime)
 
-                (recycler_view_climb_style.adapter as GenericAdapterSingleSelection<String>).setSelected(
-                    attemptWithGrades.attempt.climbStyle
-                )
-                (recycler_view_outcome.adapter as GenericAdapterSingleSelection<String>).setSelected(attemptWithGrades.attempt.outcome)
-                (recycler_view_route_grade.adapter as GenericAdapterSingleSelection<RouteGrade>).setSelected(
-                    attemptWithGrades.routeGrade
-                )
-                (recycler_view_route_type.adapter as GenericAdapterSingleSelection<String>).setSelected(
-                    attemptWithGrades.attempt.routeType
-                )
-                attemptWithGrades.attempt.routeCharacteristics?.let {
-                    (recycler_view_route_characteristics.adapter as GenericAdapterMultipleSelection<String>).setSelected(
-                        it
+                    (recycler_view_climb_style.adapter as GenericAdapterSingleSelection<String>).setSelected(
+                        attemptWithGrades.attempt.climbStyle
                     )
+                    (recycler_view_outcome.adapter as GenericAdapterSingleSelection<String>).setSelected(
+                        attemptWithGrades.attempt.outcome
+                    )
+                    (recycler_view_route_grade.adapter as GenericAdapterSingleSelection<RouteGrade>).setSelected(
+                        attemptWithGrades.routeGrade
+                    )
+                    (recycler_view_route_type.adapter as GenericAdapterSingleSelection<String>).setSelected(
+                        attemptWithGrades.attempt.routeType
+                    )
+                    attemptWithGrades.attempt.routeCharacteristics?.let {
+                        (recycler_view_route_characteristics.adapter as GenericAdapterMultipleSelection<String>).setSelected(
+                            it
+                        )
+                    }
+
+                    attemptWithGrades.location?.let {
+                        tiet_area.setText(it.area)
+                        tiet_sector.setText(it.sector)
+                    }
+
+                    edit_text_route_name.setText(attemptWithGrades.attempt.routeName)
+                    edit_text_length.setText(attemptWithGrades.attempt.length?.toString())
+                    edit_text_comment.setText(attemptWithGrades.attempt.comment)
+
+                    rating_bar_rating.rating = attemptWithGrades.attempt.rating?.toFloat() ?: 0f
                 }
-
-                attemptWithGrades.location?.let {
-                    location = it
-                    button_location.text = it.toString()
-                }
-
-                edit_text_route_name.setText(attemptWithGrades.attempt.routeName)
-                edit_text_length.setText(attemptWithGrades.attempt.length?.toString())
-                edit_text_comment.setText(attemptWithGrades.attempt.comment)
-
-                rating_bar_rating.rating = attemptWithGrades.attempt.rating?.toFloat() ?: 0f
             })
     }
 
     private fun partiallyRestoreAttemptDataFromLastAttemptEntry() {
         viewModel.getLastAttemptWithGrades()
             .observe(this, Observer { attemptWithGrades: AttemptWithGrades? ->
-                (recycler_view_climb_style.adapter as GenericAdapterSingleSelection<String>).setSelected(
-                    attemptWithGrades?.attempt?.climbStyle
-                )
-                (recycler_view_outcome.adapter as GenericAdapterSingleSelection<String>).setSelected(attemptWithGrades?.attempt?.outcome)
-                (recycler_view_route_grade.adapter as GenericAdapterSingleSelection<RouteGrade>).setSelected(
-                    attemptWithGrades?.routeGrade
-                )
-                (recycler_view_route_type.adapter as GenericAdapterSingleSelection<String>).setSelected(
-                    attemptWithGrades?.attempt?.routeType
-                )
-                attemptWithGrades?.location?.let {
-                    location = it
-                    button_location.text = it.toString()
+                if (!isRestored) {
+                    isRestored = true
+                    (recycler_view_climb_style.adapter as GenericAdapterSingleSelection<String>).setSelected(
+                        attemptWithGrades?.attempt?.climbStyle
+                    )
+                    (recycler_view_outcome.adapter as GenericAdapterSingleSelection<String>).setSelected(
+                        attemptWithGrades?.attempt?.outcome
+                    )
+                    (recycler_view_route_grade.adapter as GenericAdapterSingleSelection<RouteGrade>).setSelected(
+                        attemptWithGrades?.routeGrade
+                    )
+                    (recycler_view_route_type.adapter as GenericAdapterSingleSelection<String>).setSelected(
+                        attemptWithGrades?.attempt?.routeType
+                    )
+                    attemptWithGrades?.location?.let {
+                        tiet_area.setText(it.area)
+                        tiet_sector.setText(it.sector)
+                    }
                 }
-            }
-            )
+            })
     }
 
     private fun saveAttempt() {
@@ -299,6 +350,12 @@ class AddEditAttemptActivity : AppCompatActivity() {
             routeGrade = routeGradeId,
             outcome = outcome
         )
+
+        val area = tiet_area.text.toString()
+        val sector = tiet_sector.text.toString()
+        val locationId = locations?.get(area)?.get(sector)?.locationId
+
+        attempt.location = locationId
 
         attempt.routeName = Utils.getStringOrNull(edit_text_route_name.text)
         attempt.length = Utils.getStringOrNull(edit_text_length.text)?.toInt()

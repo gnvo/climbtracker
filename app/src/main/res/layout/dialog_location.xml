@@ -2,12 +2,11 @@
 <android.support.constraint.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
     <android.support.design.widget.TextInputLayout
-            android:id="@+id/til_area"
+            android:id="@+id/d_til_area"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -16,18 +15,17 @@
             android:layout_marginTop="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp">
-        <AutoCompleteTextView
+        <android.support.design.widget.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
                 android:hint="@string/area"
-                android:ems="10"
-                android:id="@+id/auto_complete_text_view_area"/>
+                android:id="@+id/d_tiet_area"/>
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
-            android:id="@+id/til_sector"
-            app:layout_constraintTop_toBottomOf="@id/til_area"
+            android:id="@+id/d_til_sector"
+            app:layout_constraintTop_toBottomOf="@id/d_til_area"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_width="0dp"
@@ -35,18 +33,17 @@
             android:layout_marginTop="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp">
-        <AutoCompleteTextView
+        <android.support.design.widget.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
                 android:hint="@string/sector"
-                android:ems="10"
-                android:id="@+id/auto_complete_text_view_sector"/>
+                android:id="@+id/d_tiet_sector"/>
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
             android:id="@+id/til_coordinates"
-            app:layout_constraintTop_toBottomOf="@+id/til_sector"
+            app:layout_constraintTop_toBottomOf="@+id/d_til_sector"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -56,11 +53,14 @@
             android:layout_marginEnd="8dp">
 
         <android.support.design.widget.TextInputEditText
+                android:clickable="false"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:digits=",.1234567890"
                 android:hint="@string/coordinates"
-                android:ems="10"
                 android:id="@+id/tiet_coordinates"
                 android:inputType="number|numberSigned|numberDecimal"/>
     </android.support.design.widget.TextInputLayout>

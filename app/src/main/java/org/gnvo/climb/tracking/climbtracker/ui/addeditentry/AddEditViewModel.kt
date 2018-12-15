@@ -33,4 +33,8 @@ class AddEditViewModel(application: Application) : AndroidViewModel(application)
     fun updateAttempt(attempt: Attempt) {
         repositoryAttempt.update(attempt)
     }
+
+    fun insertLocation(location: Location) {
+        repositoryLocation.insert(location)
+    }
 }

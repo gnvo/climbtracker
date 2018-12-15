@@ -107,54 +107,77 @@
                 android:layout_marginTop="8dp"
                 app:layout_constraintTop_toBottomOf="@+id/barrier_lists"/>
 
-        <android.support.v7.widget.AppCompatSpinner
-                android:id="@+id/spinner_area"
+        <android.support.design.widget.TextInputLayout
+                android:id="@+id/til_area"
                 app:layout_constraintTop_toBottomOf="@+id/rating_bar_rating"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintEnd_toStartOf="@+id/spinner_sector"
+                app:layout_constraintEnd_toStartOf="@+id/button_sector"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:layout_marginStart="8dp"/>
+                android:layout_marginStart="8dp">
+            <android.support.design.widget.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:hint="@string/area"
+                    android:id="@+id/tiet_area"
+                    android:clickable="false"
+                    android:cursorVisible="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"/>
 
-        <android.support.v7.widget.AppCompatSpinner
-                android:id="@+id/spinner_sector"
-                app:layout_constraintStart_toEndOf="@+id/spinner_area"
-                app:layout_constraintTop_toTopOf="@+id/spinner_area"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintEnd_toStartOf="@+id/button_add_location"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"/>
+        </android.support.design.widget.TextInputLayout>
 
-        <ImageButton
-                android:src="@drawable/ic_add_black"
-                android:contentDescription="@string/add_location"
-                android:id="@+id/button_add_location"
-                app:layout_constraintStart_toEndOf="@+id/spinner_sector"
-                app:layout_constraintTop_toTopOf="@+id/spinner_sector"
-                app:layout_constraintBottom_toBottomOf="@+id/spinner_sector"
+        <android.support.design.widget.TextInputLayout
+                android:id="@+id/button_sector"
+                app:layout_constraintStart_toEndOf="@+id/til_area"
+                app:layout_constraintTop_toTopOf="@+id/til_area"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintEnd_toStartOf="@+id/button_edit_location"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp">
+            <android.support.design.widget.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:hint="@string/sector"
+                    android:id="@+id/tiet_sector"
+                    android:clickable="false"
+                    android:cursorVisible="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"/>
+
+        </android.support.design.widget.TextInputLayout>
 
         <ImageButton
                 android:src="@drawable/ic_edit"
                 android:contentDescription="@string/edit_location"
                 android:id="@+id/button_edit_location"
-                app:layout_constraintBottom_toBottomOf="@+id/button_add_location"
-                app:layout_constraintTop_toTopOf="@+id/button_add_location"
+                app:layout_constraintStart_toEndOf="@+id/button_sector"
+                app:layout_constraintTop_toTopOf="@+id/button_sector"
+                app:layout_constraintBottom_toBottomOf="@+id/button_sector"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintEnd_toStartOf="@+id/button_add_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        <ImageButton
+                android:src="@drawable/ic_add_black"
+                android:contentDescription="@string/add_location"
+                android:id="@+id/button_add_location"
+                app:layout_constraintTop_toTopOf="@+id/button_edit_location"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/button_add_location"
+                app:layout_constraintStart_toEndOf="@+id/button_edit_location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
         <android.support.design.widget.TextInputLayout
                 android:id="@+id/til_route_name"
-                app:layout_constraintTop_toBottomOf="@+id/spinner_area"
+                app:layout_constraintTop_toBottomOf="@+id/til_area"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_width="0dp"
@@ -168,7 +191,6 @@
                     android:layout_height="wrap_content"
                     android:inputType="text"
                     android:hint="@string/route_name"
-                    android:ems="10"
                     android:id="@+id/edit_text_route_name"/>
         </android.support.design.widget.TextInputLayout>
 
@@ -187,25 +209,12 @@
                     android:layout_height="wrap_content"
                     android:inputType="text"
                     android:hint="@string/length"
-                    android:ems="10"
                     android:id="@+id/edit_text_length"/>
         </android.support.design.widget.TextInputLayout>
 
-        <Button
-                android:id="@+id/button_location"
-                app:layout_constraintTop_toBottomOf="@+id/til_length"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:text="@string/location"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"/>
-
         <android.support.design.widget.TextInputLayout
                 android:id="@+id/til_comment"
-                app:layout_constraintTop_toBottomOf="@+id/button_location"
+                app:layout_constraintTop_toBottomOf="@+id/til_length"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_width="0dp"
@@ -218,7 +227,6 @@
                     android:layout_height="wrap_content"
                     android:inputType="text"
                     android:hint="@string/comment"
-                    android:ems="10"
                     android:id="@+id/edit_text_comment"/>
         </android.support.design.widget.TextInputLayout>
     </android.support.constraint.ConstraintLayout>
