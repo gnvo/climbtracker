@@ -10,9 +10,11 @@ import android.support.v4.app.DialogFragment
 import android.support.v7.app.AlertDialog
 import android.text.Editable
 import android.text.TextWatcher
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.LatLng
 import kotlinx.android.synthetic.main.dialog_location.view.*
 import org.gnvo.climb.tracking.climbtracker.R
 import org.gnvo.climb.tracking.climbtracker.data.room.pojo.Location
@@ -116,7 +118,6 @@ class DialogLocationFragment : DialogFragment(), OnMapReadyCallback {
                 }
             }
         })
-
         return dialog
     }
 
@@ -150,6 +151,12 @@ class DialogLocationFragment : DialogFragment(), OnMapReadyCallback {
         }
         map.isMyLocationEnabled = true
         map.uiSettings.isZoomControlsEnabled = true
+
+        val (latitude, longitude) = Utils.extractCoordinates(tietCoordinates.text.toString())
+        if (latitude != null && longitude != null){
+            val coordinates = LatLng(latitude.value.toDouble(), longitude.value.toDouble())
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(coordinates, 12f))
+        }
 
         map.setOnCameraMoveListener {
             tietCoordinates.setText(
