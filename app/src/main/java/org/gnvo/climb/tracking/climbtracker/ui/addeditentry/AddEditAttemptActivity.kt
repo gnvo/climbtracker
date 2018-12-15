@@ -39,6 +39,12 @@ class AddEditAttemptActivity : AppCompatActivity() {
 
     private var isRestored = false
 
+    private lateinit var adapterClimbStyles: GenericAdapterSingleSelection<String>
+    private lateinit var adapterOutcome: GenericAdapterSingleSelection<String>
+    private lateinit var adapterRouteType: GenericAdapterSingleSelection<String>
+    private lateinit var adapterRouteGrade: GenericAdapterSingleSelection<RouteGrade>
+    private lateinit var adapterRouteCharacteristics: GenericAdapterMultipleSelection<String>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_update_attempt)
@@ -63,26 +69,31 @@ class AddEditAttemptActivity : AppCompatActivity() {
 
         setRouteGrades()
 
+        adapterClimbStyles = GenericAdapterSingleSelection()
         setAdapterToRecyclerViewSingleSelection(
             recycler_view_climb_style,
-            GenericAdapterSingleSelection<String>(),
+            adapterClimbStyles,
             resources.getStringArray(R.array.climb_styles).toCollection(ArrayList())
         )
 
+        adapterOutcome = GenericAdapterSingleSelection()
         setAdapterToRecyclerViewSingleSelection(
             recycler_view_outcome,
-            GenericAdapterSingleSelection<String>(),
+            adapterOutcome,
             resources.getStringArray(R.array.outcome).toCollection(ArrayList())
         )
 
+        adapterRouteType = GenericAdapterSingleSelection()
         setAdapterToRecyclerViewSingleSelection(
             recycler_view_route_type,
-            GenericAdapterSingleSelection<String>(),
+            adapterRouteType,
             resources.getStringArray(R.array.route_type).toCollection(ArrayList())
         )
+
+        adapterRouteCharacteristics = GenericAdapterMultipleSelection()
         setAdapterToRecyclerViewMultipleSelection(
             recycler_view_route_characteristics,
-            GenericAdapterMultipleSelection<String>(),
+            adapterRouteCharacteristics,
             resources.getStringArray(R.array.route_characteristic).toCollection(ArrayList())
         )
 
@@ -176,13 +187,13 @@ class AddEditAttemptActivity : AppCompatActivity() {
     }
 
     private fun setRouteGrades() {
-        val routeGradeAdapter = GenericAdapterSingleSelection<RouteGrade>()
-        routeGradeAdapter.setCustomFormatter(object : GenericAdapter.CustomFormatter<RouteGrade> {
+        adapterRouteGrade = GenericAdapterSingleSelection()
+        adapterRouteGrade.setCustomFormatter(object : GenericAdapter.CustomFormatter<RouteGrade> {
             override fun format(item: RouteGrade): String {
                 return "${item.french}"
             }
         })
-        routeGradeAdapter.setScroller(object : GenericAdapterSingleSelection.Scroller {
+        adapterRouteGrade.setScroller(object : GenericAdapterSingleSelection.Scroller {
             override fun scroll(selectedPosition: Int) {
                 val position = when (selectedPosition) {
                     RecyclerView.NO_POSITION -> 9 //if nothing is selected scroll down a bit
@@ -194,10 +205,10 @@ class AddEditAttemptActivity : AppCompatActivity() {
         recycler_view_route_grade.layoutManager = LinearLayoutManager(this)
         recycler_view_route_grade.setHasFixedSize(true)
 
-        recycler_view_route_grade.adapter = routeGradeAdapter
+        recycler_view_route_grade.adapter = adapterRouteGrade
 
         viewModel.getAllRouteGrades().observe(this, Observer {
-            routeGradeAdapter.setItems(ArrayList(it!!))
+            adapterRouteGrade.setItems(ArrayList(it!!))
         })
     }
 
@@ -263,22 +274,20 @@ class AddEditAttemptActivity : AppCompatActivity() {
                         attemptWithGrades!!.attempt.instantAndZoneId.instant.atZone(attemptWithGrades.attempt.instantAndZoneId.zoneId)
                     button_date_time.text = formatterDateTime.format(storedZonedDateTime)
 
-                    (recycler_view_climb_style.adapter as GenericAdapterSingleSelection<String>).setSelected(
+                    adapterClimbStyles.setSelected(
                         attemptWithGrades.attempt.climbStyle
                     )
-                    (recycler_view_outcome.adapter as GenericAdapterSingleSelection<String>).setSelected(
+                    adapterOutcome.setSelected(
                         attemptWithGrades.attempt.outcome
                     )
-                    (recycler_view_route_grade.adapter as GenericAdapterSingleSelection<RouteGrade>).setSelected(
+                    adapterRouteGrade.setSelected(
                         attemptWithGrades.routeGrade
                     )
-                    (recycler_view_route_type.adapter as GenericAdapterSingleSelection<String>).setSelected(
+                    adapterRouteType.setSelected(
                         attemptWithGrades.attempt.routeType
                     )
                     attemptWithGrades.attempt.routeCharacteristics?.let {
-                        (recycler_view_route_characteristics.adapter as GenericAdapterMultipleSelection<String>).setSelected(
-                            it
-                        )
+                        adapterRouteCharacteristics.setSelected(it)
                     }
 
                     attemptWithGrades.location?.let {
@@ -300,16 +309,16 @@ class AddEditAttemptActivity : AppCompatActivity() {
             .observe(this, Observer { attemptWithGrades: AttemptWithGrades? ->
                 if (!isRestored) {
                     isRestored = true
-                    (recycler_view_climb_style.adapter as GenericAdapterSingleSelection<String>).setSelected(
+                    adapterClimbStyles.setSelected(
                         attemptWithGrades?.attempt?.climbStyle
                     )
-                    (recycler_view_outcome.adapter as GenericAdapterSingleSelection<String>).setSelected(
+                    adapterOutcome.setSelected(
                         attemptWithGrades?.attempt?.outcome
                     )
-                    (recycler_view_route_grade.adapter as GenericAdapterSingleSelection<RouteGrade>).setSelected(
+                    adapterRouteGrade.setSelected(
                         attemptWithGrades?.routeGrade
                     )
-                    (recycler_view_route_type.adapter as GenericAdapterSingleSelection<String>).setSelected(
+                    adapterRouteType.setSelected(
                         attemptWithGrades?.attempt?.routeType
                     )
                     attemptWithGrades?.location?.let {
@@ -339,15 +348,10 @@ class AddEditAttemptActivity : AppCompatActivity() {
     private fun generateAttempt(): Attempt? {
         val zonedDateTime = ZonedDateTime.parse(button_date_time.text, formatterDateTime)
 
-        val climbStyle =
-            (recycler_view_climb_style.adapter as GenericAdapterSingleSelection<String>).getSelected()
-        val outcome =
-            (recycler_view_outcome.adapter as GenericAdapterSingleSelection<String>).getSelected()
-        val routeGradeId =
-            (recycler_view_route_grade.adapter as GenericAdapterSingleSelection<RouteGrade>).getSelected()?.routeGradeId
-                ?: INVALID_ID
-        val routeType =
-            (recycler_view_route_type.adapter as GenericAdapterSingleSelection<String>).getSelected()
+        val climbStyle= adapterClimbStyles.getSelected()
+        val outcome= adapterOutcome.getSelected()
+        val routeGradeId= adapterRouteGrade.getSelected()?.routeGradeId ?: INVALID_ID
+        val routeType= adapterRouteType.getSelected()
 
         if (routeType == null) {
             Toast.makeText(this, "Set route type. Eg. Sport", Toast.LENGTH_LONG).show()
@@ -384,8 +388,7 @@ class AddEditAttemptActivity : AppCompatActivity() {
         attempt.length = Utils.getStringOrNull(edit_text_length.text)?.toInt()
 
         attempt.comment = Utils.getStringOrNull(edit_text_comment.text)
-        attempt.routeCharacteristics =
-                (recycler_view_route_characteristics.adapter as GenericAdapterMultipleSelection<String>).getSelected()
+        attempt.routeCharacteristics = adapterRouteCharacteristics.getSelected()
 
         if (rating_bar_rating.rating > 0)
             attempt.rating = rating_bar_rating.rating.toInt()
