@@ -27,7 +27,6 @@ import org.threeten.bp.format.DateTimeFormatter
 class MainActivity : AppCompatActivity() {
 
     private lateinit var viewModel: MainViewModel
-    private var formatterDate = DateTimeFormatter.ofPattern("EEEE, d MMM yyyy")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,23 +53,7 @@ class MainActivity : AppCompatActivity() {
 
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
         viewModel.getAllAttemptsWithGrades().observe(this, Observer {
-            doAsync {
-                val list: MutableList<AttemptListItem> = mutableListOf()
-                if (it?.isNotEmpty()!!){
-                    var currentDate: String? = null
-                    for (attemptWithGrades in it){
-                        val zonedDateTime = attemptWithGrades.attempt.instantAndZoneId.instant.atZone(attemptWithGrades.attempt.instantAndZoneId.zoneId)
-                        val attemptDate = zonedDateTime.format(formatterDate)
-                        if (attemptDate != currentDate)
-                            list.add(AttemptHeader(date = attemptDate))
-                        list.add(attemptWithGrades)
-                        currentDate = attemptDate
-                    }
-                }
-                runOnUiThread{
-                    adapter.submitList(list)
-                }
-            }
+            adapter.submitList(it)
         })
 
         val simpleItemTouchCallback =

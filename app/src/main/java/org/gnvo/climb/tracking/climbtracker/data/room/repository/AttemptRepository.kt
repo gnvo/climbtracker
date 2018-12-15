@@ -2,21 +2,23 @@ package org.gnvo.climb.tracking.climbtracker.data.room.repository
 
 import android.app.Application
 import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.Transformations
 import org.gnvo.climb.tracking.climbtracker.data.room.AppDatabase
 import org.gnvo.climb.tracking.climbtracker.data.room.dao.AttemptDao
-import org.gnvo.climb.tracking.climbtracker.data.room.dao.LocationDao
-import org.gnvo.climb.tracking.climbtracker.data.room.pojo.Attempt
-import org.gnvo.climb.tracking.climbtracker.data.room.pojo.AttemptWithGrades
-import org.gnvo.climb.tracking.climbtracker.data.room.pojo.Location
+import org.gnvo.climb.tracking.climbtracker.data.room.pojo.*
 import org.jetbrains.anko.doAsync
+import org.threeten.bp.format.DateTimeFormatter
 
 class AttemptRepository(application: Application) {
     private val db: AppDatabase? = AppDatabase.getInstance(application = application)
     private val attemptDao: AttemptDao? = db?.attemptDao()
-    private val attemptsWithGrades: LiveData<List<AttemptWithGrades>> = attemptDao?.getAllWithGrades()!!
+    private val allAttemptsWithGradesAndHeaders: LiveData<List<AttemptListItem>> =
+        Transformations.map(attemptDao?.getAllWithGrades()!!, ::getAllWithDateHeaders)
 
-    fun getAllWithGrades(): LiveData<List<AttemptWithGrades>> {
-        return attemptsWithGrades
+    private var formatterDate = DateTimeFormatter.ofPattern("EEEE, d MMM yyyy")
+
+    fun getAllWithGradesAndHeaders(): LiveData<List<AttemptListItem>> {
+        return allAttemptsWithGradesAndHeaders
     }
 
     fun getByIdWithGrades(attemptId: Long): LiveData<AttemptWithGrades> {
@@ -43,5 +45,21 @@ class AttemptRepository(application: Application) {
         doAsync {
             attemptDao?.delete(attempt)
         }
+    }
+
+    private fun getAllWithDateHeaders(attemptsWithGrades: List<AttemptWithGrades>): List<AttemptListItem> {
+        val list: MutableList<AttemptListItem> = mutableListOf()
+
+        var currentDate: String? = null
+        for (attemptWithGrades in attemptsWithGrades){
+            val zonedDateTime = attemptWithGrades.attempt.instantAndZoneId.instant.atZone(attemptWithGrades.attempt.instantAndZoneId.zoneId)
+            val attemptDate = zonedDateTime.format(formatterDate)
+            if (attemptDate != currentDate)
+                list.add(AttemptHeader(date = attemptDate))
+            list.add(attemptWithGrades)
+            currentDate = attemptDate
+        }
+
+        return list
     }
 }
