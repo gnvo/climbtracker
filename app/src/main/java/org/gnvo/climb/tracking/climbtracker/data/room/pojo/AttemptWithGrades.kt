@@ -25,7 +25,7 @@ data class AttemptWithGrades(
         return result
     }
 
-    override fun areItemsTheSame(other: AttemptListItem?): Boolean {
+    override fun itemsAreEqualOrHaveSameId(other: AttemptListItem?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 

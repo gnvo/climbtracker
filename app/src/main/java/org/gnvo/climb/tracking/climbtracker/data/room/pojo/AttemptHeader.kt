@@ -18,7 +18,7 @@ class AttemptHeader (
         return date.hashCode()
     }
 
-    override fun areItemsTheSame(other: AttemptListItem?): Boolean {
+    override fun itemsAreEqualOrHaveSameId(other: AttemptListItem?): Boolean {
         return equals(other)
     }
 }

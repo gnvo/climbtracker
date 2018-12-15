@@ -5,7 +5,7 @@ import org.gnvo.climb.tracking.climbtracker.data.room.pojo.AttemptListItem
 
 class EntryDiffCallback : DiffUtil.ItemCallback<AttemptListItem>() {
     override fun areItemsTheSame(oldItem: AttemptListItem, newItem: AttemptListItem): Boolean {
-        return oldItem.areItemsTheSame(newItem)
+        return oldItem.itemsAreEqualOrHaveSameId(newItem)
     }
 
     override fun areContentsTheSame(oldItem: AttemptListItem, newItem: AttemptListItem): Boolean {
