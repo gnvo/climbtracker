@@ -10,7 +10,6 @@ import android.support.v4.app.DialogFragment
 import android.support.v7.app.AlertDialog
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.View
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
@@ -20,6 +19,7 @@ import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.dialog_location.view.*
 import org.gnvo.climb.tracking.climbtracker.R
+import org.gnvo.climb.tracking.climbtracker.data.room.pojo.Location
 import org.gnvo.climb.tracking.climbtracker.ui.addeditentry.Utils.Companion.getStringOrNull
 
 
@@ -62,7 +62,15 @@ class DialogLocationFragment : DialogFragment(), OnMapReadyCallback {
                     val area = getStringOrNull(tietArea.text)!!
                     val sector = getStringOrNull(tietSector.text)
                     val coordinates = getStringOrNull(tietCoordinates.text)
-                    listener?.onDialogPositiveClick(area, sector, coordinates)
+
+                    val location = Location(area = area)
+                    location.sector = sector
+                    val (latitude, longitude) = Utils.extractCoordinates(coordinates ?: "")
+                    location.sector = sector
+                    location.latitude = latitude?.value?.toDouble()
+                    location.longitude = longitude?.value?.toDouble()
+
+                    listener?.onDialogPositiveClick(location)
                 }
                 .setNegativeButton(
                     R.string.cancel
@@ -71,14 +79,29 @@ class DialogLocationFragment : DialogFragment(), OnMapReadyCallback {
 
             val dialog = builder.create()
 
-            dialog.setTitle(listener?.setTitle())
+            dialog.setTitle(listener?.getTitle())
+
             dialog.setOnShowListener {
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).text = listener?.getPositiveButtonText()
                 if (tietArea.text.isNullOrEmpty()) {
                     tietArea.error = "Cannot be empty"
                     dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
                 }
             }
-            listener?.populate(dialogView)
+            val location = listener?.getLocation()
+            location?.let { l ->
+                dialogView.d_tiet_area.setText(l.area)
+                l.sector?.let { dialogView.d_tiet_sector.setText(it) }
+                if (l.latitude != null && l.longitude != null) {
+                    dialogView.tiet_coordinates.setText(
+                        getString(
+                            R.string.coordinates_format,
+                            location.latitude,
+                            location.longitude
+                        )
+                    )
+                }
+            }
 
             mMapView = dialogView.map_view_map
             mMapView?.onCreate(savedInstanceState)
@@ -87,11 +110,11 @@ class DialogLocationFragment : DialogFragment(), OnMapReadyCallback {
             dialog
         } ?: throw IllegalStateException("Activity cannot be null")
 
-        tietArea.addTextChangedListener( object : TextWatcher {
+        tietArea.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun afterTextChanged(s: Editable?) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (s.isNullOrEmpty()){
+                if (s.isNullOrEmpty()) {
                     tietArea.error = "Cannot be empty"
                     dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
                 } else {
@@ -104,9 +127,10 @@ class DialogLocationFragment : DialogFragment(), OnMapReadyCallback {
     }
 
     interface DialogLocationListener {
-        fun onDialogPositiveClick(area: String, sector: String?, coordinates: String?)
-        fun setTitle(): String
-        fun populate(view: View)
+        fun getTitle(): String
+        fun getLocation(): Location?
+        fun getPositiveButtonText(): String
+        fun onDialogPositiveClick(location: Location)
     }
 
     fun setDialogLocationListener(listener: DialogLocationListener) {

@@ -11,13 +11,10 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_add_update_attempt.*
-import kotlinx.android.synthetic.main.dialog_location.view.*
 import org.gnvo.climb.tracking.climbtracker.R
 import org.gnvo.climb.tracking.climbtracker.data.room.pojo.*
-import org.gnvo.climb.tracking.climbtracker.ui.addeditentry.Utils.Companion.extractCoordinates
 import org.gnvo.climb.tracking.climbtracker.ui.addeditentry.adapters.GenericAdapter
 import org.gnvo.climb.tracking.climbtracker.ui.addeditentry.adapters.GenericAdapterMultipleSelection
 import org.gnvo.climb.tracking.climbtracker.ui.addeditentry.adapters.GenericAdapterSingleSelection
@@ -96,26 +93,52 @@ class AddEditAttemptActivity : AppCompatActivity() {
         button_add_location.setOnClickListener {
             val dialog = DialogLocationFragment()
             dialog.setDialogLocationListener(object : DialogLocationFragment.DialogLocationListener {
-                override fun setTitle(): String {
+                override fun getPositiveButtonText(): String {
+                    return getString(R.string.create)
+                }
+
+                override fun getTitle(): String {
                     return getString(R.string.add_location)
                 }
 
-                override fun populate(view: View) {
-                    view.d_tiet_area.text = tiet_area.text
+                override fun getLocation(): Location? {
+                    return Location(area = tiet_area.text.toString())
                 }
 
-                override fun onDialogPositiveClick(area: String, sector: String?, coordinates: String?) {
-                    val location = Location(area = area)
-                    location.sector = sector
-                    val (latitude, longitude) = extractCoordinates(coordinates ?: "")
-                    location.sector = sector
-                    location.latitude = latitude?.value?.toDouble()
-                    location.longitude = longitude?.value?.toDouble()
-
-                    tiet_area.setText(area)
-                    tiet_sector.setText(sector)
+                override fun onDialogPositiveClick(location: Location) {
+                    tiet_area.setText(location.area)
+                    location.sector?.let{s-> tiet_sector.setText(s)}
 
                     viewModel.insertLocation(location)
+                }
+            })
+            dialog.show(supportFragmentManager, "DialogLocation")
+        }
+
+        button_edit_location.setOnClickListener {
+            var locationId: Long? = null
+            val dialog = DialogLocationFragment()
+            dialog.setDialogLocationListener(object : DialogLocationFragment.DialogLocationListener {
+                override fun getPositiveButtonText(): String {
+                    return getString(R.string.update)
+                }
+
+                override fun getTitle(): String {
+                    return getString(R.string.edit_location)
+                }
+
+                override fun getLocation(): Location? {
+                    val location = locations?.get(tiet_area.text.toString())?.get(tiet_sector.text.toString())
+                    locationId = location?.locationId
+                    return location
+                }
+
+                override fun onDialogPositiveClick(location: Location) {
+                    tiet_area.setText(location.area)
+                    location.sector?.let{s -> tiet_sector.setText(s)}
+
+                    location.locationId = locationId
+                    viewModel.updateLocation(location)
                 }
             })
             dialog.show(supportFragmentManager, "DialogLocation")
