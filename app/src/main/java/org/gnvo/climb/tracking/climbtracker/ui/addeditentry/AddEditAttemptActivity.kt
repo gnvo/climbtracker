@@ -164,7 +164,7 @@ class AddEditAttemptActivity : AppCompatActivity() {
         tiet_sector.setOnClickListener {
             val area = tiet_area.text.toString()
             val sectors =
-                locations?.get(area)?.keys?.filter { sector -> sector.isNotEmpty() }?.toTypedArray() ?: arrayOf()
+                locations?.get(area)?.keys?.toTypedArray() ?: arrayOf()
             val builder = AlertDialog.Builder(this)
             builder.setTitle(R.string.sector)
                 .setItems(sectors) { _, which ->
