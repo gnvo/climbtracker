@@ -10,13 +10,9 @@ import android.support.v4.app.DialogFragment
 import android.support.v7.app.AlertDialog
 import android.text.Editable
 import android.text.TextWatcher
-import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.dialog_location.view.*
 import org.gnvo.climb.tracking.climbtracker.R
 import org.gnvo.climb.tracking.climbtracker.data.room.pojo.Location
@@ -39,8 +35,6 @@ class DialogLocationFragment : DialogFragment(), OnMapReadyCallback {
     private lateinit var tietCoordinates: TextInputEditText
     private lateinit var tietArea: TextInputEditText
     private lateinit var tietSector: TextInputEditText
-
-    private var marker: Marker? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         dialog = activity?.let { it ->
@@ -157,22 +151,12 @@ class DialogLocationFragment : DialogFragment(), OnMapReadyCallback {
         map.isMyLocationEnabled = true
         map.uiSettings.isZoomControlsEnabled = true
 
-        val (latitude, longitude) = Utils.extractCoordinates(tietCoordinates.text.toString())
-        marker = if (latitude != null && longitude != null) {
-            val coordinates = LatLng(latitude.value.toDouble(), longitude.value.toDouble())
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom(coordinates, 12f))
-            map.addMarker(MarkerOptions().position(coordinates))
-        } else {
-            map.addMarker(MarkerOptions().position(googleMap.cameraPosition.target))
-        }
-
         map.setOnCameraMoveListener {
-            marker!!.position = googleMap.cameraPosition.target
             tietCoordinates.setText(
                 getString(
                     R.string.coordinates_format,
-                    marker!!.position.latitude,
-                    marker!!.position.longitude
+                    googleMap.cameraPosition.target.latitude,
+                    googleMap.cameraPosition.target.longitude
                 )
             )
         }

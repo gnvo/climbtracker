@@ -19,6 +19,7 @@
     <string name="edit_location">Edit Location</string>
     <string name="add_location">Add Location</string>
     <string name="update">Update</string>
+    <string name="map_center">Map center</string>
 
     <string-array name="route_type">
         <item>Trad</item>
