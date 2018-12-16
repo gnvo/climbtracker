@@ -1,11 +1,12 @@
 package org.gnvo.climb.tracking.climbtracker.data.room.pojo
 
+import android.arch.persistence.room.ColumnInfo
 import org.threeten.bp.Instant
 import org.threeten.bp.ZoneId
 
 data class InstantAndZoneId (
     var instant: Instant,
-    var zoneId: ZoneId
+    @ColumnInfo(name = "zone_id") var zoneId: ZoneId
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

@@ -21,7 +21,7 @@ data class Attempt(
     @ColumnInfo(name = "route_name") var routeName: String? = null,
     var comment: String? = null,
     var rating: Int? = null,
-    var routeCharacteristics: List<String>? = null,
+    @ColumnInfo(name = "route_characteristics") var routeCharacteristics: List<String>? = null,
 
     var length: Int? = null,
 

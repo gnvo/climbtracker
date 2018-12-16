@@ -14,7 +14,7 @@ import org.gnvo.climb.tracking.climbtracker.data.room.dao.*
 import org.gnvo.climb.tracking.climbtracker.data.room.pojo.*
 import org.jetbrains.anko.doAsync
 
-@Database(entities = [Attempt::class, RouteGrade::class, Location::class], version = 3)
+@Database(entities = [Attempt::class, RouteGrade::class, Location::class], version = 4)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun attemptDao(): AttemptDao
