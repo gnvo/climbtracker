@@ -118,7 +118,8 @@ class AddEditAttemptActivity : AppCompatActivity() {
 
                 override fun onDialogPositiveClick(location: Location) {
                     tiet_area.setText(location.area)
-                    location.sector?.let{s-> tiet_sector.setText(s)}
+                    val sector: String = location.sector ?: ""
+                    tiet_sector.setText(sector)
 
                     viewModel.insertLocation(location)
                 }
@@ -146,7 +147,8 @@ class AddEditAttemptActivity : AppCompatActivity() {
 
                 override fun onDialogPositiveClick(location: Location) {
                     tiet_area.setText(location.area)
-                    location.sector?.let{s -> tiet_sector.setText(s)}
+                    val sector: String = location.sector ?: ""
+                    tiet_sector.setText(sector)
 
                     location.locationId = locationId
                     viewModel.updateLocation(location)
