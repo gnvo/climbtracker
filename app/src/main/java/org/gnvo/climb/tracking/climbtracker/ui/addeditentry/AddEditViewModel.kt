@@ -41,4 +41,8 @@ class AddEditViewModel(application: Application) : AndroidViewModel(application)
     fun updateLocation(location: Location) {
         repositoryLocation.update(location)
     }
+
+    fun deleteAttemptById(attemptId: Long) {
+        repositoryAttempt.delete(attemptId)
+    }
 }

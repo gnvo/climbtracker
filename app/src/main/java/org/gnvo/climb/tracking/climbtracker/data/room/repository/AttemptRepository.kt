@@ -41,9 +41,9 @@ class AttemptRepository(application: Application) {
         }
     }
 
-    fun delete(attempt: Attempt) {
+    fun delete(attemptId: Long) {
         doAsync {
-            attemptDao?.delete(attempt)
+            attemptDao?.delete(attemptId)
         }
     }
 

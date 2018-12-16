@@ -398,8 +398,27 @@ class AddEditAttemptActivity : AppCompatActivity() {
         return attempt
     }
 
+    private fun deleteAttempt() {
+        AlertDialog.Builder(this)
+            .setTitle(getString(R.string.delete))
+            .setMessage(getString(R.string.delete_attempt_question))
+            .setIcon(R.drawable.ic_delete_forever)
+            .setPositiveButton(
+                R.string.delete
+            ) { _, _ ->
+                viewModel.deleteAttemptById(attemptIdFromIntentExtra)
+                finish()
+            }
+            .setNegativeButton(
+                R.string.cancel
+                , null
+            ).create().show()
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.add_edit_attempt_menu, menu)
+        if (attemptIdFromIntentExtra == INVALID_ID)
+            menu?.findItem(R.id.delete_attempt)?.isVisible = false
         return true
     }
 
@@ -407,6 +426,10 @@ class AddEditAttemptActivity : AppCompatActivity() {
         return when (item?.itemId) {
             R.id.save_attempt -> {
                 saveAttempt()
+                true
+            }
+            R.id.delete_attempt -> {
+                deleteAttempt()
                 true
             }
             else -> super.onOptionsItemSelected(item)

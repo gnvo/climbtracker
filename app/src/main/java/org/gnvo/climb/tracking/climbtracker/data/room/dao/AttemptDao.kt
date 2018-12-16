@@ -40,6 +40,6 @@ interface AttemptDao {
     @Update
     fun update(attempt: Attempt)
 
-    @Delete
-    fun delete(attempt: Attempt)
+    @Query("DELETE FROM attempt WHERE id = :attemptId")
+    fun delete(attemptId: Long)
 }
