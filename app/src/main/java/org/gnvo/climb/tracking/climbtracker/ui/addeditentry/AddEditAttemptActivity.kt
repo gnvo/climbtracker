@@ -9,6 +9,8 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -127,6 +129,8 @@ class AddEditAttemptActivity : AppCompatActivity() {
             dialog.show(supportFragmentManager, "DialogLocation")
         }
 
+        button_edit_location.isEnabled = false
+        button_edit_location.setImageResource(R.drawable.ic_edit_grayedout)
         button_edit_location.setOnClickListener {
             var locationId: Long? = null
             val dialog = DialogLocationFragment()
@@ -159,6 +163,17 @@ class AddEditAttemptActivity : AppCompatActivity() {
 
         viewModel.getAllLocations().observe(this, Observer { locations ->
             this.locations = locations
+        })
+
+        tiet_area.addTextChangedListener(object : TextWatcher {
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                button_edit_location.isEnabled = true
+                button_edit_location.setImageResource(R.drawable.ic_edit)
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
         })
 
         tiet_area.setOnClickListener {
