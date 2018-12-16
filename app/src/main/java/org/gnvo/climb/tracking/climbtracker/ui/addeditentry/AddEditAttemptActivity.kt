@@ -350,10 +350,10 @@ class AddEditAttemptActivity : AppCompatActivity() {
     private fun generateAttempt(): Attempt? {
         val zonedDateTime = ZonedDateTime.parse(button_date_time.text, formatterDateTime)
 
-        val climbStyle= adapterClimbStyles.getSelected()
-        val outcome= adapterOutcome.getSelected()
-        val routeGradeId= adapterRouteGrade.getSelected()?.routeGradeId ?: INVALID_ID
-        val routeType= adapterRouteType.getSelected()
+        val climbStyle = adapterClimbStyles.getSelected()
+        val outcome = adapterOutcome.getSelected()
+        val routeGradeId = adapterRouteGrade.getSelected()?.routeGradeId ?: INVALID_ID
+        val routeType = adapterRouteType.getSelected()
 
         if (routeType == null) {
             Toast.makeText(this, "Set route type. Eg. Sport", Toast.LENGTH_LONG).show()
