@@ -41,6 +41,8 @@ class AddEditAttemptActivity : AppCompatActivity() {
 
     private var isRestored = false
 
+    private var dialogLocationFragment: DialogLocationFragment? = null
+
     private lateinit var adapterClimbStyles: GenericAdapterSingleSelection<String>
     private lateinit var adapterOutcome: GenericAdapterSingleSelection<String>
     private lateinit var adapterRouteType: GenericAdapterSingleSelection<String>
@@ -104,8 +106,8 @@ class AddEditAttemptActivity : AppCompatActivity() {
 
     private fun locationPreparation() {
         button_add_location.setOnClickListener {
-            val dialog = DialogLocationFragment()
-            dialog.setDialogLocationListener(object : DialogLocationFragment.DialogLocationListener {
+            dialogLocationFragment = DialogLocationFragment()
+            dialogLocationFragment!!.setDialogLocationListener(object : DialogLocationFragment.DialogLocationListener {
                 override fun getPositiveButtonText(): String {
                     return getString(R.string.create)
                 }
@@ -126,15 +128,15 @@ class AddEditAttemptActivity : AppCompatActivity() {
                     viewModel.insertLocation(location)
                 }
             })
-            dialog.show(supportFragmentManager, "DialogLocation")
+            dialogLocationFragment!!.show(supportFragmentManager, "DialogLocation")
         }
 
         button_edit_location.isEnabled = false
         button_edit_location.setImageResource(R.drawable.ic_edit_grayedout)
         button_edit_location.setOnClickListener {
             var locationId: Long? = null
-            val dialog = DialogLocationFragment()
-            dialog.setDialogLocationListener(object : DialogLocationFragment.DialogLocationListener {
+            dialogLocationFragment = DialogLocationFragment()
+            dialogLocationFragment!!.setDialogLocationListener(object : DialogLocationFragment.DialogLocationListener {
                 override fun getPositiveButtonText(): String {
                     return getString(R.string.update)
                 }
@@ -158,7 +160,7 @@ class AddEditAttemptActivity : AppCompatActivity() {
                     viewModel.updateLocation(location)
                 }
             })
-            dialog.show(supportFragmentManager, "DialogLocation")
+            dialogLocationFragment!!.show(supportFragmentManager, "DialogLocation")
         }
 
         viewModel.getAllLocations().observe(this, Observer { locations ->
@@ -449,5 +451,9 @@ class AddEditAttemptActivity : AppCompatActivity() {
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        dialogLocationFragment?.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 }

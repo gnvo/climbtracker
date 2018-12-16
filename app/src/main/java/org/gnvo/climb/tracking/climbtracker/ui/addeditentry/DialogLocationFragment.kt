@@ -1,5 +1,6 @@
 package org.gnvo.climb.tracking.climbtracker.ui.addeditentry
 
+import android.Manifest
 import android.app.Activity
 import android.app.Dialog
 import android.content.pm.PackageManager
@@ -140,16 +141,17 @@ class DialogLocationFragment : DialogFragment(), OnMapReadyCallback {
         if (ActivityCompat.checkSelfPermission(
                 activity as Activity,
                 android.Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
+            ) == PackageManager.PERMISSION_GRANTED
         ) {
+            map.isMyLocationEnabled = true
+        } else {
             ActivityCompat.requestPermissions(
                 activity as Activity,
                 arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
                 LOCATION_PERMISSION_REQUEST_CODE
             )
-            return
         }
-        map.isMyLocationEnabled = true
+
         map.uiSettings.isZoomControlsEnabled = true
 
         val (latitude, longitude) = Utils.extractCoordinates(tietCoordinates.text.toString())
@@ -166,6 +168,18 @@ class DialogLocationFragment : DialogFragment(), OnMapReadyCallback {
                     googleMap.cameraPosition.target.longitude
                 )
             )
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
+            if (permissions.size == 1 &&
+                permissions[0] == Manifest.permission.ACCESS_FINE_LOCATION &&
+                grantResults[0] == PackageManager.PERMISSION_GRANTED
+            ) {
+                map.isMyLocationEnabled = true
+            } else {
+            }
         }
     }
 
