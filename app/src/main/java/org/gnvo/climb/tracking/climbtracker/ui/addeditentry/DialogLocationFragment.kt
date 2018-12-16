@@ -153,7 +153,7 @@ class DialogLocationFragment : DialogFragment(), OnMapReadyCallback {
         map.uiSettings.isZoomControlsEnabled = true
 
         val (latitude, longitude) = Utils.extractCoordinates(tietCoordinates.text.toString())
-        if (latitude != null && longitude != null){
+        if (latitude != null && longitude != null) {
             val coordinates = LatLng(latitude.value.toDouble(), longitude.value.toDouble())
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(coordinates, 12f))
         }
