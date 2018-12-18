@@ -14,10 +14,12 @@ import org.gnvo.climb.tracking.climbtracker.ui.main.views.ViewHolderHeader
 class EntryAdapter : ListAdapter<AttemptListItem, ViewHolder>(
     EntryDiffCallback()
 ) {
-    private var listener: OnItemClickListener? = null
+    companion object {
+        private const val TYPE_HEADER = 1
+        private const val TYPE_ITEM = 2
+    }
 
-    val TYPE_HEADER = 1
-    val TYPE_ITEM = 2
+    private var listener: OnItemClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return when (viewType){
@@ -28,10 +30,6 @@ class EntryAdapter : ListAdapter<AttemptListItem, ViewHolder>(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(getItem(position), listener)
-    }
-
-    fun getItemAt(position: Int): AttemptListItem {
-        return getItem(position)
     }
 
     interface OnItemClickListener {
