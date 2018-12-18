@@ -76,6 +76,37 @@ abstract class AppDatabase : RoomDatabase() {
                 }
             }
 
+            val MIGRATION_4_5 = object : Migration(4, 5) {
+                override fun migrate(database: SupportSQLiteDatabase) {
+                    database.execSQL("PRAGMA foreign_keys=off;")
+                    database.execSQL("BEGIN TRANSACTION;")
+                    database.execSQL("ALTER TABLE attempt RENAME TO attempt_old;")
+                    database.execSQL("CREATE TABLE `attempt` " +
+                            "(`id` INTEGER PRIMARY KEY AUTOINCREMENT," +
+                            "`climb_style` TEXT NOT NULL," +
+                            "`outcome` TEXT NOT NULL," +
+                            "`route_grade` TEXT NOT NULL," +
+                            "`route_type` TEXT NOT NULL," +
+                            "`route_name` TEXT," +
+                            "`comment` TEXT," +
+                            "`rating` INTEGER," +
+                            "`route_characteristics` TEXT," +
+                            "`length` INTEGER," +
+                            "`location` INTEGER," +
+                            "`instant` INTEGER NOT NULL," +
+                            "`zone_id` TEXT NOT NULL," +
+                            "FOREIGN KEY(`location`) REFERENCES `location`(`location_id`) ON UPDATE NO ACTION ON DELETE NO ACTION );")
+                    database.execSQL("INSERT INTO attempt ( id,climb_style,outcome,route_grade,route_type,route_name,comment,rating,route_characteristics,length,location,instant,zone_id )" +
+                            "SELECT id,climb_style,outcome,route_grade.french,route_type,route_name,comment,rating,route_characteristics,length,location,instant,zone_id " +
+                            "FROM attempt_old " +
+                            "INNER JOIN route_grade on route_grade.route_grade_id = attempt_old.route_grade ;")
+                    database.execSQL("DROP TABLE attempt_old;")
+                    database.execSQL("CREATE INDEX `index_attempt_location` ON `attempt` (`location`);")
+                    database.execSQL("COMMIT;")
+                    database.execSQL("PRAGMA foreign_keys=on;")
+                }
+            }
+
             return Room.databaseBuilder(
                 context,
                 AppDatabase::class.java,
@@ -83,6 +114,7 @@ abstract class AppDatabase : RoomDatabase() {
             )
                 .addMigrations(MIGRATION_2_3)
                 .addMigrations(MIGRATION_3_4)
+                .addMigrations(MIGRATION_4_5)
                 .build()
         }
     }
