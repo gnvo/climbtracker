@@ -24,6 +24,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
 
         button_add_attempt.setOnClickListener {
             val intent = Intent(this@MainActivity, AddEditAttemptActivity::class.java)
@@ -44,7 +45,6 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
         viewModel.getAllAttemptsWithGrades().observe(this, Observer {
             adapter.submitList(it)
         })
