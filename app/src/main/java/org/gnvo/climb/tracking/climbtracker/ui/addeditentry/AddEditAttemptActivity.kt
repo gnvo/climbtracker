@@ -97,6 +97,11 @@ class AddEditAttemptActivity : AppCompatActivity() {
             adapterRouteGrade,
             viewModel.getAllRouteGrades().keys.toCollection(ArrayList())
         )
+        adapterRouteGrade.setScroller(object : GenericAdapterSingleSelection.Scroller {
+            override fun scroll(selectedPosition: Int) {
+                (recycler_view_route_grade.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(selectedPosition, 0)
+            }
+        })
 
         adapterRouteCharacteristics = GenericAdapterMultipleSelection()
         setAdapterToRecyclerViewMultipleSelection(
