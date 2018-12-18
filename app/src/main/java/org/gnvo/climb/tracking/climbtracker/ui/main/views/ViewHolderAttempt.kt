@@ -11,7 +11,6 @@ import java.util.*
 class ViewHolderAttempt(itemView: View) : ViewHolder(itemView) {
     private var formatterTime = DateTimeFormatter.ofPattern("HH:mm:ss VV")
 
-
     override fun bind(item: AttemptListItem, listener: EntryAdapter.OnItemClickListener?) {
         if (item is AttemptWithGrades) {
             itemView.text_view_climb_style.text = item.attempt.climbStyle
