@@ -8,11 +8,8 @@ import android.arch.persistence.room.RoomDatabase
 import android.arch.persistence.room.TypeConverters
 import android.arch.persistence.room.migration.Migration
 import android.content.Context
-import android.database.sqlite.SQLiteDatabase
-import android.support.annotation.NonNull
 import org.gnvo.climb.tracking.climbtracker.data.room.dao.*
 import org.gnvo.climb.tracking.climbtracker.data.room.pojo.*
-import org.jetbrains.anko.doAsync
 
 @Database(entities = [Attempt::class, Location::class], version = 5)
 @TypeConverters(Converters::class)
@@ -68,7 +65,7 @@ abstract class AppDatabase : RoomDatabase() {
                     database.execSQL("INSERT INTO attempt ( id,climb_style,outcome,route_grade,route_type,route_name,comment,rating,route_characteristics,length,location,instant,zone_id )" +
                             "SELECT  id,climb_style,outcome,route_grade,route_type,route_name,comment,rating,routeCharacteristics,length,location,instant,zoneId " +
                             "FROM attempt_old;")
-                    database.execSQL("DROP TABLE attempt_old;\n")
+                    database.execSQL("DROP TABLE attempt_old;")
                     database.execSQL("CREATE INDEX `index_attempt_location` ON `attempt` (`location`);")
                     database.execSQL("CREATE INDEX `index_attempt_route_grade` ON `attempt` (`route_grade`);")
                     database.execSQL("COMMIT;")
