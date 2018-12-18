@@ -11,7 +11,7 @@ import org.gnvo.climb.tracking.climbtracker.ui.main.views.ViewHolder
 import org.gnvo.climb.tracking.climbtracker.ui.main.views.ViewHolderAttempt
 import org.gnvo.climb.tracking.climbtracker.ui.main.views.ViewHolderHeader
 
-class EntryAdapter : ListAdapter<AttemptListItem, ViewHolder>(
+class EntryAdapter(var alwaysShowGrade: String?) : ListAdapter<AttemptListItem, ViewHolder>(
     EntryDiffCallback()
 ) {
     companion object {
@@ -24,7 +24,7 @@ class EntryAdapter : ListAdapter<AttemptListItem, ViewHolder>(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return when (viewType){
             TYPE_HEADER -> ViewHolderHeader(LayoutInflater.from(parent.context).inflate(R.layout.recycler_view_attempt_header, parent, false))
-            else -> ViewHolderAttempt(LayoutInflater.from(parent.context).inflate(R.layout.recycler_view_attempt_item, parent, false))
+            else -> ViewHolderAttempt(LayoutInflater.from(parent.context).inflate(R.layout.recycler_view_attempt_item, parent, false), alwaysShowGrade)
         }
     }
 

@@ -8,14 +8,26 @@ import org.gnvo.climb.tracking.climbtracker.ui.main.views.adapter.EntryAdapter
 import org.threeten.bp.format.DateTimeFormatter
 import java.util.*
 
-class ViewHolderAttempt(itemView: View) : ViewHolder(itemView) {
+class ViewHolderAttempt(itemView: View, private val alwaysShowGrade: String?) : ViewHolder(itemView) {
     private var formatterTime = DateTimeFormatter.ofPattern("HH:mm:ss VV")
 
     override fun bind(item: AttemptListItem, listener: EntryAdapter.OnItemClickListener?) {
         if (item is AttemptWithGrades) {
             itemView.text_view_climb_style.text = item.attempt.climbStyle
             itemView.text_view_outcome.text = item.attempt.outcome
-            itemView.text_view_route_grade.text = item.attempt.routeGrade
+
+            val stringBufferRouteGrade = StringBuffer()
+            stringBufferRouteGrade.append(item.attempt.routeGrade)
+
+            alwaysShowGrade?.let {
+                val routeGradeField = item.routeGrade!!::class.java.getDeclaredField(alwaysShowGrade)
+                routeGradeField.isAccessible = true
+                val alwaysShowActualGrade = routeGradeField.get(item.routeGrade)
+                if (alwaysShowActualGrade != item.attempt.routeGrade) {
+                    stringBufferRouteGrade.append("/"+alwaysShowActualGrade.toString())
+                }
+            }
+            itemView.text_view_route_grade.text = stringBufferRouteGrade.toString()
 
             val attempt = item.attempt
             val listOfDetails = LinkedList<String>()

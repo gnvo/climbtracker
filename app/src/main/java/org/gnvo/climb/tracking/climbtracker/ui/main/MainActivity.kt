@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
         recycler_view.layoutManager = layoutManager
         recycler_view.setHasFixedSize(true)
 
-        val adapter = EntryAdapter()
+        val adapter = EntryAdapter(appPrefs.getAlwaysShow())
         recycler_view.adapter = adapter
 
         adapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
