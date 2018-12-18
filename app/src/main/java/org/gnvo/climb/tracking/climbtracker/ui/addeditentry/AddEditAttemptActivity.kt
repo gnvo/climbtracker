@@ -95,7 +95,7 @@ class AddEditAttemptActivity : AppCompatActivity() {
         setAdapterToRecyclerViewSingleSelection(
             recycler_view_route_grade,
             adapterRouteGrade,
-            viewModel.getAllRouteGrades().keys.sorted().toCollection(ArrayList())
+            viewModel.getAllRouteGrades().keys.toCollection(ArrayList())
         )
 
         adapterRouteCharacteristics = GenericAdapterMultipleSelection()

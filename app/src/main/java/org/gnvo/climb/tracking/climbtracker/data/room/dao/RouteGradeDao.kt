@@ -5,10 +5,10 @@ import org.gnvo.climb.tracking.climbtracker.data.room.pojo.RouteGrade
 
 @Dao
 abstract class RouteGradeDao {
-    fun getAll():HashMap<String, RouteGrade> = grades
+    fun getAll():LinkedHashMap<String, RouteGrade> = grades
     fun get(routeGrade: String): RouteGrade? = grades[routeGrade]
 
-    private val grades = hashMapOf(
+    private val grades = linkedMapOf(
         //French
         "1" to RouteGrade(french = "1", yds = "5.2", uiaa = "I"),
         "2" to RouteGrade(french = "2", yds = "5.3", uiaa = "II"),
