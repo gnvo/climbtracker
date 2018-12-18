@@ -19,7 +19,7 @@ class ViewHolderAttempt(itemView: View, private val alwaysShowGrade: String?) : 
             val stringBufferRouteGrade = StringBuffer()
             stringBufferRouteGrade.append(item.attempt.routeGrade)
 
-            alwaysShowGrade?.let {
+            if (!alwaysShowGrade.isNullOrEmpty()) {
                 val routeGradeField = item.routeGrade!!::class.java.getDeclaredField(alwaysShowGrade)
                 routeGradeField.isAccessible = true
                 val alwaysShowActualGrade = routeGradeField.get(item.routeGrade)
