@@ -1,7 +1,5 @@
 <resources>
     <!--
-    TODO: Before you run your application, you need a Google Maps API key.
-
     To get one, follow this link, follow the directions and press "Create" at the end:
 
     https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend&keyType=CLIENT_SIDE_ANDROID&r=09:A6:18:20:15:6A:A3:A3:3E:04:FE:85:F9:48:20:8B:E8:08:FC:0A%3Borg.gnvo.climb.tracking.climbtracker.ui.main
