@@ -22,6 +22,9 @@
     <string name="update">Update</string>
     <string name="map_center">Map center</string>
     <string name="delete_attempt_question">Do you really want to delete this attempt?</string>
+    <string name="always_show_french_notation">Always show French notation</string>
+    <string name="always_show_uuia_notation">Always show UUIA notation</string>
+    <string name="always_show_yosemite_decimal_system_notation">Always show Yosemite Decimal System notation</string>
 
     <string-array name="route_type">
         <item>Trad</item>

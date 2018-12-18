@@ -1,25 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
-
     <item
-            android:title="Delete all climb entries"
-            app:showAsAction="never"
-            android:id="@+id/delete_all_climb_entries"
-    />
-    <item
-            android:title="Show max grade of multipitch"
+            android:id="@+id/always_show_french"
+            android:title="@string/always_show_french_notation"
             app:showAsAction="never"
     />
     <item
-            android:title="Show French notation"
+            android:id="@+id/always_show_uuia"
+            android:title="@string/always_show_uuia_notation"
             app:showAsAction="never"
     />
     <item
-            android:title="Show UUIA notation"
-            app:showAsAction="never"
-    />
-    <item
-            android:title="Show Yosemite Decimal System notation"
+            android:id="@+id/always_show_yds"
+            android:title="@string/always_show_yosemite_decimal_system_notation"
             app:showAsAction="never"
     />
 </menu>
