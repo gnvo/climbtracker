@@ -1,14 +1,114 @@
 package org.gnvo.climb.tracking.climbtracker.data.room.dao
 
-import android.arch.lifecycle.LiveData
-import android.arch.persistence.room.*
+import android.arch.persistence.room.Dao
 import org.gnvo.climb.tracking.climbtracker.data.room.pojo.RouteGrade
 
 @Dao
-interface RouteGradeDao {
-    @Query("SELECT * FROM route_grade ORDER BY french ASC")
-    fun getAll(): LiveData<List<RouteGrade>>
+abstract class RouteGradeDao {
+    fun getAll():HashMap<String, RouteGrade> = grades
+    fun get(routeGrade: String): RouteGrade? = grades[routeGrade]
 
-    @Insert
-    fun init(routeGrades: List<RouteGrade>)
+    private val grades = hashMapOf(
+        //French
+        "1" to RouteGrade(french = "1", yds = "5.2", uiaa = "I"),
+        "2" to RouteGrade(french = "2", yds = "5.3", uiaa = "II"),
+        "3" to RouteGrade(french = "3", yds = "5.4", uiaa = "III"),
+        "4a" to RouteGrade(french = "4a", yds = "5.5", uiaa = "IV-"),
+        "4b" to RouteGrade(french = "4b", yds = "5.6", uiaa = "IV+"),
+        "4c" to RouteGrade(french = "4c", yds = "5.7", uiaa = "V-"),
+        "5a" to RouteGrade(french = "5a", yds = "5.8", uiaa = "V+"),
+        "5a+" to RouteGrade(french = "5a+", yds = "5.8/5.9", uiaa = "V+/VI-"),
+        "5b" to RouteGrade(french = "5b", yds = "5.9", uiaa = "VI-"),
+        "5b+" to RouteGrade(french = "5b+", yds = "5.9/5.10a", uiaa = "VI-/VI"),
+        "5c" to RouteGrade(french = "5c", yds = "5.10a", uiaa = "VI"),
+        "5c+" to RouteGrade(french = "5c+", yds = "5.10a/5.10b", uiaa = "VI/VI+"),
+        "6a" to RouteGrade(french = "6a", yds = "5.10b", uiaa = "VI+"),
+        "6a+" to RouteGrade(french = "6a+", yds = "5.10c", uiaa = "VII-"),
+        "6b" to RouteGrade(french = "6b", yds = "5.10d", uiaa = "VII"),
+        "6b+" to RouteGrade(french = "6b+", yds = "5.11a", uiaa = "VII+"),
+        "6c" to RouteGrade(french = "6c", yds = "5.11b", uiaa = "VIII-"),
+        "6c+" to RouteGrade(french = "6c+", yds = "5.11c", uiaa = "VIII"),
+        "7a" to RouteGrade(french = "7a", yds = "5.11d", uiaa = "VIII+"),
+        "7a+" to RouteGrade(french = "7a+", yds = "5.12a", uiaa = "IX-"),
+        "7b" to RouteGrade(french = "7b", yds = "5.12b", uiaa = "IX-/IX"),
+        "7b+" to RouteGrade(french = "7b+", yds = "5.12c", uiaa = "IX"),
+        "7c" to RouteGrade(french = "7c", yds = "5.12d", uiaa = "IX/IX+"),
+        "7c+" to RouteGrade(french = "7c+", yds = "5.13a", uiaa = "IX+"),
+        "8a" to RouteGrade(french = "8a", yds = "5.13b", uiaa = "IX+/X-"),
+        "8a+" to RouteGrade(french = "8a+", yds = "5.13c", uiaa = "X-"),
+        "8b" to RouteGrade(french = "8b", yds = "5.13d", uiaa = "X"),
+        "8b+" to RouteGrade(french = "8b+", yds = "5.14a", uiaa = "X+"),
+        "8c" to RouteGrade(french = "8c", yds = "5.14b", uiaa = "X+/XI-"),
+        "8c+" to RouteGrade(french = "8c+", yds = "5.14c", uiaa = "XI-"),
+        "9a" to RouteGrade(french = "9a", yds = "5.14d", uiaa = "XI"),
+        "9a+" to RouteGrade(french = "9a+", yds = "5.15a", uiaa = "XI+"),
+        "9b" to RouteGrade(french = "9b", yds = "5.15b", uiaa = "XI+"),
+        "9b+" to RouteGrade(french = "9b+", yds = "5.15c", uiaa = "XII"),
+        "9c" to RouteGrade(french = "9c", yds = "5.15d", uiaa = "XII+"),
+
+        //YDS
+        "5.2" to RouteGrade(yds = "5.2", uiaa = "I", french = "1"),
+        "5.3" to RouteGrade(yds = "5.3", uiaa = "II", french = "2"),
+        "5.4" to RouteGrade(yds = "5.4", uiaa = "III", french = "3"),
+        "5.5" to RouteGrade(yds = "5.5", uiaa = "IV-", french = "4a"),
+        "5.6" to RouteGrade(yds = "5.6", uiaa = "IV+", french = "4b"),
+        "5.7" to RouteGrade(yds = "5.7", uiaa = "V-", french = "4c"),
+        "5.8" to RouteGrade(yds = "5.8", uiaa = "V+", french = "5a"),
+        "5.9" to RouteGrade(yds = "5.9", uiaa = "VI-", french = "5b"),
+        "5.10a" to RouteGrade(yds = "5.10a", uiaa = "VI", french = "5c"),
+        "5.10b" to RouteGrade(yds = "5.10b", uiaa = "VI+", french = "6a"),
+        "5.10c" to RouteGrade(yds = "5.10c", uiaa = "VII-", french = "6a+"),
+        "5.10d" to RouteGrade(yds = "5.10d", uiaa = "VII", french = "6b"),
+        "5.11a" to RouteGrade(yds = "5.11a", uiaa = "VII+", french = "6b+"),
+        "5.11b" to RouteGrade(yds = "5.11b", uiaa = "VIII-", french = "6c"),
+        "5.11c" to RouteGrade(yds = "5.11c", uiaa = "VIII", french = "6c+"),
+        "5.11d" to RouteGrade(yds = "5.11d", uiaa = "VIII+", french = "7a"),
+        "5.12a" to RouteGrade(yds = "5.12a", uiaa = "IX-", french = "7a+"),
+        "5.12b" to RouteGrade(yds = "5.12b", uiaa = "IX-/IX", french = "7b"),
+        "5.12c" to RouteGrade(yds = "5.12c", uiaa = "IX", french = "7b+"),
+        "5.12d" to RouteGrade(yds = "5.12d", uiaa = "IX/IX+", french = "7c"),
+        "5.13a" to RouteGrade(yds = "5.13a", uiaa = "IX+", french = "7c+"),
+        "5.13b" to RouteGrade(yds = "5.13b", uiaa = "IX+/X-", french = "8a"),
+        "5.13c" to RouteGrade(yds = "5.13c", uiaa = "X-", french = "8a+"),
+        "5.13d" to RouteGrade(yds = "5.13d", uiaa = "X", french = "8b"),
+        "5.14a" to RouteGrade(yds = "5.14a", uiaa = "X+", french = "8b+"),
+        "5.14b" to RouteGrade(yds = "5.14b", uiaa = "X+/XI-", french = "8c"),
+        "5.14c" to RouteGrade(yds = "5.14c", uiaa = "XI-", french = "8c+"),
+        "5.14d" to RouteGrade(yds = "5.14d", uiaa = "XI", french = "9a"),
+        "5.15a" to RouteGrade(yds = "5.15a", uiaa = "XI+", french = "9a+"),
+        "5.15b" to RouteGrade(yds = "5.15b", uiaa = "XI+", french = "9b"),
+        "5.15c" to RouteGrade(yds = "5.15c", uiaa = "XII", french = "9b+"),
+        "5.15d" to RouteGrade(yds = "5.15d", uiaa = "XII+", french = "9c"),
+
+        //UIAA
+
+        "I" to RouteGrade(uiaa = "I", french = "1", yds = "5.2"),
+        "II" to RouteGrade(uiaa = "II", french = "2", yds = "5.3"),
+        "III" to RouteGrade(uiaa = "III", french = "3", yds = "5.4"),
+        "IV-" to RouteGrade(uiaa = "IV-", french = "4a", yds = "5.5"),
+        "IV+" to RouteGrade(uiaa = "IV+", french = "4b", yds = "5.6"),
+        "V-" to RouteGrade(uiaa = "V-", french = "4c", yds = "5.7"),
+        "V+" to RouteGrade(uiaa = "V+", french = "5a", yds = "5.8"),
+        "VI-" to RouteGrade(uiaa = "VI-", french = "5b", yds = "5.9"),
+        "VI" to RouteGrade(uiaa = "VI", french = "5c", yds = "5.10a"),
+        "VI+" to RouteGrade(uiaa = "VI+", french = "6a", yds = "5.10b"),
+        "VII-" to RouteGrade(uiaa = "VII-", french = "6a+", yds = "5.10c"),
+        "VII" to RouteGrade(uiaa = "VII", french = "6b", yds = "5.10d"),
+        "VII+" to RouteGrade(uiaa = "VII+", french = "6b+", yds = "5.11a"),
+        "VIII-" to RouteGrade(uiaa = "VIII-", french = "6c", yds = "5.11b"),
+        "VIII" to RouteGrade(uiaa = "VIII", french = "6c+", yds = "5.11c"),
+        "VIII+" to RouteGrade(uiaa = "VIII+", french = "7a", yds = "5.11d"),
+        "IX-" to RouteGrade(uiaa = "IX-", french = "7a+", yds = "5.12a"),
+        "IX" to RouteGrade(uiaa = "IX", french = "7b+", yds = "5.12c"),
+        "IX+" to RouteGrade(uiaa = "IX+", french = "7c+", yds = "5.13a"),
+        "X-" to RouteGrade(uiaa = "X-", french = "8a+", yds = "5.13c"),
+        "X" to RouteGrade(uiaa = "X", french = "8b", yds = "5.13d"),
+        "X+" to RouteGrade(uiaa = "X+", french = "8b+", yds = "5.14a"),
+        "XI-" to RouteGrade(uiaa = "XI-", french = "8c+", yds = "5.14c"),
+        "XI" to RouteGrade(uiaa = "XI", french = "9a", yds = "5.14d"),
+        "XI+" to RouteGrade(uiaa = "XI+", french = "9a+", yds = "5.15a"),
+        "XI+" to RouteGrade(uiaa = "XI+", french = "9b", yds = "5.15b"),
+        "XII" to RouteGrade(uiaa = "XII", french = "9b+", yds = "5.15c"),
+        "XII+" to RouteGrade(uiaa = "XII+", french = "9c", yds = "5.15d")
+    )
 }

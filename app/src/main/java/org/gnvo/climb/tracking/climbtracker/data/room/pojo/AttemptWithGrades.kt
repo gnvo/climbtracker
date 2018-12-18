@@ -4,7 +4,7 @@ import android.arch.persistence.room.Embedded
 
 data class AttemptWithGrades(
     @Embedded val attempt: Attempt,
-    @Embedded val routeGrade: RouteGrade,
+    @Embedded var routeGrade: RouteGrade? = null,
     @Embedded val location: Location? = null
 ) : AttemptListItem() {
     override fun equals(other: Any?): Boolean {

@@ -5,16 +5,15 @@ import android.arch.persistence.room.*
 @Entity(
     tableName = "attempt",
     foreignKeys = [
-        ForeignKey(entity = RouteGrade::class, parentColumns = ["route_grade_id"], childColumns = ["route_grade"]),
         ForeignKey(entity = Location::class, parentColumns = ["location_id"], childColumns = ["location"])
     ],
-    indices = [Index(value = ["route_grade"]), Index(value = ["location"])]
+    indices = [Index(value = ["location"])]
 )
 data class Attempt(
     @PrimaryKey(autoGenerate = true) var id: Long? = null,
     @ColumnInfo(name = "climb_style") var climbStyle: String,
     var outcome: String,
-    @ColumnInfo(name = "route_grade") var routeGrade: Long,
+    @ColumnInfo(name = "route_grade") var routeGrade: String,
     @ColumnInfo(name = "route_type") var routeType: String,
 
     @Embedded var instantAndZoneId: InstantAndZoneId,

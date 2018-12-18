@@ -14,7 +14,7 @@ class AddEditViewModel(application: Application) : AndroidViewModel(application)
     fun getAllLocations(): LiveData<Map<String, Map<String, Location>>> {
         return repositoryLocation.getAll()
     }
-    fun getAllRouteGrades(): LiveData<List<RouteGrade>> {
+    fun getAllRouteGrades(): HashMap<String, RouteGrade> {
         return repositoryRouteGrade.getAll()
     }
 

@@ -14,12 +14,12 @@ import org.gnvo.climb.tracking.climbtracker.data.room.dao.*
 import org.gnvo.climb.tracking.climbtracker.data.room.pojo.*
 import org.jetbrains.anko.doAsync
 
-@Database(entities = [Attempt::class, RouteGrade::class, Location::class], version = 4)
+@Database(entities = [Attempt::class, Location::class], version = 5)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun attemptDao(): AttemptDao
-    abstract fun routeGradeDao(): RouteGradeDao
     abstract fun locationDao(): LocationDao
+    abstract fun routeGradeDao(): RouteGradeDao
 
     companion object {
         var INSTANCE: AppDatabase? = null
@@ -81,14 +81,6 @@ abstract class AppDatabase : RoomDatabase() {
                 AppDatabase::class.java,
                 "database.sql"
             )
-                .addCallback(object : RoomDatabase.Callback() {
-                    override fun onCreate(@NonNull db: SupportSQLiteDatabase) {
-                        super.onCreate(db)
-                        doAsync {
-                            INSTANCE?.routeGradeDao()?.init(RouteGrade.initialData())
-                        }
-                    }
-                })
                 .addMigrations(MIGRATION_2_3)
                 .addMigrations(MIGRATION_3_4)
                 .build()

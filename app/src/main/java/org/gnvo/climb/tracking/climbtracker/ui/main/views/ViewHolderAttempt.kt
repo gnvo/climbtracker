@@ -16,7 +16,7 @@ class ViewHolderAttempt(itemView: View) : ViewHolder(itemView) {
         if (item is AttemptWithGrades) {
             itemView.text_view_climb_style.text = item.attempt.climbStyle
             itemView.text_view_outcome.text = item.attempt.outcome
-            itemView.text_view_route_grade.text = item.routeGrade.french
+            itemView.text_view_route_grade.text = item.attempt.routeGrade
 
             val attempt = item.attempt
             val listOfDetails = LinkedList<String>()

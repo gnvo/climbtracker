@@ -5,6 +5,7 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.Transformations
 import org.gnvo.climb.tracking.climbtracker.data.room.AppDatabase
 import org.gnvo.climb.tracking.climbtracker.data.room.dao.AttemptDao
+import org.gnvo.climb.tracking.climbtracker.data.room.dao.RouteGradeDao
 import org.gnvo.climb.tracking.climbtracker.data.room.pojo.*
 import org.jetbrains.anko.doAsync
 import org.threeten.bp.format.DateTimeFormatter
@@ -12,6 +13,7 @@ import org.threeten.bp.format.DateTimeFormatter
 class AttemptRepository(application: Application) {
     private val db: AppDatabase? = AppDatabase.getInstance(application = application)
     private val attemptDao: AttemptDao? = db?.attemptDao()
+    private val routeGradeDao: RouteGradeDao? = db?.routeGradeDao()
     private val allAttemptsWithGradesAndHeaders: LiveData<List<AttemptListItem>> =
         Transformations.map(attemptDao?.getAllWithGrades()!!, ::getAllWithDateHeaders)
 
@@ -56,6 +58,7 @@ class AttemptRepository(application: Application) {
             val attemptDate = zonedDateTime.format(formatterDate)
             if (attemptDate != currentDate)
                 list.add(AttemptHeader(date = attemptDate))
+            attemptWithGrades.routeGrade = routeGradeDao?.get(attemptWithGrades.attempt.routeGrade)
             list.add(attemptWithGrades)
             currentDate = attemptDate
         }

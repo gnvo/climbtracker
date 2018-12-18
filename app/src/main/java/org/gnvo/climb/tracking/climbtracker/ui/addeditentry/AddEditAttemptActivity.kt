@@ -17,7 +17,6 @@ import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_add_update_attempt.*
 import org.gnvo.climb.tracking.climbtracker.R
 import org.gnvo.climb.tracking.climbtracker.data.room.pojo.*
-import org.gnvo.climb.tracking.climbtracker.ui.addeditentry.adapters.GenericAdapter
 import org.gnvo.climb.tracking.climbtracker.ui.addeditentry.adapters.GenericAdapterMultipleSelection
 import org.gnvo.climb.tracking.climbtracker.ui.addeditentry.adapters.GenericAdapterSingleSelection
 import org.threeten.bp.LocalDate
@@ -46,7 +45,7 @@ class AddEditAttemptActivity : AppCompatActivity() {
     private lateinit var adapterClimbStyles: GenericAdapterSingleSelection<String>
     private lateinit var adapterOutcome: GenericAdapterSingleSelection<String>
     private lateinit var adapterRouteType: GenericAdapterSingleSelection<String>
-    private lateinit var adapterRouteGrade: GenericAdapterSingleSelection<RouteGrade>
+    private lateinit var adapterRouteGrade: GenericAdapterSingleSelection<String>
     private lateinit var adapterRouteCharacteristics: GenericAdapterMultipleSelection<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,8 +70,6 @@ class AddEditAttemptActivity : AppCompatActivity() {
 
         setDateTimeDialogs()
 
-        setRouteGrades()
-
         adapterClimbStyles = GenericAdapterSingleSelection()
         setAdapterToRecyclerViewSingleSelection(
             recycler_view_climb_style,
@@ -92,6 +89,13 @@ class AddEditAttemptActivity : AppCompatActivity() {
             recycler_view_route_type,
             adapterRouteType,
             resources.getStringArray(R.array.route_type).toCollection(ArrayList())
+        )
+
+        adapterRouteGrade = GenericAdapterSingleSelection()
+        setAdapterToRecyclerViewSingleSelection(
+            recycler_view_route_grade,
+            adapterRouteGrade,
+            viewModel.getAllRouteGrades().keys.sorted().toCollection(ArrayList())
         )
 
         adapterRouteCharacteristics = GenericAdapterMultipleSelection()
@@ -205,32 +209,6 @@ class AddEditAttemptActivity : AppCompatActivity() {
         }
     }
 
-    private fun setRouteGrades() {
-        adapterRouteGrade = GenericAdapterSingleSelection()
-        adapterRouteGrade.setCustomFormatter(object : GenericAdapter.CustomFormatter<RouteGrade> {
-            override fun format(item: RouteGrade): String {
-                return "${item.french}"
-            }
-        })
-        adapterRouteGrade.setScroller(object : GenericAdapterSingleSelection.Scroller {
-            override fun scroll(selectedPosition: Int) {
-                val position = when (selectedPosition) {
-                    RecyclerView.NO_POSITION -> 9 //if nothing is selected scroll down a bit
-                    else -> selectedPosition
-                }
-                (recycler_view_route_grade.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(position, 0)
-            }
-        })
-        recycler_view_route_grade.layoutManager = LinearLayoutManager(this)
-        recycler_view_route_grade.setHasFixedSize(true)
-
-        recycler_view_route_grade.adapter = adapterRouteGrade
-
-        viewModel.getAllRouteGrades().observe(this, Observer {
-            adapterRouteGrade.setItems(ArrayList(it!!))
-        })
-    }
-
     private fun <T> setAdapterToRecyclerViewSingleSelection(
         recycler_view: RecyclerView,
         genericAdapter: GenericAdapterSingleSelection<T>,
@@ -300,7 +278,7 @@ class AddEditAttemptActivity : AppCompatActivity() {
                         attemptWithGrades.attempt.outcome
                     )
                     adapterRouteGrade.setSelected(
-                        attemptWithGrades.routeGrade
+                        attemptWithGrades.attempt.routeGrade
                     )
                     adapterRouteType.setSelected(
                         attemptWithGrades.attempt.routeType
@@ -335,7 +313,7 @@ class AddEditAttemptActivity : AppCompatActivity() {
                         attemptWithGrades?.attempt?.outcome
                     )
                     adapterRouteGrade.setSelected(
-                        attemptWithGrades?.routeGrade
+                        attemptWithGrades?.attempt?.routeGrade
                     )
                     adapterRouteType.setSelected(
                         attemptWithGrades?.attempt?.routeType
@@ -369,7 +347,7 @@ class AddEditAttemptActivity : AppCompatActivity() {
 
         val climbStyle = adapterClimbStyles.getSelected()
         val outcome = adapterOutcome.getSelected()
-        val routeGradeId = adapterRouteGrade.getSelected()?.routeGradeId ?: INVALID_ID
+        val routeGrade = adapterRouteGrade.getSelected()
         val routeType = adapterRouteType.getSelected()
 
         if (routeType == null) {
@@ -380,7 +358,7 @@ class AddEditAttemptActivity : AppCompatActivity() {
             Toast.makeText(this, "Set climb style. Eg. Lead", Toast.LENGTH_LONG).show()
             return null
         }
-        if (routeGradeId == INVALID_ID) {
+        if (routeGrade == null) {
             Toast.makeText(this, "Set route grade. Eg. 7a", Toast.LENGTH_LONG).show()
             return null
         }
@@ -393,7 +371,7 @@ class AddEditAttemptActivity : AppCompatActivity() {
             instantAndZoneId = InstantAndZoneId(zonedDateTime.toInstant(), zonedDateTime.zone),
             routeType = routeType,
             climbStyle = climbStyle,
-            routeGrade = routeGradeId,
+            routeGrade = routeGrade,
             outcome = outcome
         )
 

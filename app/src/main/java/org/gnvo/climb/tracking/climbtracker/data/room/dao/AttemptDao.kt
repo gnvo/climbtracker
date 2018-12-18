@@ -10,25 +10,22 @@ interface AttemptDao {
     @Query(
         "SELECT * " +
                 "FROM attempt " +
-                "INNER JOIN route_grade on route_grade.route_grade_id = attempt.route_grade " +
                 "LEFT JOIN location on location.location_id = attempt.location " +
                 "ORDER BY attempt.instant DESC"
     )
     fun getAllWithGrades(): LiveData<List<AttemptWithGrades>>
 
     @Query(
-        "SELECT attempt.*, route_grade.*, location.* " +
+        "SELECT attempt.*, location.* " +
                 "FROM attempt " +
-                "INNER JOIN route_grade on route_grade.route_grade_id = attempt.route_grade " +
                 "LEFT JOIN location on location.location_id = attempt.location " +
                 "WHERE attempt.id = :attemptId "
     )
     fun getByIdWithGrades(attemptId: Long): LiveData<AttemptWithGrades>
 
     @Query(
-        "SELECT attempt.*, route_grade.*, location.* " +
+        "SELECT attempt.*, location.* " +
                 "FROM attempt " +
-                "INNER JOIN route_grade on route_grade.route_grade_id = attempt.route_grade " +
                 "LEFT JOIN location on location.location_id = attempt.location " +
                 "WHERE attempt.id = (SELECT max(id) FROM attempt)"
     )
