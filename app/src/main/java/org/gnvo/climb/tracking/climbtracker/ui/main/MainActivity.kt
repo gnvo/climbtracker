@@ -74,7 +74,7 @@ class MainActivity : AppCompatActivity() {
                 true
             }
             R.id.always_show_uuia -> {
-                switchAlwaysShow(ALWAYS_SHOW_UUIA)
+                switchAlwaysShow(ALWAYS_SHOW_UIAA)
                 true
             }
             R.id.always_show_yds -> {
@@ -97,7 +97,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         private const val ALWAYS_SHOW_FRENCH = "french"
-        private const val ALWAYS_SHOW_UUIA= "uuia"
+        private const val ALWAYS_SHOW_UIAA= "uiaa"
         private const val ALWAYS_SHOW_YDS = "yds"
         private const val ALWAYS_SHOW_NONE = ""
     }
