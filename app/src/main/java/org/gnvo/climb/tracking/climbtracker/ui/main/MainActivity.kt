@@ -21,6 +21,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var viewModel: MainViewModel
     private lateinit var appPrefs: AppPreferencesHelper
+    private lateinit var adapter: EntryAdapter
+    private lateinit var layoutManager : LinearLayoutManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,11 +35,11 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        val layoutManager = LinearLayoutManager(this)
+        layoutManager = LinearLayoutManager(this)
         recycler_view.layoutManager = layoutManager
         recycler_view.setHasFixedSize(true)
 
-        val adapter = EntryAdapter(appPrefs.getAlwaysShow())
+        adapter = EntryAdapter(appPrefs.getAlwaysShow())
         recycler_view.adapter = adapter
 
         adapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
@@ -93,6 +95,10 @@ class MainActivity : AppCompatActivity() {
             alwaysShowName
         }
         appPrefs.setAlwaysShow(newAlwaysShow)
+        recycler_view.layoutManager = null
+        adapter.alwaysShowGrade = newAlwaysShow
+        recycler_view.recycledViewPool.clear()
+        recycler_view.layoutManager = layoutManager
     }
 
     companion object {

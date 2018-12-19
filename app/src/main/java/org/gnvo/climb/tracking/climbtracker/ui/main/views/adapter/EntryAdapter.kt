@@ -11,7 +11,7 @@ import org.gnvo.climb.tracking.climbtracker.ui.main.views.ViewHolder
 import org.gnvo.climb.tracking.climbtracker.ui.main.views.ViewHolderAttempt
 import org.gnvo.climb.tracking.climbtracker.ui.main.views.ViewHolderHeader
 
-class EntryAdapter(var alwaysShowGrade: String?) : ListAdapter<AttemptListItem, ViewHolder>(
+class EntryAdapter(internal var alwaysShowGrade: String?) : ListAdapter<AttemptListItem, ViewHolder>(
     EntryDiffCallback()
 ) {
     companion object {
