@@ -13,7 +13,6 @@
             android:theme="@style/AppTheme"
     >
         <activity android:name=".ui.main.MainActivity"
-                  android:screenOrientation="portrait"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -23,7 +22,6 @@
         </activity>
         <activity
                 android:name=".ui.addeditentry.AddEditAttemptActivity"
-                android:screenOrientation="portrait"
                 android:parentActivityName=".ui.main.MainActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
