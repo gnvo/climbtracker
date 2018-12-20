@@ -29,6 +29,12 @@ class AddEditAttemptActivity : AppCompatActivity() {
     companion object {
         const val EXTRA_ID: String = "org.gnvo.climb.tracking.climbtracker.ui.addeditentry.EXTRA_ID"
         const val INVALID_ID: Long = -1
+
+        const val SAVED_POSITION_CLIMB_STYLES = "position_climb_styles"
+        const val SAVED_POSITION_OUTCOME = "position_outcome"
+        const val SAVED_POSITION_ROUTE_GRADE = "position_route_grade"
+        const val SAVED_POSITION_ROUTE_TYPE = "position_route_type"
+        const val SAVED_POSITION_ROUTE_CHARACTERISTICS = "position_route_characteristics"
     }
 
     private lateinit var viewModel: AddEditViewModel
@@ -48,11 +54,24 @@ class AddEditAttemptActivity : AppCompatActivity() {
     private lateinit var adapterRouteGrade: GenericAdapterSingleSelection
     private lateinit var adapterRouteCharacteristics: GenericAdapterMultipleSelection
 
+    private var savedInstanceStateClimbStyles: String? = null
+    private var savedInstanceStateOutcome: String? = null
+    private var savedInstanceStateRouteGrade: String? = null
+    private var savedInstanceStateRouteType: String? = null
+    private var savedInstanceStateRouteCharacteristics: ArrayList<String>? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_update_attempt)
 
         viewModel = ViewModelProviders.of(this).get(AddEditViewModel::class.java)
+
+        savedInstanceStateClimbStyles = savedInstanceState?.getString(SAVED_POSITION_CLIMB_STYLES)
+        savedInstanceStateOutcome = savedInstanceState?.getString(SAVED_POSITION_OUTCOME)
+        savedInstanceStateRouteGrade = savedInstanceState?.getString(SAVED_POSITION_ROUTE_GRADE)
+        savedInstanceStateRouteType = savedInstanceState?.getString(SAVED_POSITION_ROUTE_TYPE)
+        savedInstanceStateRouteCharacteristics =
+                savedInstanceState?.getStringArrayList(SAVED_POSITION_ROUTE_CHARACTERISTICS)
 
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_close)
         if (intent.hasExtra(EXTRA_ID)) {
@@ -280,20 +299,18 @@ class AddEditAttemptActivity : AppCompatActivity() {
                     button_date_time.text = formatterDateTime.format(storedZonedDateTime)
 
                     adapterClimbStyles.setSelected(
-                        attemptWithGrades.attempt.climbStyle
+                        savedInstanceStateClimbStyles ?: attemptWithGrades.attempt.climbStyle
                     )
                     adapterOutcome.setSelected(
-                        attemptWithGrades.attempt.outcome
+                        savedInstanceStateOutcome ?: attemptWithGrades.attempt.outcome
                     )
                     adapterRouteGrade.setSelected(
-                        attemptWithGrades.attempt.routeGrade
+                        savedInstanceStateRouteGrade ?: attemptWithGrades.attempt.routeGrade
                     )
                     adapterRouteType.setSelected(
-                        attemptWithGrades.attempt.routeType
+                        savedInstanceStateRouteType ?: attemptWithGrades.attempt.routeType
                     )
-                    attemptWithGrades.attempt.routeCharacteristics?.let {
-                        adapterRouteCharacteristics.setSelected(it)
-                    }
+                    adapterRouteCharacteristics.setSelected(savedInstanceStateRouteCharacteristics ?: ArrayList(attemptWithGrades.attempt.routeCharacteristics ?: emptyList()))
 
                     attemptWithGrades.location?.let {
                         tiet_area.setText(it.area)
@@ -315,17 +332,18 @@ class AddEditAttemptActivity : AppCompatActivity() {
                 if (!isRestored) {
                     isRestored = true
                     adapterClimbStyles.setSelected(
-                        attemptWithGrades?.attempt?.climbStyle
+                        savedInstanceStateClimbStyles ?: attemptWithGrades?.attempt?.climbStyle
                     )
                     adapterOutcome.setSelected(
-                        attemptWithGrades?.attempt?.outcome
+                        savedInstanceStateOutcome ?: attemptWithGrades?.attempt?.outcome
                     )
                     adapterRouteGrade.setSelected(
-                        attemptWithGrades?.attempt?.routeGrade
+                        savedInstanceStateRouteGrade ?: attemptWithGrades?.attempt?.routeGrade
                     )
                     adapterRouteType.setSelected(
-                        attemptWithGrades?.attempt?.routeType
+                        savedInstanceStateRouteType ?: attemptWithGrades?.attempt?.routeType
                     )
+                    adapterRouteCharacteristics.setSelected(savedInstanceStateRouteCharacteristics ?: arrayListOf())
                     attemptWithGrades?.location?.let {
                         tiet_area.setText(it.area)
                         tiet_sector.setText(it.sector)
@@ -441,5 +459,14 @@ class AddEditAttemptActivity : AppCompatActivity() {
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         dialogLocationFragment?.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        outState?.putString(SAVED_POSITION_OUTCOME, adapterOutcome.getSelected())
+        outState?.putString(SAVED_POSITION_CLIMB_STYLES, adapterClimbStyles.getSelected())
+        outState?.putString(SAVED_POSITION_ROUTE_GRADE, adapterRouteGrade.getSelected())
+        outState?.putString(SAVED_POSITION_ROUTE_TYPE, adapterRouteType.getSelected())
+        outState?.putStringArrayList(SAVED_POSITION_ROUTE_CHARACTERISTICS, adapterRouteCharacteristics.getSelected())
+        super.onSaveInstanceState(outState)
     }
 }

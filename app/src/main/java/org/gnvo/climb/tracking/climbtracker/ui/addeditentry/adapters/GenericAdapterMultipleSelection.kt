@@ -17,16 +17,16 @@ class GenericAdapterMultipleSelection : GenericAdapter() {
         }.toMutableList()
     }
 
-    fun getSelected(): List<String>? {
+    fun getSelected(): ArrayList<String>? {
         return if (selectedPositions.isEmpty()) null
         else {
-            selectedPositions.map {
+            ArrayList(selectedPositions.map {
                 items[it.toInt()]
-            }
+            })
         }
     }
 
-    fun setSelected(selectedItems: List<String>) {
+    fun setSelected(selectedItems: ArrayList<String>) {
         this.selectedItems = selectedItems.toMutableList()
         if (items.isNotEmpty()) {
             selectedPositions = selectedItems.map {
