@@ -317,6 +317,7 @@ class AddEditAttemptActivity : AppCompatActivity() {
                         tiet_sector.setText(it.sector)
                     }
 
+                    edit_text_try_number.setText(attemptWithLocation.attempt.tryNumber?.toString())
                     edit_text_route_name.setText(attemptWithLocation.attempt.routeName)
                     edit_text_length.setText(attemptWithLocation.attempt.length?.toString())
                     edit_text_comment.setText(attemptWithLocation.attempt.comment)
@@ -407,6 +408,7 @@ class AddEditAttemptActivity : AppCompatActivity() {
 
         attempt.location = locationId
 
+        attempt.tryNumber = Utils.getStringOrNull(edit_text_try_number.text)?.toInt()
         attempt.routeName = Utils.getStringOrNull(edit_text_route_name.text)
         attempt.length = Utils.getStringOrNull(edit_text_length.text)?.toInt()
 

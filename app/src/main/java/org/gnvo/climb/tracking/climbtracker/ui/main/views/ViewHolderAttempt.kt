@@ -14,8 +14,11 @@ class ViewHolderAttempt(itemView: View, private val alwaysShowGrade: String?) : 
     override fun bind(item: AttemptListItem, listener: EntryAdapter.OnItemClickListener?) {
         if (item is AttemptWithLocationAndGrades) {
             itemView.text_view_climb_style.text = item.attempt.climbStyle
-            itemView.text_view_outcome.text = item.attempt.outcome
-
+            var tryNumber: String? = null
+            item.attempt.tryNumber?.let {
+                tryNumber = "($it)"
+            }
+            itemView.text_view_outcome.text = item.attempt.outcome + (tryNumber ?: "")
             val stringBufferRouteGrade = StringBuffer()
             stringBufferRouteGrade.append(item.attempt.routeGrade)
 

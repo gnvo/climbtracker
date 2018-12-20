@@ -25,6 +25,7 @@
     <string name="always_show_french_notation">Always show French notation</string>
     <string name="always_show_uuia_notation">Always show UUIA notation</string>
     <string name="always_show_yosemite_decimal_system_notation">Always show Yosemite Decimal System notation</string>
+    <string name="try_number">Try number</string>
 
     <string-array name="route_type">
         <item>Trad</item>

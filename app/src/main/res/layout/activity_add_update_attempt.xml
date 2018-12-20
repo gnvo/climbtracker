@@ -104,8 +104,26 @@
                 app:layout_constraintTop_toBottomOf="@+id/barrier_lists"/>
 
         <android.support.design.widget.TextInputLayout
-                android:id="@+id/til_area"
+                android:id="@+id/til_try_number"
                 app:layout_constraintTop_toBottomOf="@+id/rating_bar_rating"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp">
+            <android.support.design.widget.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:hint="@string/try_number"
+                    android:id="@+id/edit_text_try_number"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+                android:id="@+id/til_area"
+                app:layout_constraintTop_toBottomOf="@+id/til_try_number"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintEnd_toStartOf="@+id/button_sector"

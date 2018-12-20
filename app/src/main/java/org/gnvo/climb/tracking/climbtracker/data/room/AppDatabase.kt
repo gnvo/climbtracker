@@ -11,7 +11,7 @@ import android.content.Context
 import org.gnvo.climb.tracking.climbtracker.data.room.dao.*
 import org.gnvo.climb.tracking.climbtracker.data.room.pojo.*
 
-@Database(entities = [Attempt::class, Location::class], version = 5)
+@Database(entities = [Attempt::class, Location::class], version = 6)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun attemptDao(): AttemptDao
@@ -104,6 +104,12 @@ abstract class AppDatabase : RoomDatabase() {
                 }
             }
 
+            val MIGRATION_5_6 = object : Migration(5, 6) {
+                override fun migrate(database: SupportSQLiteDatabase) {
+                    database.execSQL("ALTER TABLE attempt ADD COLUMN try_number INTEGER;")
+                }
+            }
+
             return Room.databaseBuilder(
                 context,
                 AppDatabase::class.java,
@@ -112,6 +118,7 @@ abstract class AppDatabase : RoomDatabase() {
                 .addMigrations(MIGRATION_2_3)
                 .addMigrations(MIGRATION_3_4)
                 .addMigrations(MIGRATION_4_5)
+                .addMigrations(MIGRATION_5_6)
                 .build()
         }
     }
