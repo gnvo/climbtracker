@@ -27,7 +27,7 @@ class ViewHolderAttempt(itemView: View, private val alwaysShowGrade: String?) : 
                 routeGradeField.isAccessible = true
                 val alwaysShowActualGrade = routeGradeField.get(item.routeGrade)
                 if (alwaysShowActualGrade != item.attempt.routeGrade) {
-                    stringBufferRouteGrade.append("/"+alwaysShowActualGrade.toString())
+                    stringBufferRouteGrade.append("/" + alwaysShowActualGrade.toString())
                 }
             }
             itemView.text_view_route_grade.text = stringBufferRouteGrade.toString()
