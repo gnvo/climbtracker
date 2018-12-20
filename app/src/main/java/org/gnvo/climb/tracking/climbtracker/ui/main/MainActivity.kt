@@ -11,7 +11,7 @@ import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_main.*
 import org.gnvo.climb.tracking.climbtracker.R
 import org.gnvo.climb.tracking.climbtracker.data.room.pojo.AttemptListItem
-import org.gnvo.climb.tracking.climbtracker.data.room.pojo.AttemptWithGrades
+import org.gnvo.climb.tracking.climbtracker.data.room.pojo.AttemptWithLocationAndGrades
 import org.gnvo.climb.tracking.climbtracker.preferences.AppPreferencesHelper
 import org.gnvo.climb.tracking.climbtracker.ui.addeditentry.AddEditAttemptActivity
 import org.gnvo.climb.tracking.climbtracker.ui.main.views.adapter.EntryAdapter
@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity() {
 
         adapter.setOnItemClickListener(object : EntryAdapter.OnItemClickListener {
             override fun onItemClick(attemptListItem: AttemptListItem) {
-                if (attemptListItem is AttemptWithGrades) {
+                if (attemptListItem is AttemptWithLocationAndGrades) {
                     val intent = Intent(this@MainActivity, AddEditAttemptActivity::class.java)
                     intent.putExtra(AddEditAttemptActivity.EXTRA_ID, attemptListItem.attempt.id)
                     startActivity(intent)

@@ -14,21 +14,21 @@ class AttemptRepository(application: Application) {
     private val db: AppDatabase? = AppDatabase.getInstance(application = application)
     private val attemptDao: AttemptDao? = db?.attemptDao()
     private val routeGradeDao: RouteGradeDao? = db?.routeGradeDao()
-    private val allAttemptsWithGradesAndHeaders: LiveData<List<AttemptListItem>> =
-        Transformations.map(attemptDao?.getAllWithGrades()!!, ::getAllWithDateHeaders)
+    private val allAttemptsWithLocationGradesAndHeaders: LiveData<List<AttemptListItem>> =
+        Transformations.map(attemptDao?.getAllWithLocation()!!, ::addHeadersAndGrades)
 
     private var formatterDate = DateTimeFormatter.ofPattern("EEEE, d MMM yyyy")
 
-    fun getAllWithGradesAndHeaders(): LiveData<List<AttemptListItem>> {
-        return allAttemptsWithGradesAndHeaders
+    fun getAllWithLocationGradesAndHeaders(): LiveData<List<AttemptListItem>> {
+        return allAttemptsWithLocationGradesAndHeaders
     }
 
-    fun getByIdWithGrades(attemptId: Long): LiveData<AttemptWithGrades> {
-        return attemptDao?.getByIdWithGrades(attemptId)!!
+    fun getByIdWithLocation(attemptId: Long): LiveData<AttemptWithLocation> {
+        return attemptDao?.getByIdWithLocation(attemptId)!!
     }
 
-    fun getLastAttemptWithGrades(): LiveData<AttemptWithGrades> {
-        return attemptDao?.getLastWithGrades()!!
+    fun getLastAttemptWithLocation(): LiveData<AttemptWithLocation> {
+        return attemptDao?.getLastWithLocation()!!
     }
 
     fun update(attempt: Attempt) {
@@ -49,17 +49,22 @@ class AttemptRepository(application: Application) {
         }
     }
 
-    private fun getAllWithDateHeaders(attemptsWithGrades: List<AttemptWithGrades>): List<AttemptListItem> {
+    private fun addHeadersAndGrades(attemptsWithLocations: List<AttemptWithLocation>): List<AttemptListItem> {
         val list: MutableList<AttemptListItem> = mutableListOf()
 
         var currentDate: String? = null
-        for (attemptWithGrades in attemptsWithGrades){
-            val zonedDateTime = attemptWithGrades.attempt.instantAndZoneId.instant.atZone(attemptWithGrades.attempt.instantAndZoneId.zoneId)
+        for (attemptWithLocation in attemptsWithLocations) {
+            val zonedDateTime =
+                attemptWithLocation.attempt.instantAndZoneId.instant.atZone(attemptWithLocation.attempt.instantAndZoneId.zoneId)
             val attemptDate = zonedDateTime.format(formatterDate)
             if (attemptDate != currentDate)
                 list.add(AttemptHeader(date = attemptDate))
-            attemptWithGrades.routeGrade = routeGradeDao?.get(attemptWithGrades.attempt.routeGrade)
-            list.add(attemptWithGrades)
+            val attemptWithLocationAndGrades = AttemptWithLocationAndGrades(
+                attempt = attemptWithLocation.attempt,
+                location = attemptWithLocation.location,
+                routeGrade = routeGradeDao?.get(attemptWithLocation.attempt.routeGrade)!!
+            )
+            list.add(attemptWithLocationAndGrades)
             currentDate = attemptDate
         }
 

@@ -14,16 +14,17 @@ class AddEditViewModel(application: Application) : AndroidViewModel(application)
     fun getAllLocations(): LiveData<Map<String, Map<String, Location>>> {
         return repositoryLocation.getAll()
     }
+
     fun getAllRouteGrades(): HashMap<String, RouteGrade> {
         return repositoryRouteGrade.getAll()
     }
 
-    fun getAttemptWithGradesById(attemptId: Long): LiveData<AttemptWithGrades> {
-        return repositoryAttempt.getByIdWithGrades(attemptId)
+    fun getAttemptWithLocationById(attemptId: Long): LiveData<AttemptWithLocation> {
+        return repositoryAttempt.getByIdWithLocation(attemptId)
     }
 
-    fun getLastAttemptWithGrades(): LiveData<AttemptWithGrades> {
-        return repositoryAttempt.getLastAttemptWithGrades()
+    fun getLastAttemptWithLocation(): LiveData<AttemptWithLocation> {
+        return repositoryAttempt.getLastAttemptWithLocation()
     }
 
     fun insertAttempt(attempt: Attempt) {

@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import org.gnvo.climb.tracking.climbtracker.R
 import org.gnvo.climb.tracking.climbtracker.data.room.pojo.AttemptHeader
 import org.gnvo.climb.tracking.climbtracker.data.room.pojo.AttemptListItem
-import org.gnvo.climb.tracking.climbtracker.data.room.pojo.AttemptWithGrades
+import org.gnvo.climb.tracking.climbtracker.data.room.pojo.AttemptWithLocationAndGrades
 import org.gnvo.climb.tracking.climbtracker.ui.main.views.ViewHolder
 import org.gnvo.climb.tracking.climbtracker.ui.main.views.ViewHolderAttempt
 import org.gnvo.climb.tracking.climbtracker.ui.main.views.ViewHolderHeader
@@ -43,7 +43,7 @@ class EntryAdapter(internal var alwaysShowGrade: String?) : ListAdapter<AttemptL
     override fun getItemViewType(position: Int): Int {
         val item = getItem(position)
         return when (item) {
-            is AttemptWithGrades -> TYPE_ITEM
+            is AttemptWithLocationAndGrades -> TYPE_ITEM
             is AttemptHeader -> TYPE_HEADER
             else -> 0
         }

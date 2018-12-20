@@ -8,9 +8,9 @@ import org.gnvo.climb.tracking.climbtracker.data.room.repository.AttemptReposito
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val repositoryAttempt: AttemptRepository = AttemptRepository(application)
-    private val attemptsWithGradesAndHeaders: LiveData<List<AttemptListItem>> = repositoryAttempt.getAllWithGradesAndHeaders()
+    private val attemptsWithLocationGradesAndHeaders: LiveData<List<AttemptListItem>> = repositoryAttempt.getAllWithLocationGradesAndHeaders()
 
     fun getAllAttemptsWithGrades(): LiveData<List<AttemptListItem>> {
-        return attemptsWithGradesAndHeaders
+        return attemptsWithLocationGradesAndHeaders
     }
 }

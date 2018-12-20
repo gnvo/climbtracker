@@ -290,61 +290,61 @@ class AddEditAttemptActivity : AppCompatActivity() {
     }
 
     private fun restoreAttemptData() {
-        viewModel.getAttemptWithGradesById(attemptIdFromIntentExtra)
-            .observe(this, Observer { attemptWithGrades: AttemptWithGrades? ->
+        viewModel.getAttemptWithLocationById(attemptIdFromIntentExtra)
+            .observe(this, Observer { attemptWithLocation: AttemptWithLocation? ->
                 if (!isRestored) {
                     isRestored = true
                     val storedZonedDateTime =
-                        attemptWithGrades!!.attempt.instantAndZoneId.instant.atZone(attemptWithGrades.attempt.instantAndZoneId.zoneId)
+                        attemptWithLocation!!.attempt.instantAndZoneId.instant.atZone(attemptWithLocation.attempt.instantAndZoneId.zoneId)
                     button_date_time.text = formatterDateTime.format(storedZonedDateTime)
 
                     adapterClimbStyles.setSelected(
-                        savedInstanceStateClimbStyles ?: attemptWithGrades.attempt.climbStyle
+                        savedInstanceStateClimbStyles ?: attemptWithLocation.attempt.climbStyle
                     )
                     adapterOutcome.setSelected(
-                        savedInstanceStateOutcome ?: attemptWithGrades.attempt.outcome
+                        savedInstanceStateOutcome ?: attemptWithLocation.attempt.outcome
                     )
                     adapterRouteGrade.setSelected(
-                        savedInstanceStateRouteGrade ?: attemptWithGrades.attempt.routeGrade
+                        savedInstanceStateRouteGrade ?: attemptWithLocation.attempt.routeGrade
                     )
                     adapterRouteType.setSelected(
-                        savedInstanceStateRouteType ?: attemptWithGrades.attempt.routeType
+                        savedInstanceStateRouteType ?: attemptWithLocation.attempt.routeType
                     )
-                    adapterRouteCharacteristics.setSelected(savedInstanceStateRouteCharacteristics ?: ArrayList(attemptWithGrades.attempt.routeCharacteristics ?: emptyList()))
+                    adapterRouteCharacteristics.setSelected(savedInstanceStateRouteCharacteristics ?: ArrayList(attemptWithLocation.attempt.routeCharacteristics ?: emptyList()))
 
-                    attemptWithGrades.location?.let {
+                    attemptWithLocation.location?.let {
                         tiet_area.setText(it.area)
                         tiet_sector.setText(it.sector)
                     }
 
-                    edit_text_route_name.setText(attemptWithGrades.attempt.routeName)
-                    edit_text_length.setText(attemptWithGrades.attempt.length?.toString())
-                    edit_text_comment.setText(attemptWithGrades.attempt.comment)
+                    edit_text_route_name.setText(attemptWithLocation.attempt.routeName)
+                    edit_text_length.setText(attemptWithLocation.attempt.length?.toString())
+                    edit_text_comment.setText(attemptWithLocation.attempt.comment)
 
-                    rating_bar_rating.rating = attemptWithGrades.attempt.rating?.toFloat() ?: 0f
+                    rating_bar_rating.rating = attemptWithLocation.attempt.rating?.toFloat() ?: 0f
                 }
             })
     }
 
     private fun partiallyRestoreAttemptDataFromLastAttemptEntry() {
-        viewModel.getLastAttemptWithGrades()
-            .observe(this, Observer { attemptWithGrades: AttemptWithGrades? ->
+        viewModel.getLastAttemptWithLocation()
+            .observe(this, Observer { attemptWithLocation: AttemptWithLocation? ->
                 if (!isRestored) {
                     isRestored = true
                     adapterClimbStyles.setSelected(
-                        savedInstanceStateClimbStyles ?: attemptWithGrades?.attempt?.climbStyle
+                        savedInstanceStateClimbStyles ?: attemptWithLocation?.attempt?.climbStyle
                     )
                     adapterOutcome.setSelected(
-                        savedInstanceStateOutcome ?: attemptWithGrades?.attempt?.outcome
+                        savedInstanceStateOutcome ?: attemptWithLocation?.attempt?.outcome
                     )
                     adapterRouteGrade.setSelected(
-                        savedInstanceStateRouteGrade ?: attemptWithGrades?.attempt?.routeGrade
+                        savedInstanceStateRouteGrade ?: attemptWithLocation?.attempt?.routeGrade
                     )
                     adapterRouteType.setSelected(
-                        savedInstanceStateRouteType ?: attemptWithGrades?.attempt?.routeType
+                        savedInstanceStateRouteType ?: attemptWithLocation?.attempt?.routeType
                     )
                     adapterRouteCharacteristics.setSelected(savedInstanceStateRouteCharacteristics ?: arrayListOf())
-                    attemptWithGrades?.location?.let {
+                    attemptWithLocation?.location?.let {
                         tiet_area.setText(it.area)
                         tiet_sector.setText(it.sector)
                     }

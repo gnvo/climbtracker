@@ -3,7 +3,7 @@ package org.gnvo.climb.tracking.climbtracker.data.room.dao
 import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.*
 import org.gnvo.climb.tracking.climbtracker.data.room.pojo.Attempt
-import org.gnvo.climb.tracking.climbtracker.data.room.pojo.AttemptWithGrades
+import org.gnvo.climb.tracking.climbtracker.data.room.pojo.AttemptWithLocation
 
 @Dao
 interface AttemptDao {
@@ -13,7 +13,7 @@ interface AttemptDao {
                 "LEFT JOIN location on location.location_id = attempt.location " +
                 "ORDER BY attempt.instant DESC"
     )
-    fun getAllWithGrades(): LiveData<List<AttemptWithGrades>>
+    fun getAllWithLocation(): LiveData<List<AttemptWithLocation>>
 
     @Query(
         "SELECT attempt.*, location.* " +
@@ -21,7 +21,7 @@ interface AttemptDao {
                 "LEFT JOIN location on location.location_id = attempt.location " +
                 "WHERE attempt.id = :attemptId "
     )
-    fun getByIdWithGrades(attemptId: Long): LiveData<AttemptWithGrades>
+    fun getByIdWithLocation(attemptId: Long): LiveData<AttemptWithLocation>
 
     @Query(
         "SELECT attempt.*, location.* " +
@@ -29,7 +29,7 @@ interface AttemptDao {
                 "LEFT JOIN location on location.location_id = attempt.location " +
                 "WHERE attempt.id = (SELECT max(id) FROM attempt)"
     )
-    fun getLastWithGrades(): LiveData<AttemptWithGrades>
+    fun getLastWithLocation(): LiveData<AttemptWithLocation>
 
     @Insert
     fun insert(attempt: Attempt?)

@@ -3,7 +3,7 @@ package org.gnvo.climb.tracking.climbtracker.ui.main.views
 import android.view.View
 import kotlinx.android.synthetic.main.recycler_view_attempt_item.view.*
 import org.gnvo.climb.tracking.climbtracker.data.room.pojo.AttemptListItem
-import org.gnvo.climb.tracking.climbtracker.data.room.pojo.AttemptWithGrades
+import org.gnvo.climb.tracking.climbtracker.data.room.pojo.AttemptWithLocationAndGrades
 import org.gnvo.climb.tracking.climbtracker.ui.main.views.adapter.EntryAdapter
 import org.threeten.bp.format.DateTimeFormatter
 import java.util.*
@@ -12,7 +12,7 @@ class ViewHolderAttempt(itemView: View, private val alwaysShowGrade: String?) : 
     private var formatterTime = DateTimeFormatter.ofPattern("HH:mm:ss VV")
 
     override fun bind(item: AttemptListItem, listener: EntryAdapter.OnItemClickListener?) {
-        if (item is AttemptWithGrades) {
+        if (item is AttemptWithLocationAndGrades) {
             itemView.text_view_climb_style.text = item.attempt.climbStyle
             itemView.text_view_outcome.text = item.attempt.outcome
 
@@ -20,7 +20,7 @@ class ViewHolderAttempt(itemView: View, private val alwaysShowGrade: String?) : 
             stringBufferRouteGrade.append(item.attempt.routeGrade)
 
             if (!alwaysShowGrade.isNullOrEmpty()) {
-                val routeGradeField = item.routeGrade!!::class.java.getDeclaredField(alwaysShowGrade)
+                val routeGradeField = item.routeGrade::class.java.getDeclaredField(alwaysShowGrade)
                 routeGradeField.isAccessible = true
                 val alwaysShowActualGrade = routeGradeField.get(item.routeGrade)
                 if (alwaysShowActualGrade != item.attempt.routeGrade) {
