@@ -43,6 +43,7 @@ data class Attempt(
         if (rating != other.rating) return false
         if (routeCharacteristics != other.routeCharacteristics) return false
         if (length != other.length) return false
+        if (tryNumber != other.tryNumber) return false
         if (location != other.location) return false
 
         return true
@@ -59,6 +60,7 @@ data class Attempt(
         result = 31 * result + (rating ?: 0)
         result = 31 * result + (routeCharacteristics?.hashCode() ?: 0)
         result = 31 * result + (length ?: 0)
+        result = 31 * result + (tryNumber ?: 0)
         result = 31 * result + (location?.hashCode() ?: 0)
         return result
     }
