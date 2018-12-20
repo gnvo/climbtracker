@@ -5,25 +5,25 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import kotlinx.android.synthetic.main.recycler_view_item_1.view.*
 
-class GenericAdapterSingleSelection<T> : GenericAdapter<T>() {
+class GenericAdapterSingleSelection : GenericAdapter() {
     private var selectedPosition: Int = RecyclerView.NO_POSITION
-    private var selectedItem: T? = null
+    private var selectedItem: String? = null
     private var scroller: Scroller? = null
 
-    override fun setItems(items: ArrayList<T>) {
+    override fun setItems(items: ArrayList<String>) {
         super.setItems(items)
         selectedPosition = items.indexOf(selectedItem)
         scroller?.scroll(selectedPosition)
     }
 
-    fun getSelected(): T? {
+    fun getSelected(): String? {
         return if (selectedPosition == RecyclerView.NO_POSITION || items.isEmpty()) null
         else {
             items[selectedPosition]
         }
     }
 
-    fun setSelected(selectedItem: T?) {
+    fun setSelected(selectedItem: String?) {
         this.selectedItem = selectedItem
         if (items.isNotEmpty()) {
             with(items.indexOf(this.selectedItem)) {

@@ -42,11 +42,11 @@ class AddEditAttemptActivity : AppCompatActivity() {
 
     private var dialogLocationFragment: DialogLocationFragment? = null
 
-    private lateinit var adapterClimbStyles: GenericAdapterSingleSelection<String>
-    private lateinit var adapterOutcome: GenericAdapterSingleSelection<String>
-    private lateinit var adapterRouteType: GenericAdapterSingleSelection<String>
-    private lateinit var adapterRouteGrade: GenericAdapterSingleSelection<String>
-    private lateinit var adapterRouteCharacteristics: GenericAdapterMultipleSelection<String>
+    private lateinit var adapterClimbStyles: GenericAdapterSingleSelection
+    private lateinit var adapterOutcome: GenericAdapterSingleSelection
+    private lateinit var adapterRouteType: GenericAdapterSingleSelection
+    private lateinit var adapterRouteGrade: GenericAdapterSingleSelection
+    private lateinit var adapterRouteCharacteristics: GenericAdapterMultipleSelection
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -99,7 +99,10 @@ class AddEditAttemptActivity : AppCompatActivity() {
         )
         adapterRouteGrade.setScroller(object : GenericAdapterSingleSelection.Scroller {
             override fun scroll(selectedPosition: Int) {
-                (recycler_view_route_grade.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(selectedPosition, 0)
+                (recycler_view_route_grade.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(
+                    selectedPosition,
+                    0
+                )
             }
         })
 
@@ -214,10 +217,10 @@ class AddEditAttemptActivity : AppCompatActivity() {
         }
     }
 
-    private fun <T> setAdapterToRecyclerViewSingleSelection(
+    private fun setAdapterToRecyclerViewSingleSelection(
         recycler_view: RecyclerView,
-        genericAdapter: GenericAdapterSingleSelection<T>,
-        items: ArrayList<T>
+        genericAdapter: GenericAdapterSingleSelection,
+        items: ArrayList<String>
     ) {
         recycler_view.layoutManager = LinearLayoutManager(this)
         recycler_view.setHasFixedSize(true)
@@ -227,10 +230,10 @@ class AddEditAttemptActivity : AppCompatActivity() {
         genericAdapter.setItems(items)
     }
 
-    private fun <T> setAdapterToRecyclerViewMultipleSelection(
+    private fun setAdapterToRecyclerViewMultipleSelection(
         recycler_view: RecyclerView,
-        genericAdapter: GenericAdapterMultipleSelection<T>,
-        items: ArrayList<T>
+        genericAdapter: GenericAdapterMultipleSelection,
+        items: ArrayList<String>
     ) {
         recycler_view.layoutManager = LinearLayoutManager(this)
         recycler_view.setHasFixedSize(true)

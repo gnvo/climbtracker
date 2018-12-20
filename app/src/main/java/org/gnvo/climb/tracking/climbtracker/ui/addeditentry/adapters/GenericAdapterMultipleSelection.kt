@@ -5,19 +5,19 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import kotlinx.android.synthetic.main.recycler_view_item_1.view.*
 
-class GenericAdapterMultipleSelection<T> : GenericAdapter<T>() {
+class GenericAdapterMultipleSelection : GenericAdapter() {
 
     private var selectedPositions: MutableList<Long> = mutableListOf()
-    private var selectedItems: MutableList<T> = mutableListOf()
+    private var selectedItems: MutableList<String> = mutableListOf()
 
-    override fun setItems(items: ArrayList<T>) {
+    override fun setItems(items: ArrayList<String>) {
         super.setItems(items)
         selectedPositions = selectedItems.map {
             items.indexOf(it).toLong()
         }.toMutableList()
     }
 
-    fun getSelected(): List<T>? {
+    fun getSelected(): List<String>? {
         return if (selectedPositions.isEmpty()) null
         else {
             selectedPositions.map {
@@ -26,7 +26,7 @@ class GenericAdapterMultipleSelection<T> : GenericAdapter<T>() {
         }
     }
 
-    fun setSelected(selectedItems: List<T>) {
+    fun setSelected(selectedItems: List<String>) {
         this.selectedItems = selectedItems.toMutableList()
         if (items.isNotEmpty()) {
             selectedPositions = selectedItems.map {

@@ -7,12 +7,11 @@ import android.view.ViewGroup
 import kotlinx.android.synthetic.main.recycler_view_item_1.view.*
 import org.gnvo.climb.tracking.climbtracker.R
 
-abstract class GenericAdapter<T> : RecyclerView.Adapter<GenericAdapter<T>.ViewHolder>() {
+abstract class GenericAdapter : RecyclerView.Adapter<GenericAdapter.ViewHolder>() {
 
-    internal var items = ArrayList<T>()
-    private var formatter: CustomFormatter<T>? = null
+    internal var items = ArrayList<String>()
 
-    open fun setItems(items: ArrayList<T>) {
+    open fun setItems(items: ArrayList<String>) {
         this.items = items
         notifyDataSetChanged()
     }
@@ -32,20 +31,9 @@ abstract class GenericAdapter<T> : RecyclerView.Adapter<GenericAdapter<T>.ViewHo
     open inner class ViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView) {
         open fun bind(position: Int) {
             val item = items[position]
-            when (formatter){
-                null -> itemView.text_view_1.text = item.toString()
-                else -> itemView.text_view_1.text = formatter?.format(item)
-            }
+            itemView.text_view_1.text = item.toString()
             customBind(itemView, position)
         }
-    }
-
-    interface CustomFormatter<T> {
-        fun format(item: T): String
-    }
-
-    fun setCustomFormatter(formatter: CustomFormatter<T>){
-        this.formatter = formatter
     }
 
     abstract fun customBind(itemView: View, position: Int)
