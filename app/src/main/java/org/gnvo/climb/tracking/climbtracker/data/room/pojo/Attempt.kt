@@ -56,7 +56,7 @@ data class Attempt(
         result = 31 * result + (routeName?.hashCode() ?: 0)
         result = 31 * result + (comment?.hashCode() ?: 0)
         result = 31 * result + (rating ?: 0)
-        result = 31 * result + routeCharacteristics.hashCode()
+        result = 31 * result + (routeCharacteristics?.hashCode() ?: 0)
         result = 31 * result + (length ?: 0)
         result = 31 * result + (location?.hashCode() ?: 0)
         return result
