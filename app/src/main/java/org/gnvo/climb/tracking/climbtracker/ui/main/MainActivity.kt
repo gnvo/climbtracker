@@ -1,6 +1,5 @@
 package org.gnvo.climb.tracking.climbtracker.ui.main
 
-import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
@@ -49,9 +48,9 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        viewModel.getAllAttemptsWithGrades().observe(this, Observer {
+        viewModel.getAllAttemptsWithGrades().observeForever {
             adapter.submitList(it)
-        })
+        }
 
         adapter.setOnItemClickListener(object : EntryAdapter.OnItemClickListener {
             override fun onItemClick(attemptListItem: AttemptListItem) {
