@@ -106,5 +106,4 @@ class MainActivity : AppCompatActivity() {
         private const val ALWAYS_SHOW_YDS = "yds"
         private const val ALWAYS_SHOW_NONE = ""
     }
-
 }
