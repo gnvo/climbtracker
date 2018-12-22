@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: MainViewModel
     private lateinit var appPrefs: AppPreferencesHelper
     private lateinit var adapter: EntryAdapter
-    private lateinit var layoutManager : LinearLayoutManager
+    private lateinit var layoutManager: LinearLayoutManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        viewModel.getAllAttemptsWithGrades().observeForever {
+        viewModel.getAllAttemptsWithLocationGradesAndHeaders().observeForever {
             adapter.submitList(it)
         }
 
@@ -146,7 +146,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         private const val ALWAYS_SHOW_FRENCH = "french"
-        private const val ALWAYS_SHOW_UIAA= "uiaa"
+        private const val ALWAYS_SHOW_UIAA = "uiaa"
         private const val ALWAYS_SHOW_YDS = "yds"
         private const val ALWAYS_SHOW_NONE = ""
     }
