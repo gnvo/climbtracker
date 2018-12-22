@@ -1,13 +1,16 @@
 package org.gnvo.climb.tracking.climbtracker.ui.main
 
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import com.opencsv.CSVWriter
 import kotlinx.android.synthetic.main.activity_main.*
 import org.gnvo.climb.tracking.climbtracker.R
 import org.gnvo.climb.tracking.climbtracker.data.room.pojo.AttemptListItem
@@ -15,6 +18,9 @@ import org.gnvo.climb.tracking.climbtracker.data.room.pojo.AttemptWithLocationAn
 import org.gnvo.climb.tracking.climbtracker.preferences.AppPreferencesHelper
 import org.gnvo.climb.tracking.climbtracker.ui.addeditentry.AddEditAttemptActivity
 import org.gnvo.climb.tracking.climbtracker.ui.main.views.adapter.EntryAdapter
+import java.io.CharArrayWriter
+import java.io.Writer
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -82,13 +88,51 @@ class MainActivity : AppCompatActivity() {
                 switchAlwaysShow(ALWAYS_SHOW_YDS)
                 true
             }
+            R.id.export_db -> {
+                exportDB(CharArrayWriter())
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
 
+    private fun exportDB(writer: Writer) {
+        val allAttempts = viewModel.getAllAttempts()
+        allAttempts.observe(this, Observer {
+            // write String Array
+            val csvWriter = CSVWriter(writer,
+                CSVWriter.DEFAULT_SEPARATOR,
+                CSVWriter.DEFAULT_QUOTE_CHARACTER,
+                CSVWriter.DEFAULT_ESCAPE_CHARACTER,
+                CSVWriter.DEFAULT_LINE_END)
+
+//            csvWriter.writeNext(CSV_HEADER)
+
+            for (attemptWithLocation in it!!) {
+                val data = arrayOf<String>(
+                    attemptWithLocation.attempt.climbStyle,
+                    attemptWithLocation.attempt.outcome,
+                    attemptWithLocation.attempt.routeGrade,
+                    attemptWithLocation.attempt.routeType,
+                    attemptWithLocation.attempt.instantAndZoneId.instant.toEpochMilli().toString(),
+                    attemptWithLocation.attempt.instantAndZoneId.zoneId.id,
+                    attemptWithLocation.attempt.routeName ?: "",
+                    attemptWithLocation.attempt.comment ?: "",
+                    attemptWithLocation.attempt.rating?.toString() ?: "",
+                    attemptWithLocation.attempt.routeCharacteristics?.toString() ?: "",
+                    attemptWithLocation.attempt.length?.toString() ?: "",
+                    attemptWithLocation.attempt.tryNumber?.toString() ?: "",
+                    attemptWithLocation.attempt.location?.toString() ?: "")
+
+                csvWriter.writeNext(data)
+            }
+            Log.d("gnvog", "writer: $writer")
+        })
+    }
+
     private fun switchAlwaysShow(alwaysShowName: String) {
         val currentAlwaysShow = appPrefs.getAlwaysShow()
-        val newAlwaysShow = if (currentAlwaysShow != null && currentAlwaysShow == alwaysShowName){
+        val newAlwaysShow = if (currentAlwaysShow != null && currentAlwaysShow == alwaysShowName) {
             ALWAYS_SHOW_NONE
         } else {
             alwaysShowName

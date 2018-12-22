@@ -4,6 +4,7 @@ import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.LiveData
 import org.gnvo.climb.tracking.climbtracker.data.room.pojo.AttemptListItem
+import org.gnvo.climb.tracking.climbtracker.data.room.pojo.AttemptWithLocation
 import org.gnvo.climb.tracking.climbtracker.data.room.repository.AttemptRepository
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
@@ -12,5 +13,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun getAllAttemptsWithGrades(): LiveData<List<AttemptListItem>> {
         return attemptsWithLocationGradesAndHeaders
+    }
+
+    fun getAllAttempts(): LiveData<List<AttemptWithLocation>> {
+        return repositoryAttempt.getAllWithLocation()
     }
 }

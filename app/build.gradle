@@ -41,6 +41,9 @@ dependencies {
     // JSON handler
     implementation 'com.google.code.gson:gson:2.8.5'
 
+    // CSV handler
+    implementation 'com.opencsv:opencsv:4.4'
+
     // Geolocation
     implementation 'com.google.android.gms:play-services-maps:16.0.0'
     implementation 'com.google.android.gms:play-services-location:16.0.0'

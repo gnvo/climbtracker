@@ -15,4 +15,9 @@
             android:title="@string/always_show_yosemite_decimal_system_notation"
             app:showAsAction="never"
     />
+    <item
+            android:id="@+id/export_db"
+            android:title="@string/export_data"
+            app:showAsAction="never"
+    />
 </menu>
