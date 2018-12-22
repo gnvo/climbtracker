@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        viewModel.getAllAttemptsWithGrades().observeForever {
+        viewModel.getAllAttemptsWithLocationGradesAndHeaders().observeForever {
             adapter.submitList(it)
         }
 
