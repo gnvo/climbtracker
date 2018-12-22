@@ -14,14 +14,14 @@ class AttemptRepository(application: Application) {
     private val db: AppDatabase? = AppDatabase.getInstance(application = application)
     private val attemptDao: AttemptDao? = db?.attemptDao()
     private val routeGradeDao: RouteGradeDao? = db?.routeGradeDao()
-    private val allAttemptsWithLocationGrades: LiveData<List<AttemptWithLocation>> = attemptDao?.getAllWithLocation()!!
+    private val allAttemptsWithLocation: LiveData<List<AttemptWithLocation>> = attemptDao?.getAllWithLocation()!!
     private val allAttemptsWithLocationGradesAndHeaders: LiveData<List<AttemptListItem>> =
-        Transformations.map(allAttemptsWithLocationGrades, ::addHeadersAndGrades)
+        Transformations.map(allAttemptsWithLocation, ::addHeadersAndGrades)
 
     private var formatterDate = DateTimeFormatter.ofPattern("EEEE, d MMM yyyy")
 
     fun getAllWithLocation(): LiveData<List<AttemptWithLocation>> {
-        return allAttemptsWithLocationGrades
+        return allAttemptsWithLocation
     }
 
     fun getAllWithLocationGradesAndHeaders(): LiveData<List<AttemptListItem>> {
