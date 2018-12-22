@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: MainViewModel
     private lateinit var appPrefs: AppPreferencesHelper
     private lateinit var adapter: EntryAdapter
-    private lateinit var layoutManager : LinearLayoutManager
+    private lateinit var layoutManager: LinearLayoutManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,7 +88,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun switchAlwaysShow(alwaysShowName: String) {
         val currentAlwaysShow = appPrefs.getAlwaysShow()
-        val newAlwaysShow = if (currentAlwaysShow != null && currentAlwaysShow == alwaysShowName){
+        val newAlwaysShow = if (currentAlwaysShow != null && currentAlwaysShow == alwaysShowName) {
             ALWAYS_SHOW_NONE
         } else {
             alwaysShowName
@@ -102,7 +102,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         private const val ALWAYS_SHOW_FRENCH = "french"
-        private const val ALWAYS_SHOW_UIAA= "uiaa"
+        private const val ALWAYS_SHOW_UIAA = "uiaa"
         private const val ALWAYS_SHOW_YDS = "yds"
         private const val ALWAYS_SHOW_NONE = ""
     }
