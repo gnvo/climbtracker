@@ -38,7 +38,7 @@ class AddEditAttemptActivity : AppCompatActivity() {
     }
 
     private lateinit var viewModel: AddEditViewModel
-    private var formatterDateTime = DateTimeFormatter.ofPattern("EEEE, d MMM yyyy, HH:mm:ss VV")
+    private var formatterDateTime = DateTimeFormatter.ofPattern("yyyy-MM-dd, HH:mm:ss VV")
 
     private var attemptIdFromIntentExtra: Long = INVALID_ID
 
@@ -83,7 +83,7 @@ class AddEditAttemptActivity : AppCompatActivity() {
 
             val currentDateTime = ZonedDateTime.now()
 
-            button_date_time.text = formatterDateTime.format(currentDateTime)
+            text_view_date_time.text = formatterDateTime.format(currentDateTime)
             partiallyRestoreAttemptDataFromLastAttemptEntry()
         }
 
@@ -263,29 +263,34 @@ class AddEditAttemptActivity : AppCompatActivity() {
     }
 
     private fun setDateTimeDialogs() {
-        button_date_time.setOnClickListener {
-            var zonedDateTime = ZonedDateTime.parse(button_date_time.text, formatterDateTime)
-            TimePickerDialog(
+        button_image_date.setOnClickListener {
+            var zonedDateTime = ZonedDateTime.parse(text_view_date_time.text, formatterDateTime)
+            DatePickerDialog(
+                this,
+                DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
+                    zonedDateTime = zonedDateTime.with(LocalDate.of(year, monthOfYear + 1, dayOfMonth))
+                    text_view_date_time.text = formatterDateTime.format(zonedDateTime)
+                },
+                zonedDateTime.year,
+                zonedDateTime.monthValue - 1,
+                zonedDateTime.dayOfMonth
+            ).show()
+        }
+        button_image_time.setOnClickListener {
+            var zonedDateTime = ZonedDateTime.parse(text_view_date_time.text, formatterDateTime)
+            val timePickerDialog = TimePickerDialog(
                 this,
                 TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
                     run {
                         zonedDateTime = zonedDateTime.with(LocalTime.of(hourOfDay, minute))
-                        DatePickerDialog(
-                            this,
-                            DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
-                                zonedDateTime = zonedDateTime.with(LocalDate.of(year, monthOfYear + 1, dayOfMonth))
-                                button_date_time.text = formatterDateTime.format(zonedDateTime)
-                            },
-                            zonedDateTime.year,
-                            zonedDateTime.monthValue - 1,
-                            zonedDateTime.dayOfMonth
-                        ).show()
+                        text_view_date_time.text = formatterDateTime.format(zonedDateTime)
                     }
                 },
                 zonedDateTime.hour,
                 zonedDateTime.minute,
                 false
-            ).show()
+            )
+            timePickerDialog.show()
         }
     }
 
@@ -296,7 +301,7 @@ class AddEditAttemptActivity : AppCompatActivity() {
                     isRestored = true
                     val storedZonedDateTime =
                         attemptWithLocation!!.attempt.instantAndZoneId.instant.atZone(attemptWithLocation.attempt.instantAndZoneId.zoneId)
-                    button_date_time.text = formatterDateTime.format(storedZonedDateTime)
+                    text_view_date_time.text = formatterDateTime.format(storedZonedDateTime)
 
                     adapterClimbStyles.setSelected(
                         savedInstanceStateClimbStyles ?: attemptWithLocation.attempt.climbStyle
@@ -370,7 +375,7 @@ class AddEditAttemptActivity : AppCompatActivity() {
     }
 
     private fun generateAttempt(): Attempt? {
-        val zonedDateTime = ZonedDateTime.parse(button_date_time.text, formatterDateTime)
+        val zonedDateTime = ZonedDateTime.parse(text_view_date_time.text, formatterDateTime)
 
         val climbStyle = adapterClimbStyles.getSelected()
         val outcome = adapterOutcome.getSelected()

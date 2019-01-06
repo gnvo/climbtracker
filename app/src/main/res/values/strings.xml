@@ -26,6 +26,8 @@
     <string name="always_show_uuia_notation">Always show UUIA notation</string>
     <string name="always_show_yosemite_decimal_system_notation">Always show Yosemite Decimal System notation</string>
     <string name="try_number">Try number</string>
+    <string name="change_date">Change date</string>
+    <string name="change_time">Change time</string>
 
     <string-array name="route_type">
         <item>Trad</item>
