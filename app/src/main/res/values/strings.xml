@@ -42,6 +42,7 @@
 
     <string-array name="outcome">
         <item>Onsight</item>
+        <item>Repeat</item>
         <item>Flash</item>
         <item>Redpoint</item>
         <item>Fell/Hung</item>
