@@ -180,14 +180,17 @@
             <android.support.design.widget.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text"
                     android:hint="@string/area"
                     android:id="@+id/tiet_area"
                     android:clickable="false"
                     android:cursorVisible="false"
                     android:focusable="false"
-                    android:focusableInTouchMode="false"/>
-
+                    android:focusableInTouchMode="false"
+                    android:lines="1"
+                    android:scrollHorizontally="true"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:editable="false"/>
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -202,13 +205,17 @@
             <android.support.design.widget.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text"
                     android:hint="@string/sector"
                     android:id="@+id/tiet_sector"
                     android:clickable="false"
                     android:cursorVisible="false"
                     android:focusable="false"
-                    android:focusableInTouchMode="false"/>
+                    android:focusableInTouchMode="false"
+                    android:lines="1"
+                    android:scrollHorizontally="true"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:editable="false"/>
 
         </android.support.design.widget.TextInputLayout>
 
