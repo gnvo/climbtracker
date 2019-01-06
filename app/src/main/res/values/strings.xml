@@ -28,6 +28,9 @@
     <string name="try_number">Try number</string>
     <string name="change_date">Change date</string>
     <string name="change_time">Change time</string>
+    <string name="one">1</string>
+    <string name="augment_try_number">Augment try number</string>
+    <string name="reduce_try_number">Reduce try number</string>
 
     <string-array name="route_type">
         <item>Trad</item>

@@ -13,6 +13,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.TextView
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_add_update_attempt.*
 import org.gnvo.climb.tracking.climbtracker.R
@@ -233,6 +234,19 @@ class AddEditAttemptActivity : AppCompatActivity() {
                 }
             builder.create()
             builder.show()
+        }
+
+        tryNumberButtonsListeners()
+    }
+
+    private fun tryNumberButtonsListeners() {
+        button_try_plus.setOnClickListener {
+            val newNumber = edit_text_try_number.text.toString().toInt() + 1
+            edit_text_try_number.setText(newNumber.toString(), TextView.BufferType.EDITABLE)
+        }
+        button_try_minus.setOnClickListener {
+            val newNumber = edit_text_try_number.text.toString().toInt() - 1
+            edit_text_try_number.setText(newNumber.toString(), TextView.BufferType.EDITABLE)
         }
     }
 
